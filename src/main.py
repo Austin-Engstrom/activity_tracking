@@ -1,12 +1,14 @@
 """Main entry point for the Strava analytics ETL pipeline."""
 
-from http import client
-from sqlalchemy import inspect
-
 from src.api.authenticate import StravaAuthenticator
 from src.api.client import StravaClient
-from src.database import DATABASE_PATH, initialize_database
-from src.database.connection import engine
+from src.database import (
+    DATABASE_PATH,
+    SessionLocal,
+    initialize_database,
+)
+from src.repositories import ActivityRepository
+from src.services import ActivityEtlService
 
 
 def main() -> None:
@@ -27,38 +29,40 @@ def main() -> None:
     print("\nVerifying Strava API connection...")
     client = StravaClient(access_token)
     athlete = client.get_logged_in_athlete()
-    
+
     print("Strava API connection successful.")
     print(f"Athlete: {athlete['firstname']} {athlete['lastname']}")
     print(f"Athlete ID: {athlete['id']}")
 
-    print("\nFetching Strava activities...")
-    activities = client.get_all_activities()
-
-    print("Activity extraction successful.")
-    print(f"Total activities retrieved: {len(activities)}")
-
-    if activities:
-        newest_activity = activities[0]
-
-        print("\nMost recent activity:")
-        print(f"Name: {newest_activity.get('name')}")
-        print(f"Sport type: {newest_activity.get('sport_type')}")
-        print(f"Start date: {newest_activity.get('start_date')}")
-        print(f"Distance: {newest_activity.get('distance', 0)} meters")
-
     print("\nInitializing database...")
     initialize_database()
 
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
-
     print("Database initialized successfully.")
     print(f"Database path: {DATABASE_PATH}")
-    print(f"Tables created: {', '.join(tables)}")
+
+    with SessionLocal() as session:
+        repository = ActivityRepository(session)
+
+        etl_service = ActivityEtlService(
+            client=client,
+            repository=repository,
+        )
+
+        result = etl_service.run_full_load()
+
+    print("\n" + "-" * 45)
+    print("ETL SUMMARY")
+    print("-" * 45)
+    print(f"Retrieved:    {result.retrieved}")
+    print(f"Transformed:  {result.transformed}")
+    print(f"Failed:       {result.failed}")
+    print(f"Inserted:     {result.inserted}")
+    print(f"Updated:      {result.updated}")
+    print(f"Skipped:      {result.skipped}")
+    print(f"Total stored: {result.total_stored}")
 
     print("\n" + "=" * 45)
-    print("MILESTONE 2A COMPLETE")
+    print("MILESTONE 2B COMPLETE")
     print("=" * 45)
 
 

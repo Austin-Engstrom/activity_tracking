@@ -1,6 +1,6 @@
 """Transform raw Strava API responses into Activity models."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from src.models.activity import Activity
@@ -15,7 +15,7 @@ class ActivityMapper:
 
     @staticmethod
     def parse_datetime(value: str | None) -> datetime:
-        """Convert a Strava ISO-8601 timestamp into a datetime."""
+        """Convert a Strava ISO-8601 timestamp into a naive UTC datetime."""
 
         if not value:
             raise ActivityMappingError(
@@ -23,9 +23,17 @@ class ActivityMapper:
             )
 
         try:
-            return datetime.fromisoformat(
+            parsed_datetime = datetime.fromisoformat(
                 value.replace("Z", "+00:00")
             )
+
+            if parsed_datetime.tzinfo is not None:
+                parsed_datetime = parsed_datetime.astimezone(
+                    timezone.utc
+                ).replace(tzinfo=None)
+
+            return parsed_datetime
+
         except ValueError as exc:
             raise ActivityMappingError(
                 f"Invalid Strava datetime value: {value}"
