@@ -48,7 +48,7 @@ def main() -> None:
             repository=repository,
         )
 
-        result = etl_service.run_full_load()
+        result = etl_service.run_incremental_load()
 
     print("\n" + "-" * 45)
     print("ETL SUMMARY")
@@ -62,7 +62,7 @@ def main() -> None:
     print(f"Total stored: {result.total_stored}")
 
     print("\n" + "=" * 45)
-    print("MILESTONE 2B COMPLETE")
+    print("MILESTONE 3 COMPLETE")
     print("=" * 45)
 
 

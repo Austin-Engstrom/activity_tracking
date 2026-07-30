@@ -124,11 +124,11 @@ class StravaClient:
 
     def get_all_activities(
         self,
-        after: int | None = None,
-        before: int | None = None,
         per_page: int = 200,
+        before: int | None = None,
+        after: int | None = None,
     ) -> list[dict[str, Any]]:
-        """Retrieve all available activities using pagination."""
+        """Retrieve all matching Strava activities."""
 
         activities: list[dict[str, Any]] = []
         page = 1
@@ -137,8 +137,8 @@ class StravaClient:
             page_activities = self.get_activities_page(
                 page=page,
                 per_page=per_page,
-                after=after,
                 before=before,
+                after=after,
             )
 
             activities.extend(page_activities)
@@ -154,3 +154,4 @@ class StravaClient:
             page += 1
 
         return activities
+    
