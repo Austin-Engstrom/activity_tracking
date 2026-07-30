@@ -1,9 +1,10 @@
 """Main entry point for the Strava analytics ETL pipeline."""
 
+from http import client
 from sqlalchemy import inspect
 
 from src.api.authenticate import StravaAuthenticator
-from src.api.client import get_athlete
+from src.api.client import StravaClient
 from src.database import DATABASE_PATH, initialize_database
 from src.database.connection import engine
 
@@ -24,11 +25,27 @@ def main() -> None:
     print("Authentication successful.")
 
     print("\nVerifying Strava API connection...")
-    athlete = get_athlete(access_token)
-
+    client = StravaClient(access_token)
+    athlete = client.get_logged_in_athlete()
+    
     print("Strava API connection successful.")
     print(f"Athlete: {athlete['firstname']} {athlete['lastname']}")
     print(f"Athlete ID: {athlete['id']}")
+
+    print("\nFetching Strava activities...")
+    activities = client.get_all_activities()
+
+    print("Activity extraction successful.")
+    print(f"Total activities retrieved: {len(activities)}")
+
+    if activities:
+        newest_activity = activities[0]
+
+        print("\nMost recent activity:")
+        print(f"Name: {newest_activity.get('name')}")
+        print(f"Sport type: {newest_activity.get('sport_type')}")
+        print(f"Start date: {newest_activity.get('start_date')}")
+        print(f"Distance: {newest_activity.get('distance', 0)} meters")
 
     print("\nInitializing database...")
     initialize_database()
