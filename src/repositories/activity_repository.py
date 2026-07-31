@@ -1,6 +1,7 @@
 """Repository for storing and querying Strava activities."""
 
 from dataclasses import dataclass
+from datetime import datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -62,11 +63,49 @@ class ActivityRepository:
         statement = select(func.count(Activity.activity_id))
         return int(self.session.scalar(statement) or 0)
 
-    def get_latest_start_date(self):
+    def get_latest_start_date(self) -> datetime | None:
         """Return the newest stored activity start date."""
 
         statement = select(func.max(Activity.start_date))
         return self.session.scalar(statement)
+
+    def get_pending_detail_activities(
+        self,
+        limit: int = 25,
+    ) -> list[Activity]:
+        """Return activities awaiting detail enrichment."""
+
+        if limit < 1:
+            raise ValueError("limit must be at least 1.")
+
+        statement = (
+            select(Activity)
+            .where(Activity.detail_loaded_at.is_(None))
+            .order_by(Activity.start_date.desc())
+            .limit(limit)
+        )
+
+        return list(self.session.scalars(statement))
+
+    def count_pending_details(self) -> int:
+        """Return the number of activities awaiting detail enrichment."""
+
+        statement = (
+            select(func.count(Activity.activity_id))
+            .where(Activity.detail_loaded_at.is_(None))
+        )
+
+        return int(self.session.scalar(statement) or 0)
+
+    def commit(self) -> None:
+        """Commit pending repository changes."""
+
+        self.session.commit()
+
+    def rollback(self) -> None:
+        """Roll back pending repository changes."""
+
+        self.session.rollback()
 
     @staticmethod
     def _update_existing(
