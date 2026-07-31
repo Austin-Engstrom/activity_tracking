@@ -8,7 +8,10 @@ from src.database import (
     initialize_database,
 )
 from src.repositories import ActivityRepository
-from src.services import ActivityEtlService
+from src.services import (
+    ActivityDetailService,
+    ActivityEtlService,
+)
 
 
 def main() -> None:
@@ -48,21 +51,43 @@ def main() -> None:
             repository=repository,
         )
 
-        result = etl_service.run_incremental_load()
+        etl_result = etl_service.run_incremental_load()
+
+        detail_service = ActivityDetailService(
+            client=client,
+            repository=repository,
+        )
+
+        detail_result = detail_service.run_batch(
+            batch_size=75
+        )
 
     print("\n" + "-" * 45)
     print("ETL SUMMARY")
     print("-" * 45)
-    print(f"Retrieved:    {result.retrieved}")
-    print(f"Transformed:  {result.transformed}")
-    print(f"Failed:       {result.failed}")
-    print(f"Inserted:     {result.inserted}")
-    print(f"Updated:      {result.updated}")
-    print(f"Skipped:      {result.skipped}")
-    print(f"Total stored: {result.total_stored}")
+    print(f"Retrieved:    {etl_result.retrieved}")
+    print(f"Transformed:  {etl_result.transformed}")
+    print(f"Failed:       {etl_result.failed}")
+    print(f"Inserted:     {etl_result.inserted}")
+    print(f"Updated:      {etl_result.updated}")
+    print(f"Skipped:      {etl_result.skipped}")
+    print(f"Total stored: {etl_result.total_stored}")
 
+    print("\n" + "-" * 45)
+    print("DETAIL ENRICHMENT SUMMARY")
+    print("-" * 45)
+    print(f"Selected:     {detail_result.selected}")
+    print(f"Enriched:     {detail_result.enriched}")
+    print(f"Failed:       {detail_result.failed}")
+    print(f"Remaining:    {detail_result.remaining}")
+    print(f"Deferred:     {detail_result.deferred}")
+
+    if detail_result.rate_limit_reached:
+        print("Status:       Stopped at Strava read limit")
+    else:
+        print("Status:       Batch completed")
     print("\n" + "=" * 45)
-    print("MILESTONE 3 COMPLETE")
+    print("MILESTONE 4C COMPLETE")
     print("=" * 45)
 
 

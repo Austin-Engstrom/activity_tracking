@@ -11,6 +11,19 @@ STRAVA_API_BASE_URL = "https://www.strava.com/api/v3"
 class StravaApiError(RuntimeError):
     """Raised when a Strava API request fails."""
 
+class StravaRateLimitError(StravaApiError):
+    """Raised when the Strava API read limit has been reached."""
+
+    def __init__(
+        self,
+        message: str,
+        read_usage: tuple[int, int] | None = None,
+        read_limit: tuple[int, int] | None = None,
+    ) -> None:
+        super().__init__(message)
+
+        self.read_usage = read_usage
+        self.read_limit = read_limit
 
 class StravaClient:
     """Small HTTP client for authenticated Strava API requests."""
@@ -23,7 +36,12 @@ class StravaClient:
         if not access_token:
             raise ValueError("An access token is required.")
 
+        self.base_url = STRAVA_API_BASE_URL
         self.timeout_seconds = timeout_seconds
+
+        self.read_rate_limit: tuple[int, int] | None = None
+        self.read_rate_usage: tuple[int, int] | None = None
+
         self.session = requests.Session()
         self.session.headers.update(
             {
@@ -35,42 +53,44 @@ class StravaClient:
     def get(
         self,
         endpoint: str,
-        params: dict[str, Any] | None = None,
-    ) -> Any:
+        params: dict | None = None,
+    ) -> dict:
         """Send an authenticated GET request to Strava."""
 
-        url = f"{STRAVA_API_BASE_URL}/{endpoint.lstrip('/')}"
-
-        try:
-            response = self.session.get(
-                url,
-                params=params,
-                timeout=self.timeout_seconds,
+        if not self.has_read_capacity():
+            raise StravaRateLimitError(
+                message=(
+                    "Strava read quota is nearly exhausted. "
+                    "Request deferred."
+                ),
+                read_usage=self.read_rate_usage,
+                read_limit=self.read_rate_limit,
             )
-            response.raise_for_status()
-        except requests.Timeout as exc:
+
+        response = self.session.get(
+            f"{self.base_url}{endpoint}",
+            params=params,
+            timeout=self.timeout_seconds,
+        )
+
+        self._update_rate_limit_state(response)
+
+        if response.status_code == 429:
+            raise StravaRateLimitError(
+                message=(
+                    f"Strava read rate limit reached for {endpoint}."
+                ),
+                read_usage=self.read_rate_usage,
+                read_limit=self.read_rate_limit,
+            )
+
+        if not response.ok:
             raise StravaApiError(
-                f"Strava request timed out: {endpoint}"
-            ) from exc
-        except requests.RequestException as exc:
-            response_body = ""
+                f"Strava request failed: {endpoint}. "
+                f"Response: {response.text}"
+            )
 
-            if exc.response is not None:
-                response_body = exc.response.text
-
-            message = f"Strava request failed: {endpoint}"
-
-            if response_body:
-                message = f"{message}. Response: {response_body}"
-
-            raise StravaApiError(message) from exc
-
-        try:
-            return response.json()
-        except ValueError as exc:
-            raise StravaApiError(
-                f"Strava returned invalid JSON for endpoint: {endpoint}"
-            ) from exc
+        return response.json()
 
     def get_logged_in_athlete(self) -> dict[str, Any]:
         """Retrieve the authenticated athlete's profile."""
@@ -214,4 +234,60 @@ class StravaClient:
             page += 1
 
         return activities
+        
+    @staticmethod
+    def _parse_rate_limit_header(
+        value: str | None,
+    ) -> tuple[int, int] | None:
+        """Parse a Strava rate-limit header into short and daily values."""
+        if not value:
+            return None
+
+        try:
+            short_term, daily = value.split(",")
+
+            return (
+                int(short_term.strip()),
+                int(daily.strip()),
+            )
+
+        except (TypeError, ValueError):
+            return None
+
+
+    def _update_rate_limit_state(
+        self,
+        response,
+    ) -> None:
+        """Update the client with rate-limit values from a response."""
+
+        self.read_rate_limit = self._parse_rate_limit_header(
+            response.headers.get("X-ReadRateLimit-Limit")
+        )
+
+        self.read_rate_usage = self._parse_rate_limit_header(
+            response.headers.get("X-ReadRateLimit-Usage")
+        )
     
+    def has_read_capacity(
+        self,
+        reserve: int = 2,
+    ) -> bool:
+        """Return whether another read request can safely be made."""
+
+        if (
+            self.read_rate_limit is None
+            or self.read_rate_usage is None
+        ):
+            return True
+
+        short_limit, daily_limit = self.read_rate_limit
+        short_usage, daily_usage = self.read_rate_usage
+
+        short_remaining = short_limit - short_usage
+        daily_remaining = daily_limit - daily_usage
+
+        return (
+            short_remaining > reserve
+            and daily_remaining > reserve
+        )
