@@ -9,6 +9,7 @@ from sqlalchemy import (
     Float,
     Integer,
     String,
+    Text,
 )
 
 from sqlalchemy.orm import Mapped, mapped_column
@@ -119,6 +120,51 @@ class Activity(Base):
         DateTime,
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
+    )
+
+    description: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    calories: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True,
+    )
+
+    device_name: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    workout_type: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+    )
+
+    suffer_score: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+    )
+
+    average_cadence: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True,
+    )
+
+    max_heartrate: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True,
+    )
+
+    has_heartrate: Mapped[bool | None] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+
+    detail_loaded_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
     )
 
     def __repr__(self) -> str:
