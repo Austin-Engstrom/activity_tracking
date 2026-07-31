@@ -59,7 +59,7 @@ def main() -> None:
         )
 
         detail_result = detail_service.run_batch(
-            batch_size=25
+            batch_size=75
         )
 
     print("\n" + "-" * 45)
@@ -80,7 +80,12 @@ def main() -> None:
     print(f"Enriched:     {detail_result.enriched}")
     print(f"Failed:       {detail_result.failed}")
     print(f"Remaining:    {detail_result.remaining}")
+    print(f"Deferred:     {detail_result.deferred}")
 
+    if detail_result.rate_limit_reached:
+        print("Status:       Stopped at Strava read limit")
+    else:
+        print("Status:       Batch completed")
     print("\n" + "=" * 45)
     print("MILESTONE 4C COMPLETE")
     print("=" * 45)

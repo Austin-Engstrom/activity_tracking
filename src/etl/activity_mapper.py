@@ -204,3 +204,54 @@ class ActivityMapper:
             return None
 
         return bool(value)
+    
+    @classmethod
+    def apply_detail(
+        cls,
+        activity: Activity,
+        detail_data: dict[str, Any],
+    ) -> Activity:
+        """Apply detailed Strava fields to an existing activity."""
+
+        detail_activity_id = detail_data.get("id")
+
+        if detail_activity_id is None:
+            raise ActivityMappingError(
+                "Detailed activity response is missing an ID."
+            )
+
+        if int(detail_activity_id) != activity.activity_id:
+            raise ActivityMappingError(
+                "Detailed activity ID does not match stored activity."
+            )
+
+        activity.description = cls.optional_string(
+            detail_data.get("description")
+        )
+        activity.calories = cls.optional_float(
+            detail_data.get("calories")
+        )
+        activity.device_name = cls.optional_string(
+            detail_data.get("device_name")
+        )
+        activity.workout_type = cls.optional_int(
+            detail_data.get("workout_type")
+        )
+        activity.suffer_score = cls.optional_int(
+            detail_data.get("suffer_score")
+        )
+        activity.average_cadence = cls.optional_float(
+            detail_data.get("average_cadence")
+        )
+        activity.max_heartrate = cls.optional_float(
+            detail_data.get("max_heartrate")
+        )
+        activity.has_heartrate = cls.optional_bool(
+            detail_data.get("has_heartrate")
+        )
+
+        activity.detail_loaded_at = datetime.now(
+            timezone.utc
+        ).replace(tzinfo=None)
+
+        return activity
