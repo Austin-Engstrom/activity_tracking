@@ -84,6 +84,66 @@ class StravaClient:
 
         return response_data
 
+    def get_activity(
+        self,
+        activity_id: int,
+        include_all_efforts: bool = False,
+    ) -> dict[str, Any]:
+        """Retrieve detailed information for one Strava activity."""
+
+        if activity_id <= 0:
+            raise ValueError(
+                "activity_id must be a positive integer."
+            )
+
+        response_data = self.get(
+            f"/activities/{activity_id}",
+            params={
+                "include_all_efforts": str(
+                    include_all_efforts
+                ).lower()
+            },
+        )
+
+        if not isinstance(response_data, dict):
+            raise StravaApiError(
+                "Strava returned an unexpected activity response."
+            )
+
+        return response_data
+
+    def get_activity_streams(
+        self,
+        activity_id: int,
+        stream_types: list[str],
+    ) -> dict[str, Any]:
+        """Retrieve selected streams for one Strava activity."""
+
+        if activity_id <= 0:
+            raise ValueError(
+                "activity_id must be a positive integer."
+            )
+
+        if not stream_types:
+            raise ValueError(
+                "At least one stream type must be requested."
+            )
+
+        response_data = self.get(
+            f"/activities/{activity_id}/streams",
+            params={
+                "keys": ",".join(stream_types),
+                "key_by_type": "true",
+            },
+        )
+
+        if not isinstance(response_data, dict):
+            raise StravaApiError(
+                "Strava returned an unexpected streams response."
+            )
+
+        return response_data
+    
     def get_activities_page(
         self,
         page: int = 1,
