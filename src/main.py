@@ -9,13 +9,134 @@ from src.database import (
 )
 from src.repositories import (
     ActivityRepository,
-    GearRepository
+    ActivityStreamRepository,
+    GearRepository,
 )
 from src.services import (
     ActivityDetailService,
     ActivityEtlService,
+    ActivityStreamService,
     GearService,
 )
+
+
+def print_etl_summary(etl_result) -> bool:
+    """Print the activity ETL summary when work occurred."""
+
+    should_print = (
+        etl_result.retrieved > 0
+        or etl_result.failed > 0
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("ETL SUMMARY")
+    print("-" * 45)
+    print(f"Retrieved:    {etl_result.retrieved}")
+    print(f"Transformed:  {etl_result.transformed}")
+    print(f"Failed:       {etl_result.failed}")
+    print(f"Inserted:     {etl_result.inserted}")
+    print(f"Updated:      {etl_result.updated}")
+    print(f"Skipped:      {etl_result.skipped}")
+    print(f"Total stored: {etl_result.total_stored}")
+
+    return True
+
+
+def print_detail_summary(detail_result) -> bool:
+    """Print the detail-enrichment summary when work occurred."""
+
+    should_print = (
+        detail_result.selected > 0
+        or detail_result.failed > 0
+        or detail_result.deferred > 0
+        or detail_result.rate_limit_reached
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("DETAIL ENRICHMENT SUMMARY")
+    print("-" * 45)
+    print(f"Selected:     {detail_result.selected}")
+    print(f"Enriched:     {detail_result.enriched}")
+    print(f"Failed:       {detail_result.failed}")
+    print(f"Remaining:    {detail_result.remaining}")
+    print(f"Deferred:     {detail_result.deferred}")
+
+    if detail_result.rate_limit_reached:
+        print("Status:       Stopped at Strava read limit")
+    else:
+        print("Status:       Batch completed")
+
+    return True
+
+
+def print_gear_summary(gear_result) -> bool:
+    """Print the gear-load summary when work occurred."""
+
+    should_print = (
+        gear_result.selected > 0
+        or gear_result.failed > 0
+        or gear_result.deferred > 0
+        or gear_result.rate_limit_reached
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("GEAR LOAD SUMMARY")
+    print("-" * 45)
+    print(f"Selected:     {gear_result.selected}")
+    print(f"Inserted:     {gear_result.inserted}")
+    print(f"Updated:      {gear_result.updated}")
+    print(f"Failed:       {gear_result.failed}")
+    print(f"Remaining:    {gear_result.remaining}")
+    print(f"Deferred:     {gear_result.deferred}")
+
+    if gear_result.rate_limit_reached:
+        print("Status:       Stopped at Strava read limit")
+    else:
+        print("Status:       Load completed")
+
+    return True
+
+
+def print_stream_summary(stream_result) -> bool:
+    """Print the activity-stream summary when work occurred."""
+
+    should_print = (
+        stream_result.selected > 0
+        or stream_result.failed > 0
+        or stream_result.deferred > 0
+        or stream_result.rate_limit_reached
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("ACTIVITY STREAM LOAD SUMMARY")
+    print("-" * 45)
+    print(f"Selected:      {stream_result.selected}")
+    print(f"Loaded:        {stream_result.loaded}")
+    print(f"Rows inserted: {stream_result.rows_inserted}")
+    print(f"Empty:         {stream_result.empty}")
+    print(f"Failed:        {stream_result.failed}")
+    print(f"Remaining:     {stream_result.remaining}")
+    print(f"Deferred:      {stream_result.deferred}")
+
+    if stream_result.rate_limit_reached:
+        print("Status:        Stopped at Strava read limit")
+    else:
+        print("Status:        Batch completed")
+
+    return True
+
 
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
@@ -47,18 +168,18 @@ def main() -> None:
     print(f"Database path: {DATABASE_PATH}")
 
     with SessionLocal() as session:
-        repository = ActivityRepository(session)
+        activity_repository = ActivityRepository(session)
 
         etl_service = ActivityEtlService(
             client=client,
-            repository=repository,
+            repository=activity_repository,
         )
 
         etl_result = etl_service.run_incremental_load()
 
         detail_service = ActivityDetailService(
             client=client,
-            repository=repository,
+            repository=activity_repository,
         )
 
         detail_result = detail_service.run_batch(
@@ -73,48 +194,32 @@ def main() -> None:
             athlete_id=athlete["id"],
         )
 
-    gear_result = gear_service.run()
-    print("\n" + "-" * 45)
-    print("ETL SUMMARY")
-    print("-" * 45)
-    print(f"Retrieved:    {etl_result.retrieved}")
-    print(f"Transformed:  {etl_result.transformed}")
-    print(f"Failed:       {etl_result.failed}")
-    print(f"Inserted:     {etl_result.inserted}")
-    print(f"Updated:      {etl_result.updated}")
-    print(f"Skipped:      {etl_result.skipped}")
-    print(f"Total stored: {etl_result.total_stored}")
+        gear_result = gear_service.run()
 
-    print("\n" + "-" * 45)
-    print("DETAIL ENRICHMENT SUMMARY")
-    print("-" * 45)
-    print(f"Selected:     {detail_result.selected}")
-    print(f"Enriched:     {detail_result.enriched}")
-    print(f"Failed:       {detail_result.failed}")
-    print(f"Remaining:    {detail_result.remaining}")
-    print(f"Deferred:     {detail_result.deferred}")
+        stream_repository = ActivityStreamRepository(session)
 
-    print("\n" + "-" * 45)
-    print("GEAR LOAD SUMMARY")
-    print("-" * 45)
-    print(f"Selected:     {gear_result.selected}")
-    print(f"Inserted:     {gear_result.inserted}")
-    print(f"Updated:      {gear_result.updated}")
-    print(f"Failed:       {gear_result.failed}")
-    print(f"Remaining:    {gear_result.remaining}")
-    print(f"Deferred:     {gear_result.deferred}")
+        stream_service = ActivityStreamService(
+            client=client,
+            repository=stream_repository,
+        )
 
-    if gear_result.rate_limit_reached:
-        print("Status:       Stopped at Strava read limit")
-    else:
-        print("Status:       Load completed")
+        stream_result = stream_service.run_batch(
+            batch_size=20
+        )
 
-    if detail_result.rate_limit_reached:
-        print("Status:       Stopped at Strava read limit")
-    else:
-        print("Status:       Batch completed")
+    printed_sections = [
+        print_etl_summary(etl_result),
+        print_detail_summary(detail_result),
+        print_gear_summary(gear_result),
+        print_stream_summary(stream_result),
+    ]
+
+    if not any(printed_sections):
+        print("\nNo ETL work was required.")
+        print("Database is fully synchronized.")
+
     print("\n" + "=" * 45)
-    print("MILESTONE 4C COMPLETE")
+    print("MILESTONE 6 COMPLETE")
     print("=" * 45)
 
 
