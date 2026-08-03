@@ -9,6 +9,10 @@ from src.services.activity_etl_service import (
     ActivityEtlService,
 )
 
+from src.services.activity_stream_service import (
+    ActivityStreamLoadResult,
+    ActivityStreamService,
+)
 
 from src.services.gear_service import (
     GearLoadResult,

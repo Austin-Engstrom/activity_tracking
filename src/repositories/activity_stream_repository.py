@@ -11,6 +11,8 @@ from src.models.activity_stream import ActivityStream
 class ActivityStreamRepository:
     """Repository for querying and storing activity stream rows."""
 
+    model = ActivityStream
+    
     def __init__(self, session: Session) -> None:
         self.session = session
 
