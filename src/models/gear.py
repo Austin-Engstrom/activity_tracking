@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import BigInteger, Boolean, DateTime, Float, String, Text
+from sqlalchemy import BigInteger,Boolean,DateTime,Float,Integer,String,Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
@@ -73,6 +73,11 @@ class Gear(Base):
         onupdate=lambda: datetime.now(timezone.utc),
     )
 
+    frame_type: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+    )
+    
     def __repr__(self) -> str:
         return (
             f"<Gear("
