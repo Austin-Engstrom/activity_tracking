@@ -7,6 +7,8 @@ from sqlalchemy import engine_from_config, pool
 
 from src.models import Base
 from src.models.activity import Activity  # noqa: F401
+from src.models.segment import Segment  # noqa: F401
+from src.models.segment_effort import SegmentEffort  # noqa: F401
 
 
 config = context.config
