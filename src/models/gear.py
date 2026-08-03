@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import BigInteger, Boolean, DateTime, Float, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.database.base import Base
+from src.models.base import Base
 
 
 class Gear(Base):

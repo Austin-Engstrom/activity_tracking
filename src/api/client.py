@@ -132,6 +132,28 @@ class StravaClient:
 
         return response_data
 
+    def get_gear(
+        self,
+        gear_id: str,
+    ) -> dict[str, Any]:
+        """Retrieve detailed information for one Strava gear item."""
+
+        if not gear_id or not gear_id.strip():
+            raise ValueError(
+                "gear_id must be a non-empty string."
+            )
+
+        response_data = self.get(
+            f"/gear/{gear_id.strip()}"
+        )
+
+        if not isinstance(response_data, dict):
+            raise StravaApiError(
+                "Strava returned an unexpected gear response."
+            )
+
+        return response_data
+
     def get_activity_streams(
         self,
         activity_id: int,
