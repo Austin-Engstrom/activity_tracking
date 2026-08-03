@@ -2,9 +2,9 @@
 
 from src.api.authenticate import StravaAuthenticator
 from src.api.client import StravaClient
+from src.etl.gear_transformer import transform_gear
 
-
-TEST_GEAR_ID = "replace_with_real_gear_id"
+TEST_GEAR_ID = "b17417153"
 
 
 def main() -> None:
@@ -42,8 +42,15 @@ def main() -> None:
     print(f"Distance:    {gear.get('distance')}")
     print(f"Primary:     {gear.get('primary')}")
     print(f"Frame type:  {gear.get('frame_type')}")
+    
     print(f"Description: {gear.get('description')}")
+    transformed_gear = transform_gear(
+    raw_gear=gear,
+    athlete_id=athlete["id"],
+    )
 
+    print("\nTransformed gear:")
+    print(transformed_gear)
     print("\n" + "=" * 45)
     print("GEAR API TEST COMPLETE")
     print("=" * 45)
