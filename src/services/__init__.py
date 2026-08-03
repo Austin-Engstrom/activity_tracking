@@ -9,9 +9,17 @@ from src.services.activity_etl_service import (
     ActivityEtlService,
 )
 
+
+from src.services.gear_service import (
+    GearLoadResult,
+    GearService,
+)
+
 __all__ = [
     "ActivityDetailResult",
     "ActivityDetailService",
     "ActivityEtlResult",
     "ActivityEtlService",
+    "GearLoadResult",
+    "GearService",
 ]

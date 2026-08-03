@@ -7,12 +7,15 @@ from src.database import (
     SessionLocal,
     initialize_database,
 )
-from src.repositories import ActivityRepository
+from src.repositories import (
+    ActivityRepository,
+    GearRepository
+)
 from src.services import (
     ActivityDetailService,
     ActivityEtlService,
+    GearService,
 )
-
 
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
@@ -62,6 +65,15 @@ def main() -> None:
             batch_size=75
         )
 
+        gear_repository = GearRepository(session)
+
+        gear_service = GearService(
+            client=client,
+            repository=gear_repository,
+            athlete_id=athlete["id"],
+        )
+
+    gear_result = gear_service.run()
     print("\n" + "-" * 45)
     print("ETL SUMMARY")
     print("-" * 45)
@@ -81,6 +93,21 @@ def main() -> None:
     print(f"Failed:       {detail_result.failed}")
     print(f"Remaining:    {detail_result.remaining}")
     print(f"Deferred:     {detail_result.deferred}")
+
+    print("\n" + "-" * 45)
+    print("GEAR LOAD SUMMARY")
+    print("-" * 45)
+    print(f"Selected:     {gear_result.selected}")
+    print(f"Inserted:     {gear_result.inserted}")
+    print(f"Updated:      {gear_result.updated}")
+    print(f"Failed:       {gear_result.failed}")
+    print(f"Remaining:    {gear_result.remaining}")
+    print(f"Deferred:     {gear_result.deferred}")
+
+    if gear_result.rate_limit_reached:
+        print("Status:       Stopped at Strava read limit")
+    else:
+        print("Status:       Load completed")
 
     if detail_result.rate_limit_reached:
         print("Status:       Stopped at Strava read limit")
