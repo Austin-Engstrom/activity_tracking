@@ -11,6 +11,7 @@ from src.repositories import (
     ActivityRepository,
     ActivityStreamRepository,
     GearRepository,
+    SegmentRepository,
 )
 from src.services import (
     ActivityDetailService,
@@ -74,7 +75,6 @@ def print_detail_summary(detail_result) -> bool:
 
     return True
 
-
 def print_gear_summary(gear_result) -> bool:
     """Print the gear-load summary when work occurred."""
 
@@ -137,6 +137,40 @@ def print_stream_summary(stream_result) -> bool:
 
     return True
 
+def print_segment_summary(detail_result) -> bool:
+    """Print the segment-load summary when work occurred."""
+
+    should_print = (
+        detail_result.segments_inserted > 0
+        or detail_result.segments_updated > 0
+        or detail_result.efforts_inserted > 0
+        or detail_result.efforts_updated > 0
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("SEGMENT LOAD SUMMARY")
+    print("-" * 45)
+    print(
+        f"Segments inserted: "
+        f"{detail_result.segments_inserted}"
+    )
+    print(
+        f"Segments updated:  "
+        f"{detail_result.segments_updated}"
+    )
+    print(
+        f"Efforts inserted:  "
+        f"{detail_result.efforts_inserted}"
+    )
+    print(
+        f"Efforts updated:   "
+        f"{detail_result.efforts_updated}"
+    )
+
+    return True
 
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
@@ -177,9 +211,12 @@ def main() -> None:
 
         etl_result = etl_service.run_incremental_load()
 
+        segment_repository = SegmentRepository(session)
+
         detail_service = ActivityDetailService(
             client=client,
             repository=activity_repository,
+            segment_repository=segment_repository,
         )
 
         detail_result = detail_service.run_batch(
@@ -210,6 +247,7 @@ def main() -> None:
     printed_sections = [
         print_etl_summary(etl_result),
         print_detail_summary(detail_result),
+        print_segment_summary(detail_result),
         print_gear_summary(gear_result),
         print_stream_summary(stream_result),
     ]
