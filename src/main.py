@@ -14,7 +14,14 @@ from src.repositories import (
 from src.services import (
     ActivityDetailService,
     ActivityEtlService,
+    ActivityStreamService,
     GearService,
+)
+
+from src.repositories import (
+    ActivityRepository,
+    ActivityStreamRepository,
+    GearRepository,
 )
 
 def main() -> None:
@@ -73,6 +80,17 @@ def main() -> None:
             athlete_id=athlete["id"],
         )
 
+        stream_repository = ActivityStreamRepository(session)
+
+        stream_service = ActivityStreamService(
+            client=client,
+            repository=stream_repository,
+        )
+
+        stream_result = stream_service.run_batch(
+            batch_size=5
+        )
+
     gear_result = gear_service.run()
     print("\n" + "-" * 45)
     print("ETL SUMMARY")
@@ -103,6 +121,22 @@ def main() -> None:
     print(f"Failed:       {gear_result.failed}")
     print(f"Remaining:    {gear_result.remaining}")
     print(f"Deferred:     {gear_result.deferred}")
+
+    print("\n" + "-" * 45)
+    print("ACTIVITY STREAM LOAD SUMMARY")
+    print("-" * 45)
+    print(f"Selected:      {stream_result.selected}")
+    print(f"Loaded:        {stream_result.loaded}")
+    print(f"Rows inserted: {stream_result.rows_inserted}")
+    print(f"Empty:         {stream_result.empty}")
+    print(f"Failed:        {stream_result.failed}")
+    print(f"Remaining:     {stream_result.remaining}")
+    print(f"Deferred:      {stream_result.deferred}")
+
+    if stream_result.rate_limit_reached:
+        print("Status:        Stopped at Strava read limit")
+    else:
+        print("Status:        Batch completed")
 
     if gear_result.rate_limit_reached:
         print("Status:       Stopped at Strava read limit")
