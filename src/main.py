@@ -204,7 +204,7 @@ def main() -> None:
         )
 
         stream_result = stream_service.run_batch(
-            batch_size=50
+            batch_size=20
         )
 
     printed_sections = [
