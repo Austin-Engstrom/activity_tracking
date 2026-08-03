@@ -62,16 +62,24 @@ def print_detail_summary(detail_result) -> bool:
     print("\n" + "-" * 45)
     print("DETAIL ENRICHMENT SUMMARY")
     print("-" * 45)
-    print(f"Selected:     {detail_result.selected}")
-    print(f"Enriched:     {detail_result.enriched}")
-    print(f"Failed:       {detail_result.failed}")
-    print(f"Remaining:    {detail_result.remaining}")
-    print(f"Deferred:     {detail_result.deferred}")
+    print(f"Selected:       {detail_result.selected}")
+    print(f"Processed:      {detail_result.enriched}")
+    print(
+        f"Details loaded: "
+        f"{detail_result.detail_activities_loaded}"
+    )
+    print(
+        f"Segments loaded:"
+        f" {detail_result.segment_activities_loaded}"
+    )
+    print(f"Failed:         {detail_result.failed}")
+    print(f"Remaining:      {detail_result.remaining}")
+    print(f"Deferred:       {detail_result.deferred}")
 
     if detail_result.rate_limit_reached:
-        print("Status:       Stopped at Strava read limit")
+        print("Status:         Stopped at Strava read limit")
     else:
-        print("Status:       Batch completed")
+        print("Status:         Batch completed")
 
     return True
 
@@ -141,7 +149,8 @@ def print_segment_summary(detail_result) -> bool:
     """Print the segment-load summary when work occurred."""
 
     should_print = (
-        detail_result.segments_inserted > 0
+        detail_result.segment_activities_loaded > 0
+        or detail_result.segments_inserted > 0
         or detail_result.segments_updated > 0
         or detail_result.efforts_inserted > 0
         or detail_result.efforts_updated > 0
@@ -153,6 +162,10 @@ def print_segment_summary(detail_result) -> bool:
     print("\n" + "-" * 45)
     print("SEGMENT LOAD SUMMARY")
     print("-" * 45)
+    print(
+        f"Activities loaded: "
+        f"{detail_result.segment_activities_loaded}"
+    )
     print(
         f"Segments inserted: "
         f"{detail_result.segments_inserted}"
@@ -257,7 +270,7 @@ def main() -> None:
         print("Database is fully synchronized.")
 
     print("\n" + "=" * 45)
-    print("MILESTONE 6 COMPLETE")
+    print("MILESTONE 7 COMPLETE")
     print("=" * 45)
 
 

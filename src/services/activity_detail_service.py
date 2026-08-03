@@ -1,6 +1,7 @@
 """Service for enriching activities with detailed Strava data."""
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 from src.api.client import (
     StravaApiError,
@@ -25,6 +26,8 @@ class ActivityDetailResult:
 
     selected: int = 0
     enriched: int = 0
+    detail_activities_loaded: int = 0
+    segment_activities_loaded: int = 0
     failed: int = 0
     deferred: int = 0
     remaining: int = 0
@@ -36,7 +39,7 @@ class ActivityDetailResult:
 
 
 class ActivityDetailService:
-    """Loads activity details, segments, and segment efforts."""
+    """Loads detail-endpoint enrichments for stored activities."""
 
     def __init__(
         self,
@@ -52,7 +55,7 @@ class ActivityDetailService:
         self,
         batch_size: int = 25,
     ) -> ActivityDetailResult:
-        """Enrich one resumable batch of activities."""
+        """Enrich one resumable batch with one API call per activity."""
 
         activities = self.repository.get_pending_detail_activities(
             limit=batch_size
@@ -64,59 +67,71 @@ class ActivityDetailService:
 
         for index, activity in enumerate(activities):
             try:
+                needs_detail = activity.detail_loaded_at is None
+                needs_segments = activity.segments_loaded_at is None
+
                 detail_data = self.client.get_activity(
                     activity.activity_id,
-                    include_all_efforts=True,
+                    include_all_efforts=needs_segments,
                 )
 
-                raw_efforts = (
-                    detail_data.get("segment_efforts") or []
-                )
-
-                segments = []
-                efforts = []
-
-                for effort_data in raw_efforts:
-                    segments.append(
-                        SegmentMapper.segment_from_effort(
-                            effort_data
-                        )
+                if needs_detail:
+                    ActivityMapper.apply_detail(
+                        activity=activity,
+                        detail_data=detail_data,
                     )
-                    efforts.append(
-                        SegmentMapper.effort_from_api(
+                    result.detail_activities_loaded += 1
+
+                if needs_segments:
+                    raw_efforts = (
+                        detail_data.get("segment_efforts") or []
+                    )
+
+                    segments = []
+                    efforts = []
+
+                    for effort_data in raw_efforts:
+                        segments.append(
+                            SegmentMapper.segment_from_effort(
+                                effort_data
+                            )
+                        )
+                        efforts.append(
+                            SegmentMapper.effort_from_api(
+                                activity_id=activity.activity_id,
+                                effort_data=effort_data,
+                            )
+                        )
+
+                    load_result = (
+                        self.segment_repository
+                        .upsert_activity_segments(
                             activity_id=activity.activity_id,
-                            effort_data=effort_data,
+                            segments=segments,
+                            efforts=efforts,
                         )
                     )
 
-                load_result = (
-                    self.segment_repository.upsert_activity_segments(
-                        activity_id=activity.activity_id,
-                        segments=segments,
-                        efforts=efforts,
-                    )
-                )
+                    activity.segments_loaded_at = datetime.now(
+                        timezone.utc
+                    ).replace(tzinfo=None)
 
-                ActivityMapper.apply_detail(
-                    activity=activity,
-                    detail_data=detail_data,
-                )
+                    result.segment_activities_loaded += 1
+                    result.segments_inserted += (
+                        load_result.segments_inserted
+                    )
+                    result.segments_updated += (
+                        load_result.segments_updated
+                    )
+                    result.efforts_inserted += (
+                        load_result.efforts_inserted
+                    )
+                    result.efforts_updated += (
+                        load_result.efforts_updated
+                    )
 
                 self.repository.commit()
-
                 result.enriched += 1
-                result.segments_inserted += (
-                    load_result.segments_inserted
-                )
-                result.segments_updated += (
-                    load_result.segments_updated
-                )
-                result.efforts_inserted += (
-                    load_result.efforts_inserted
-                )
-                result.efforts_updated += (
-                    load_result.efforts_updated
-                )
 
             except StravaRateLimitError as exc:
                 self.repository.rollback()

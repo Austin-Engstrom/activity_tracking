@@ -11,7 +11,6 @@ from sqlalchemy import (
     String,
     Text,
 )
-
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
@@ -165,6 +164,25 @@ class Activity(Base):
     detail_loaded_at: Mapped[datetime | None] = mapped_column(
         DateTime,
         nullable=True,
+        index=True,
+    )
+
+    segments_loaded_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
+        index=True,
+    )
+
+    laps_loaded_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
+        index=True,
+    )
+
+    splits_loaded_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
+        index=True,
     )
 
     def __repr__(self) -> str:

@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from src.models.activity import Activity
@@ -73,14 +73,19 @@ class ActivityRepository:
         self,
         limit: int = 25,
     ) -> list[Activity]:
-        """Return activities awaiting detail enrichment."""
+        """Return activities missing details or segment enrichment."""
 
         if limit < 1:
             raise ValueError("limit must be at least 1.")
 
         statement = (
             select(Activity)
-            .where(Activity.detail_loaded_at.is_(None))
+            .where(
+                or_(
+                    Activity.detail_loaded_at.is_(None),
+                    Activity.segments_loaded_at.is_(None),
+                )
+            )
             .order_by(Activity.start_date.desc())
             .limit(limit)
         )
@@ -88,11 +93,16 @@ class ActivityRepository:
         return list(self.session.scalars(statement))
 
     def count_pending_details(self) -> int:
-        """Return the number of activities awaiting detail enrichment."""
+        """Return activities missing details or segment enrichment."""
 
         statement = (
             select(func.count(Activity.activity_id))
-            .where(Activity.detail_loaded_at.is_(None))
+            .where(
+                or_(
+                    Activity.detail_loaded_at.is_(None),
+                    Activity.segments_loaded_at.is_(None),
+                )
+            )
         )
 
         return int(self.session.scalar(statement) or 0)
