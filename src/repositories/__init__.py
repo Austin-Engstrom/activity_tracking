@@ -3,6 +3,9 @@
 from src.repositories.activity_repository import (
     ActivityLoadResult,
     ActivityRepository,
+)
+
+from src.repositories.activity_stream_repository import (
     ActivityStreamRepository,
 )
 
