@@ -147,6 +147,12 @@ class Segment(Base):
         onupdate=datetime.utcnow,
     )
 
+    trail_system_mappings = relationship(
+        "SegmentTrailSystem",
+        back_populates="segment",
+        cascade="all, delete-orphan",
+    )
+
     def __repr__(self) -> str:
         return (
             f"<Segment("
