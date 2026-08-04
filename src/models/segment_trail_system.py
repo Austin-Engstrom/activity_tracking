@@ -20,7 +20,7 @@ from src.models.base import Base
 
 if TYPE_CHECKING:
     from src.models.segment import Segment
-    from src.models.trail_system import TrailSystem
+    from src.models.trail_systems import TrailSystem
 
 
 class SegmentTrailSystem(Base):
