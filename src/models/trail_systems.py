@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, Integer, String, Text
+from sqlalchemy import DateTime, Float, Integer, String, Text, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database.base import Base
+from src.models.base import Base
 
 
 class TrailSystem(Base):

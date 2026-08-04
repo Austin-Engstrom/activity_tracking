@@ -1,6 +1,10 @@
+"""SQLAlchemy model mapping segments to trail systems."""
+
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
+    BigInteger,
     CheckConstraint,
     DateTime,
     Float,
@@ -12,10 +16,16 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database.base import Base
+from src.models.base import Base
+
+if TYPE_CHECKING:
+    from src.models.segment import Segment
+    from src.models.trail_system import TrailSystem
 
 
 class SegmentTrailSystem(Base):
+    """Maps a Strava segment to a trail system."""
+
     __tablename__ = "segment_trail_systems"
 
     segment_trail_system_id: Mapped[int] = mapped_column(
@@ -25,6 +35,7 @@ class SegmentTrailSystem(Base):
     )
 
     segment_id: Mapped[int] = mapped_column(
+        BigInteger,
         ForeignKey(
             "segments.segment_id",
             ondelete="CASCADE",
@@ -34,6 +45,7 @@ class SegmentTrailSystem(Base):
     )
 
     trail_system_id: Mapped[int] = mapped_column(
+        Integer,
         ForeignKey(
             "trail_systems.trail_system_id",
             ondelete="CASCADE",
@@ -72,14 +84,12 @@ class SegmentTrailSystem(Base):
         onupdate=datetime.utcnow,
     )
 
-    trail_system = relationship(
-        "TrailSystem",
-        back_populates="segment_mappings",
+    segment: Mapped["Segment"] = relationship(
+        back_populates="trail_system_mappings",
     )
 
-    segment = relationship(
-        "Segment",
-        back_populates="trail_system_mappings",
+    trail_system: Mapped["TrailSystem"] = relationship(
+        back_populates="segment_mappings",
     )
 
     __table_args__ = (
@@ -93,3 +103,10 @@ class SegmentTrailSystem(Base):
             name="ck_segment_trail_system_confidence",
         ),
     )
+
+    def __repr__(self) -> str:
+        return (
+            f"<SegmentTrailSystem("
+            f"segment_id={self.segment_id}, "
+            f"trail_system_id={self.trail_system_id})>"
+        )
