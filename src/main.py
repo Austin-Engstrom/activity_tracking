@@ -11,6 +11,7 @@ from src.repositories import (
     ActivityRepository,
     ActivityStreamRepository,
     GearRepository,
+    SegmentRepository,
 )
 from src.services import (
     ActivityDetailService,
@@ -61,19 +62,26 @@ def print_detail_summary(detail_result) -> bool:
     print("\n" + "-" * 45)
     print("DETAIL ENRICHMENT SUMMARY")
     print("-" * 45)
-    print(f"Selected:     {detail_result.selected}")
-    print(f"Enriched:     {detail_result.enriched}")
-    print(f"Failed:       {detail_result.failed}")
-    print(f"Remaining:    {detail_result.remaining}")
-    print(f"Deferred:     {detail_result.deferred}")
+    print(f"Selected:       {detail_result.selected}")
+    print(f"Processed:      {detail_result.enriched}")
+    print(
+        f"Details loaded: "
+        f"{detail_result.detail_activities_loaded}"
+    )
+    print(
+        f"Segments loaded:"
+        f" {detail_result.segment_activities_loaded}"
+    )
+    print(f"Failed:         {detail_result.failed}")
+    print(f"Remaining:      {detail_result.remaining}")
+    print(f"Deferred:       {detail_result.deferred}")
 
     if detail_result.rate_limit_reached:
-        print("Status:       Stopped at Strava read limit")
+        print("Status:         Stopped at Strava read limit")
     else:
-        print("Status:       Batch completed")
+        print("Status:         Batch completed")
 
     return True
-
 
 def print_gear_summary(gear_result) -> bool:
     """Print the gear-load summary when work occurred."""
@@ -137,6 +145,45 @@ def print_stream_summary(stream_result) -> bool:
 
     return True
 
+def print_segment_summary(detail_result) -> bool:
+    """Print the segment-load summary when work occurred."""
+
+    should_print = (
+        detail_result.segment_activities_loaded > 0
+        or detail_result.segments_inserted > 0
+        or detail_result.segments_updated > 0
+        or detail_result.efforts_inserted > 0
+        or detail_result.efforts_updated > 0
+    )
+
+    if not should_print:
+        return False
+
+    print("\n" + "-" * 45)
+    print("SEGMENT LOAD SUMMARY")
+    print("-" * 45)
+    print(
+        f"Activities loaded: "
+        f"{detail_result.segment_activities_loaded}"
+    )
+    print(
+        f"Segments inserted: "
+        f"{detail_result.segments_inserted}"
+    )
+    print(
+        f"Segments updated:  "
+        f"{detail_result.segments_updated}"
+    )
+    print(
+        f"Efforts inserted:  "
+        f"{detail_result.efforts_inserted}"
+    )
+    print(
+        f"Efforts updated:   "
+        f"{detail_result.efforts_updated}"
+    )
+
+    return True
 
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
@@ -177,9 +224,12 @@ def main() -> None:
 
         etl_result = etl_service.run_incremental_load()
 
+        segment_repository = SegmentRepository(session)
+
         detail_service = ActivityDetailService(
             client=client,
             repository=activity_repository,
+            segment_repository=segment_repository,
         )
 
         detail_result = detail_service.run_batch(
@@ -210,6 +260,7 @@ def main() -> None:
     printed_sections = [
         print_etl_summary(etl_result),
         print_detail_summary(detail_result),
+        print_segment_summary(detail_result),
         print_gear_summary(gear_result),
         print_stream_summary(stream_result),
     ]
@@ -219,7 +270,7 @@ def main() -> None:
         print("Database is fully synchronized.")
 
     print("\n" + "=" * 45)
-    print("MILESTONE 6 COMPLETE")
+    print("MILESTONE 7 COMPLETE")
     print("=" * 45)
 
 

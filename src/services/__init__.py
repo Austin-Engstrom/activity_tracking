@@ -8,12 +8,10 @@ from src.services.activity_etl_service import (
     ActivityEtlResult,
     ActivityEtlService,
 )
-
 from src.services.activity_stream_service import (
     ActivityStreamLoadResult,
     ActivityStreamService,
 )
-
 from src.services.gear_service import (
     GearLoadResult,
     GearService,
@@ -24,6 +22,8 @@ __all__ = [
     "ActivityDetailService",
     "ActivityEtlResult",
     "ActivityEtlService",
+    "ActivityStreamLoadResult",
+    "ActivityStreamService",
     "GearLoadResult",
     "GearService",
 ]
