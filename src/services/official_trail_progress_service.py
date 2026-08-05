@@ -75,12 +75,10 @@ class OfficialTrailProgressService:
                 )
                 progress.estimated_coverage_percent = coverage
 
-                if not matches:
-                    progress.progress_status = "unridden"
-                elif coverage >= 90.0:
-                    progress.progress_status = "completed"
-                else:
-                    progress.progress_status = "partial"
+                progress.progress_status = self._status(
+                    activity_count=progress.activity_count,
+                    coverage_percent=coverage,
+                )
 
             self.session.commit()
 
@@ -89,3 +87,24 @@ class OfficialTrailProgressService:
             raise
 
         return len(trails)
+    
+    @staticmethod
+    def _status(
+        activity_count: int,
+        coverage_percent: float,
+    ) -> str:
+        """Return the trail progress classification."""
+
+        if activity_count == 0 or coverage_percent <= 0:
+            return "unridden"
+
+        if coverage_percent >= 99.0:
+            return "completed"
+
+        if coverage_percent >= 75.0:
+            return "nearly_complete"
+
+        if coverage_percent >= 25.0:
+            return "partial"
+
+        return "started"
