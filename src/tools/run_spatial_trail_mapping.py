@@ -1,6 +1,6 @@
 """Run polygon-based mapping for unmapped Strava segments."""
 
-from src.database.session import SessionLocal
+from src.database import SessionLocal
 from src.services.spatial_trail_mapping_service import (
     SpatialTrailMappingService,
 )

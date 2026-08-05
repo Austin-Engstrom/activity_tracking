@@ -4,7 +4,7 @@ import json
 import os
 from datetime import datetime
 
-from src.database.session import SessionLocal
+from src.database import SessionLocal
 from src.services.osm_boundary_service import (
     OsmBoundaryCandidate,
     OsmBoundaryService,

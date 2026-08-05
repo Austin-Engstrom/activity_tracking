@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from src.models.segment import Segment
 from src.models.segment_trail_system import SegmentTrailSystem
-from src.models.trail_system import TrailSystem
+from src.models.trail_systems import TrailSystem
 from src.repositories.segment_trail_system_repository import (
     SegmentTrailSystemRepository,
 )
