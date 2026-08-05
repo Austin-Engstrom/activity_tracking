@@ -16,7 +16,7 @@ Consumers:
     Power BI
 
 Notes:
-    Metric and imperial lifetime-distance fields are both exposed.
+    Exposes both metric and imperial lifetime-distance fields.
 ===============================================================================
 */
 
@@ -27,21 +27,18 @@ create view view_gear as
 select
       g.gear_id as gear_key
     , g.gear_id
-
+    , g.athlete_id
     , g.name as gear_name
     , g.brand_name
     , g.model_name
     , g.description
-
     , g.distance_meters
-
     , g.distance_meters
         / 1609.344 as distance_miles
-
-    , g.primary as is_primary
-
+    , g.is_primary
+    , g.is_retired
     , g.frame_type
-
+    , g.detail_loaded_at
     , g.created_at
     , g.updated_at
 
