@@ -143,6 +143,9 @@ class OfficialTrailGpsMatchService:
                 for match in existing:
                     self.session.delete(match)
 
+                # Ensure prior rows are deleted before replacement inserts.
+                self.session.flush()
+
                 for trail in trails:
                     trail_geometry = projected_trails[trail.official_trail_id]
                     trail_length = float(trail_geometry.length)
