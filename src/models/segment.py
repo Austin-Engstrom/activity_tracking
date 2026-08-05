@@ -11,10 +11,14 @@ from sqlalchemy import (
     String,
 )
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models.segment_trail_system import SegmentTrailSystem
 
 class Segment(Base):
     """Represents a unique Strava segment."""
@@ -145,6 +149,11 @@ class Segment(Base):
         DateTime,
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
+    )
+
+    trail_system_mappings: Mapped[list["SegmentTrailSystem"]] = relationship(
+        back_populates="segment",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self) -> str:
