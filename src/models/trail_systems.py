@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, Integer, String, Text, BigInteger
+from sqlalchemy import DateTime, Float, Integer, String, Text, BigInteger, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
@@ -78,6 +78,42 @@ class TrailSystem(Base):
     )
 
     mapping_rules: Mapped[list["TrailMappingRule"]] = relationship(
-    back_populates="trail_system",
-    cascade="all, delete-orphan",
+        back_populates="trail_system",
+        cascade="all, delete-orphan",
     )
+
+    osm_element_type: Mapped[str | None] = mapped_column(
+        String(20),
+        nullable=True,
+    )
+
+    osm_element_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        )
+
+    osm_display_name: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+        )
+
+    boundary_geojson: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+        )
+
+    boundary_source: Mapped[str | None] = mapped_column(
+        String(100),
+        nullable=True,
+        )
+
+    boundary_confirmed: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        )
+
+    boundary_updated_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
+        )
