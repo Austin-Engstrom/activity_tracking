@@ -5,6 +5,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models.trail_mapping_rule import TrailMappingRule
+
 
 class TrailSystem(Base):
     __tablename__ = "trail_systems"
@@ -70,4 +75,9 @@ class TrailSystem(Base):
         "SegmentTrailSystem",
         back_populates="trail_system",
         cascade="all, delete-orphan",
+    )
+
+    mapping_rules: Mapped[list["TrailMappingRule"]] = relationship(
+    back_populates="trail_system",
+    cascade="all, delete-orphan",
     )

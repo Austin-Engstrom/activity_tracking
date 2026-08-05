@@ -1,7 +1,7 @@
 """Run automatic trail-system mapping rules."""
 
 # Update this import only if your project uses a different session module.
-from src.database.session import SessionLocal
+from src.database import SessionLocal
 from src.services.trail_mapping_service import TrailMappingService
 
 
