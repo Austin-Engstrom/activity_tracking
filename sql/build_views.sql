@@ -32,6 +32,12 @@ Notes:
 .print 'Creating view_gear...'
 .read sql/views/dimensions/view_gear.sql
 
+.print 'Creating view_fact_activity...'
+.read sql/views/dimensions/view_fact_activity.sql
+
+.print 'Creating view_segment...'
+.read sql/views/dimensions/view_segment.sql
+
 .print '============================================================'
 .print 'REPORTING VIEWS BUILT SUCCESSFULLY'
 .print '============================================================'
