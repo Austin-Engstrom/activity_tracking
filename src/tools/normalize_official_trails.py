@@ -1,5 +1,7 @@
 """Normalize imported OSM ways into official trails."""
 
+import src.models  # noqa: F401
+
 from src.database import SessionLocal
 from src.services.official_trail_normalization_service import (
     OfficialTrailNormalizationService,

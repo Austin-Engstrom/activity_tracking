@@ -2,6 +2,8 @@
 
 from sqlalchemy import func, select
 
+import src.models  # noqa: F401
+
 from src.database import SessionLocal
 from src.models.official_trail import OfficialTrail
 from src.models.osm_trails import OsmTrail

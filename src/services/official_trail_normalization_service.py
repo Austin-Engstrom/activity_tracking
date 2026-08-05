@@ -5,6 +5,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 
+from shapely import MultiLineString
 from shapely.geometry import LineString, mapping
 from shapely.ops import linemerge, unary_union
 from sqlalchemy import select
@@ -245,38 +246,37 @@ class OfficialTrailNormalizationService:
 
     @staticmethod
     def _combine_geometry(
-        sections: list[OsmTrail],
-    ) -> str | None:
-        """Combine section geometry into one LineString or MultiLineString."""
+            sections: list[OsmTrail],
+        ) -> str | None:
+            """Combine section geometry into one geometry."""
 
-        lines = []
+            lines = []
 
-        for section in sections:
-            geometry = json.loads(
-                section.geometry_geojson
+            for section in sections:
+                geometry = json.loads(section.geometry_geojson)
+
+                if geometry.get("type") == "LineString":
+                    lines.append(LineString(geometry["coordinates"]))
+
+            if not lines:
+                return None
+
+            if len(lines) == 1:
+                merged = lines[0]
+            else:
+                unioned = unary_union(lines)
+
+                if isinstance(unioned, LineString):
+                    merged = unioned
+                elif isinstance(unioned, MultiLineString):
+                    merged = linemerge(unioned)
+                else:
+                    merged = unioned
+
+            return json.dumps(
+                mapping(merged),
+                separators=(",", ":"),
             )
-
-            coordinates = geometry.get("coordinates")
-
-            if (
-                geometry.get("type") == "LineString"
-                and coordinates
-            ):
-                lines.append(
-                    LineString(coordinates)
-                )
-
-        if not lines:
-            return None
-
-        merged = linemerge(
-            unary_union(lines)
-        )
-
-        return json.dumps(
-            mapping(merged),
-            separators=(",", ":"),
-        )
 
     def _assign_unnamed_sections(
         self,
