@@ -20,6 +20,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.models.segment_trail_system import SegmentTrailSystem
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models.trail_segment_mapping import TrailSegmentMapping
+
+
 class Segment(Base):
     """Represents a unique Strava segment."""
 
@@ -155,6 +161,12 @@ class Segment(Base):
         back_populates="segment",
         cascade="all, delete-orphan",
     )
+
+    osm_trail_mappings: Mapped[list["TrailSegmentMapping"]] = relationship(
+        back_populates="segment",
+        cascade="all, delete-orphan",
+    )
+
 
     def __repr__(self) -> str:
         return (
