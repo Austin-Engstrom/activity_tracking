@@ -12,6 +12,8 @@ from src.models.segment_trail_system import SegmentTrailSystem
 from src.models.trail_mapping_rule import TrailMappingRule
 from src.models.trail_systems import TrailSystem
 from src.models.trail_segment_mapping import TrailSegmentMapping
+from src.models.official_trail_activity_match import (OfficialTrailActivityMatch,)  # noqa: F401
+from src.models.official_trail_progress import (OfficialTrailProgress,)  # noqa: F401
 
 __all__ = [
     "Activity",
@@ -26,4 +28,6 @@ __all__ = [
     "TrailMappingRule",
     "TrailSystem",
     "TrailSegmentMapping",
+    "OfficialTrailActivityMatch",
+    "OfficialTrailProgress",
 ]

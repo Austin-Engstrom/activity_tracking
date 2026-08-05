@@ -1,6 +1,8 @@
 """SQLAlchemy model for Strava activities."""
 
 from datetime import datetime
+from typing import TYPE_CHECKING
+from sqlalchemy.orm import relationship
 
 from sqlalchemy import (
     BigInteger,
@@ -14,6 +16,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models.base import Base
+
+if TYPE_CHECKING:
+    from src.models.official_trail_activity_match import (
+        OfficialTrailActivityMatch,
+    )
 
 
 class Activity(Base):
@@ -184,6 +191,14 @@ class Activity(Base):
         nullable=True,
         index=True,
     )
+
+    official_trail_matches: Mapped[
+        list["OfficialTrailActivityMatch"]
+    ] = relationship(
+        back_populates="activity",
+        cascade="all, delete-orphan",
+    )
+
 
     def __repr__(self) -> str:
         return (

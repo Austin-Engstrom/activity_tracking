@@ -19,6 +19,8 @@ from src.models.base import Base
 if TYPE_CHECKING:
     from src.models.osm_trails import OsmTrail
     from src.models.trail_systems import TrailSystem
+    from src.models.official_trail_activity_match import (OfficialTrailActivityMatch,)
+    from src.models.official_trail_progress import OfficialTrailProgress
 
 
 class OfficialTrail(Base):
@@ -118,6 +120,19 @@ class OfficialTrail(Base):
             "normalized_name",
             name="uq_official_trail_system_name",
         ),
+    )
+
+    activity_matches: Mapped[
+        list["OfficialTrailActivityMatch"]
+    ] = relationship(
+        back_populates="official_trail",
+        cascade="all, delete-orphan",
+    )
+
+    progress: Mapped["OfficialTrailProgress | None"] = relationship(
+        back_populates="official_trail",
+        cascade="all, delete-orphan",
+        uselist=False,
     )
 
     def __repr__(self) -> str:
