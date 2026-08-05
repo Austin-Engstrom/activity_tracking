@@ -4,7 +4,7 @@ import src.models  # noqa: F401
 
 from sqlalchemy import func, select
 
-from src.database.session import SessionLocal
+from src.database import SessionLocal
 from src.models.osm_trails import OsmTrail
 from src.models.trail_systems import TrailSystem
 from src.services.official_trail_normalization_service import (
