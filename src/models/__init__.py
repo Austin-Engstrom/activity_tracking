@@ -11,6 +11,7 @@ from src.models.segment_effort import SegmentEffort
 from src.models.segment_trail_system import SegmentTrailSystem
 from src.models.trail_mapping_rule import TrailMappingRule
 from src.models.trail_systems import TrailSystem
+from src.models.trail_segment_mapping import TrailSegmentMapping
 
 __all__ = [
     "Activity",
@@ -24,4 +25,5 @@ __all__ = [
     "SegmentTrailSystem",
     "TrailMappingRule",
     "TrailSystem",
+    "TrailSegmentMapping",
 ]

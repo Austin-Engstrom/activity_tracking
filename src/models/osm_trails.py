@@ -18,14 +18,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models.base import Base
 
 if TYPE_CHECKING:
-    from src.models.trail_systems import TrailSystem
-
-if TYPE_CHECKING:
-    from src.models.trail_segment_mapping import TrailSegmentMapping
-
-if TYPE_CHECKING:
     from src.models.official_trail import OfficialTrail
-
+    from src.models.trail_segment_mapping import TrailSegmentMapping
+    from src.models.trail_systems import TrailSystem
 
 class OsmTrail(Base):
     """Represents one OSM way imported as trail geometry."""
