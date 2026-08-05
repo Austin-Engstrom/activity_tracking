@@ -98,71 +98,71 @@ class TrailSystemService:
 
         return mapping
 
-def assign_segments(
-    self,
-    trail_system_id: int,
-    segment_ids: list[int],
-    confidence: float = 1.0,
-    mapping_source: str = "manual",
-) -> int:
-    """Assign multiple segments to a trail system."""
+    def assign_segments(
+        self,
+        trail_system_id: int,
+        segment_ids: list[int],
+        confidence: float = 1.0,
+        mapping_source: str = "manual",
+    ) -> int:
+        """Assign multiple segments to a trail system."""
 
-    trail_system = self.trail_repository.get_by_id(
-        trail_system_id
-    )
-
-    if trail_system is None:
-        raise ValueError(
-            f"Trail system {trail_system_id} does not exist."
+        trail_system = self.trail_repository.get_by_id(
+            trail_system_id
         )
 
-    if not 0.0 <= confidence <= 1.0:
-        raise ValueError(
-            "Confidence must be between 0.0 and 1.0."
-        )
-
-    unique_segment_ids = list(
-        dict.fromkeys(segment_ids)
-    )
-
-    inserted = 0
-
-    try:
-        for segment_id in unique_segment_ids:
-            segment = self.segment_repository.get_by_id(
-                segment_id
+        if trail_system is None:
+            raise ValueError(
+                f"Trail system {trail_system_id} does not exist."
             )
 
-            if segment is None:
-                raise ValueError(
-                    f"Segment {segment_id} does not exist."
+        if not 0.0 <= confidence <= 1.0:
+            raise ValueError(
+                "Confidence must be between 0.0 and 1.0."
+            )
+
+        unique_segment_ids = list(
+            dict.fromkeys(segment_ids)
+        )
+
+        inserted = 0
+
+        try:
+            for segment_id in unique_segment_ids:
+                segment = self.segment_repository.get_by_id(
+                    segment_id
                 )
 
-            existing = self.mapping_repository.get_mapping(
-                segment_id,
-                trail_system_id,
-            )
+                if segment is None:
+                    raise ValueError(
+                        f"Segment {segment_id} does not exist."
+                    )
 
-            if existing:
-                continue
+                existing = self.mapping_repository.get_mapping(
+                    segment_id,
+                    trail_system_id,
+                )
 
-            self.mapping_repository.create(
-                segment_id=segment_id,
-                trail_system_id=trail_system_id,
-                confidence=confidence,
-                mapping_source=mapping_source,
-            )
+                if existing:
+                    continue
 
-            inserted += 1
+                self.mapping_repository.create(
+                    segment_id=segment_id,
+                    trail_system_id=trail_system_id,
+                    confidence=confidence,
+                    mapping_source=mapping_source,
+                )
 
-        self.session.commit()
+                inserted += 1
 
-        return inserted
+            self.session.commit()
 
-    except Exception:
-        self.session.rollback()
-        raise
-    
+            return inserted
+
+        except Exception:
+            self.session.rollback()
+            raise
+
     def get_all_trail_systems(self):
         """Return all trail systems."""
 
