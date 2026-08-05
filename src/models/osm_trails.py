@@ -20,6 +20,9 @@ from src.models.base import Base
 if TYPE_CHECKING:
     from src.models.trail_systems import TrailSystem
 
+if TYPE_CHECKING:
+    from src.models.trail_segment_mapping import TrailSegmentMapping
+
 
 class OsmTrail(Base):
     """Represents one OSM way imported as trail geometry."""
@@ -154,3 +157,9 @@ class OsmTrail(Base):
             name="uq_osm_trail_system_element",
         ),
     )
+
+    segment_mappings: Mapped[list["TrailSegmentMapping"]] = relationship(
+        back_populates="osm_trail",
+        cascade="all, delete-orphan",
+    )
+
