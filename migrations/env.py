@@ -11,6 +11,7 @@ from src.models.segment import Segment  # noqa: F401
 from src.models.segment_effort import SegmentEffort  # noqa: F401
 from src.models.osm_trails import OsmTrail
 from src.models.trail_segment_mapping import TrailSegmentMapping  # noqa: F401
+from src.models.official_trail import OfficialTrail  # noqa: F401
 
 config = context.config
 

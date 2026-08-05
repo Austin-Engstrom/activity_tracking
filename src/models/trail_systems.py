@@ -15,6 +15,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.models.osm_trails import OsmTrail
 
+if TYPE_CHECKING:
+    from src.models.official_trail import OfficialTrail
+
+
 class TrailSystem(Base):
     __tablename__ = "trail_systems"
 
@@ -125,4 +129,9 @@ class TrailSystem(Base):
     osm_trails: Mapped[list["OsmTrail"]] = relationship(
         back_populates="trail_system",
     cascade="all, delete-orphan",
+    )
+
+    official_trails: Mapped[list["OfficialTrail"]] = relationship(
+        back_populates="trail_system",
+        cascade="all, delete-orphan",
     )

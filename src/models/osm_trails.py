@@ -23,6 +23,9 @@ if TYPE_CHECKING:
 if TYPE_CHECKING:
     from src.models.trail_segment_mapping import TrailSegmentMapping
 
+if TYPE_CHECKING:
+    from src.models.official_trail import OfficialTrail
+
 
 class OsmTrail(Base):
     """Represents one OSM way imported as trail geometry."""
@@ -161,5 +164,19 @@ class OsmTrail(Base):
     segment_mappings: Mapped[list["TrailSegmentMapping"]] = relationship(
         back_populates="osm_trail",
         cascade="all, delete-orphan",
+    )
+
+    official_trail_id: Mapped[int | None] = mapped_column(
+        Integer,
+        ForeignKey(
+            "official_trails.official_trail_id",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
+        index=True,
+    )
+
+    official_trail: Mapped["OfficialTrail | None"] = relationship(
+        back_populates="osm_sections",
     )
 
