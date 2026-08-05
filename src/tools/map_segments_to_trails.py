@@ -1,6 +1,6 @@
 """Map Strava segments to imported OSM trail lines."""
 
-from src.database.session import SessionLocal
+from src.database import SessionLocal
 from src.services.trail_segment_mapping_service import (
     TrailSegmentMappingService,
 )
