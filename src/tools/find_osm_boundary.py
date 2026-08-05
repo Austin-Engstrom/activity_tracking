@@ -2,7 +2,7 @@
 
 import json
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
 from src.database import SessionLocal
 from src.services.osm_boundary_service import (
@@ -209,8 +209,7 @@ def run() -> None:
                 )
                 trail.boundary_source = "OpenStreetMap Nominatim"
                 trail.boundary_confirmed = True
-                trail.boundary_updated_at = datetime.utcnow()
-
+                trail.boundary_updated_at = datetime.now(UTC)
                 session.commit()
 
                 print(
