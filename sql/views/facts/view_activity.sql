@@ -1,6 +1,6 @@
 /*
 ===============================================================================
-View Name : view_fact_activity
+View Name : view_activity
 
 Purpose:
     Provides one analytics-ready row per Strava activity.
@@ -22,9 +22,9 @@ Notes:
 ===============================================================================
 */
 
-drop view if exists view_fact_activity;
-
-create view view_fact_activity as
+drop view if exists view_activity;
+    
+create view view_activity as
 
 with stream_summary as (
     select

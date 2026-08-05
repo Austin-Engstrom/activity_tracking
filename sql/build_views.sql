@@ -20,8 +20,9 @@ Notes:
 
 .print ''
 .print '============================================================'
-.print 'BUILDING REPORTING VIEWS'
+.print 'BUILDING DIMENSION VIEWS'
 .print '============================================================'
+.print ''
 
 .print 'Creating view_date...'
 .read sql/views/dimensions/view_date.sql
@@ -32,12 +33,37 @@ Notes:
 .print 'Creating view_gear...'
 .read sql/views/dimensions/view_gear.sql
 
-.print 'Creating view_fact_activity...'
-.read sql/views/dimensions/view_fact_activity.sql
-
 .print 'Creating view_segment...'
 .read sql/views/dimensions/view_segment.sql
 
+.print 'Creating view_official_trail...'
+.read sql/views/dimensions/view_official_trail.sql
+
+.print 'Creating view_trail_system...'
+.read sql/views/dimensions/view_trail_system.sql
+
+.print ''
+.print '============================================================'
+.print 'BUILDING FACT VIEWS'
+.print '============================================================'
+.print ''
+
+.print 'Creating view_activity...'
+.read sql/views/facts/view_activity.sql
+
+.print 'Creating view_segment_effort...'
+.read sql/views/facts/view_segment_effort.sql
+
+.print 'Creating view_trail_activity...'
+.read sql/views/facts/view_trail_activity.sql
+
+.print 'Creating view_trail_progress...'
+.read sql/views/facts/view_trail_progress.sql
+
+.print 'Creating view_activity_stream_summary...'
+.read sql/views/facts/view_activity_stream_summary.sql
+
+.print ''
 .print '============================================================'
 .print 'REPORTING VIEWS BUILT SUCCESSFULLY'
 .print '============================================================'
