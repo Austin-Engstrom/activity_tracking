@@ -7,5 +7,6 @@ from src.models.activity_stream import ActivityStream
 from src.models.trail_systems import TrailSystem
 from src.models.segment_trail_system import SegmentTrailSystem
 from src.models.trail_mapping_rule import TrailMappingRule
+from src.models.osm_trails import OsmTrail
 
-__all__ = ["Activity", "Base", "Gear", "ActivityStream", "TrailSystem", "SegmentTrailSystem", "TrailMappingRule"]
+__all__ = ["Activity", "Base", "Gear", "ActivityStream", "TrailSystem", "SegmentTrailSystem", "TrailMappingRule", "OsmTrail"]

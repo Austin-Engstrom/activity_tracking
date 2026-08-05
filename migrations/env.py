@@ -9,7 +9,7 @@ from src.models import Base
 from src.models.activity import Activity  # noqa: F401
 from src.models.segment import Segment  # noqa: F401
 from src.models.segment_effort import SegmentEffort  # noqa: F401
-
+from src.models.osm_trails import OsmTrail
 
 config = context.config
 

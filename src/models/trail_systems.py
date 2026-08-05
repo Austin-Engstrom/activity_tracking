@@ -10,6 +10,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.models.trail_mapping_rule import TrailMappingRule
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models.osm_trails import OsmTrail
 
 class TrailSystem(Base):
     __tablename__ = "trail_systems"
@@ -117,3 +121,8 @@ class TrailSystem(Base):
         DateTime,
         nullable=True,
         )
+    
+    osm_trails: Mapped[list["OsmTrail"]] = relationship(
+        back_populates="trail_system",
+    cascade="all, delete-orphan",
+    )
