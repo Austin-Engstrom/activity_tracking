@@ -270,7 +270,7 @@ def main() -> None:
         print("Database is fully synchronized.")
 
     print("\n" + "=" * 45)
-    print("MILESTONE 7 COMPLETE")
+    print("Strava ETL Complete")
     print("=" * 45)
 
 
