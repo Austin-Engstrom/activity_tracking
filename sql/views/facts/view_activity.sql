@@ -18,7 +18,8 @@ Consumers:
 
 Notes:
     Exposes metric and imperial units and includes summary counts for streams
-    and segment efforts.
+    and segment efforts. Activity dates use the stored start_date value because
+    activities does not currently persist a local start timestamp.
 ===============================================================================
 */
 
@@ -54,7 +55,7 @@ select
     , cast(
           strftime(
               '%Y%m%d'
-            , date(a.start_date_local)
+            , date(a.start_date)
           )
           as integer
       ) as activity_date_key
@@ -65,9 +66,7 @@ select
     , a.name as activity_name
     , a.sport_type
     , a.start_date
-    , a.start_date_local
-    , date(a.start_date_local) as activity_date
-    , a.timezone
+    , date(a.start_date) as activity_date
 
     , a.distance_meters
 
@@ -113,26 +112,8 @@ select
     , a.calories
     , a.suffer_score
 
-    , a.elev_high_meters
-
-    , a.elev_high_meters
-        * 3.280839895 as elevation_high_feet
-
-    , a.elev_low_meters
-
-    , a.elev_low_meters
-        * 3.280839895 as elevation_low_feet
-
-    , a.start_latitude
-    , a.start_longitude
-    , a.end_latitude
-    , a.end_longitude
-
     , a.commute as is_commute
     , a.trainer as is_trainer
-    , a.manual as is_manual
-    , a.private as is_private
-    , a.visibility
 
     , coalesce(
           ss.stream_point_count

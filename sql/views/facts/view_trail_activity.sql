@@ -16,8 +16,9 @@ Consumers:
     Power BI
 
 Notes:
-    Supports trail ride counts, first and last ridden analysis, repeated trail
-    mileage, activity-level trail coverage, gear analysis, and time trends.
+    Supports trail ride counts, repeated trail mileage, activity-level trail
+    coverage, gear analysis, and time trends. Activity dates use the stored
+    activity start_date value.
 ===============================================================================
 */
 
@@ -34,7 +35,7 @@ select
     , cast(
           strftime(
               '%Y%m%d'
-            , date(a.start_date_local)
+            , date(a.start_date)
           )
           as integer
       ) as activity_date_key
@@ -44,7 +45,6 @@ select
 
     , a.name as activity_name
     , a.start_date
-    , a.start_date_local
 
     , otam.matched_trail_length_meters
 
@@ -58,28 +58,6 @@ select
 
     , otam.trail_coverage_percent
     , otam.matched_point_count
-
-    , otam.first_matched_seconds
-    , otam.last_matched_seconds
-
-    , case
-        when otam.first_matched_seconds is not null
-         and otam.last_matched_seconds is not null
-            then
-                otam.last_matched_seconds
-                - otam.first_matched_seconds
-        else null
-      end as matched_duration_seconds
-
-    , case
-        when otam.first_matched_seconds is not null
-         and otam.last_matched_seconds is not null
-            then (
-                otam.last_matched_seconds
-                - otam.first_matched_seconds
-            ) / 60.0
-        else null
-      end as matched_duration_minutes
 
     , otam.tolerance_meters
 
