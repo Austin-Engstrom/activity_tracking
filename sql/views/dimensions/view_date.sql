@@ -4,9 +4,9 @@ create view view_date as
 with recursive
 date_bounds as (
     select
-        date(min(start_date_local)) as minimum_date,
+        date(min(start_date)) as minimum_date,
         date(
-            max(start_date_local),
+            max(start_date),
             'start of year',
             '+1 year',
             '-1 day'
