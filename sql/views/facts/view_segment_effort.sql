@@ -15,68 +15,42 @@ Consumers:
     Power BI
 
 Notes:
-    Exposes metric and imperial distance fields and includes date keys for the
-    shared date dimension.
+    Exposes reporting measures using imperial units. Distance is reported in
+    miles and duration in minutes. Includes a date key for the shared date
+    dimension.
 ===============================================================================
 */
 
 drop view if exists view_segment_effort;
-    
+
 create view view_segment_effort as
 
 select
       se.segment_effort_id
     , se.segment_id as segment_key
     , se.activity_id
-
     , cast(
           strftime(
               '%Y%m%d'
-            , date(
-                  coalesce(
-                      se.start_date_local
-                    , se.start_date
-                  )
-              )
-          )
-          as integer
+            , date(coalesce(se.start_date_local, se.start_date))
+          ) as integer
       ) as effort_date_key
-
     , se.name as segment_effort_name
-
     , se.start_date
     , se.start_date_local
-
-    , se.elapsed_time_seconds
-
-    , se.elapsed_time_seconds
-        / 60.0 as elapsed_time_minutes
-
-    , se.moving_time_seconds
-
-    , se.moving_time_seconds
-        / 60.0 as moving_time_minutes
-
-    , se.distance_meters
-
-    , se.distance_meters
-        / 1609.344 as distance_miles
-
+    , round(se.elapsed_time_seconds / 60.0, 2) as elapsed_time_minutes
+    , round(se.moving_time_seconds / 60.0, 2) as moving_time_minutes
+    , round(se.distance_meters / 1609.344, 2) as distance_miles
     , se.start_index
     , se.end_index
-
     , se.average_cadence
     , se.average_watts
     , se.device_watts as is_device_watts
     , se.average_heartrate
     , se.max_heartrate
-
     , se.kom_rank
     , se.pr_rank
-
     , se.hidden as is_hidden
-
     , se.created_at
     , se.updated_at
-
 from segment_efforts se;

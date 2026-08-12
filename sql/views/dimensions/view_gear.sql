@@ -16,7 +16,7 @@ Consumers:
     Power BI
 
 Notes:
-    Exposes both metric and imperial lifetime-distance fields.
+    Exposes lifetime gear distance in miles.
 ===============================================================================
 */
 
@@ -32,14 +32,11 @@ select
     , g.brand_name
     , g.model_name
     , g.description
-    , g.distance_meters
-    , g.distance_meters
-        / 1609.344 as distance_miles
+    , round(g.distance_meters / 1609.344, 2) as distance_miles
     , g.is_primary
     , g.is_retired
     , g.frame_type
     , g.detail_loaded_at
     , g.created_at
     , g.updated_at
-
 from gear g;
