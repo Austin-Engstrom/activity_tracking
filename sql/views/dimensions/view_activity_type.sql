@@ -27,10 +27,6 @@ create view view_activity_type as
 select distinct
       a.sport_type as activity_type_key
     , a.sport_type as activity_type
-
 from activities a
-
 where a.sport_type is not null
-
-order by
-    a.sport_type;
+order by a.sport_type;
