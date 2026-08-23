@@ -7,24 +7,84 @@ from src.services.spatial_trail_mapping_service import (
 
 
 def run() -> None:
-    """Execute spatial mapping and print a summary."""
+    """Execute spatial mapping and print a detailed summary."""
 
     with SessionLocal() as session:
         summary = SpatialTrailMappingService(session).run()
+
+    mapped_this_run = summary.mapped
+
+    total_mapped = (
+        summary.already_mapped
+        + mapped_this_run
+    )
+
+    mapped_pct = (
+        (total_mapped / summary.total_segments) * 100
+        if summary.total_segments
+        else 0
+    )
+
+    run_match_pct = (
+        (mapped_this_run / summary.evaluated) * 100
+        if summary.evaluated
+        else 0
+    )
 
     print()
     print("=" * 60)
     print("SPATIAL TRAIL MAPPING SUMMARY")
     print("=" * 60)
+
     print(
         f"Trail systems with boundaries: "
         f"{summary.trail_systems_with_boundaries}"
     )
-    print(f"Total segments:                {summary.total_segments}")
-    print(f"Already mapped:                {summary.already_mapped}")
-    print(f"Evaluated:                     {summary.evaluated}")
-    print(f"Mapped by OSM polygon:         {summary.mapped}")
-    print(f"Still unmatched:               {summary.unmatched}")
+
+    print()
+    print("SEGMENTS")
+    print("-" * 60)
+    print(
+        f"Total segments:                "
+        f"{summary.total_segments}"
+    )
+    print(
+        f"Already mapped:                "
+        f"{summary.already_mapped}"
+    )
+    print(
+        f"Evaluated this run:             "
+        f"{summary.evaluated}"
+    )
+
+    print()
+    print("NEW MAPPINGS")
+    print("-" * 60)
+    print(
+        f"Mapped by polygon:             "
+        f"{mapped_this_run}"
+    )
+    print(
+        f"Match rate this run:           "
+        f"{run_match_pct:.2f}%"
+    )
+
+    print()
+    print("OVERALL")
+    print("-" * 60)
+    print(
+        f"Total mapped:                  "
+        f"{total_mapped}"
+    )
+    print(
+        f"Total mapped percent:          "
+        f"{mapped_pct:.2f}%"
+    )
+    print(
+        f"Still unmatched:               "
+        f"{summary.unmatched}"
+    )
+
     print("=" * 60)
 
 
