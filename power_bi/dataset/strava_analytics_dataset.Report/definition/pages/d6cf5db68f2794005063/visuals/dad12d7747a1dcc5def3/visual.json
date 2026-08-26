@@ -1,0 +1,146 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "dad12d7747a1dcc5def3",
+  "position": {
+    "x": 336,
+    "y": 184,
+    "z": 2,
+    "height": 408,
+    "width": 480,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "activity_type"
+                    }
+                  },
+                  "Property": "activity_type"
+                }
+              },
+              "queryRef": "activity_type.activity_type",
+              "nativeQueryRef": "activity_type",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Activity Count"
+                }
+              },
+              "queryRef": "_measures.Activity Count",
+              "nativeQueryRef": "Activity Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Total Distance"
+                }
+              },
+              "queryRef": "_measures.Total Distance",
+              "nativeQueryRef": "Total Distance"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Total Moving Time"
+                }
+              },
+              "queryRef": "_measures.Total Moving Time",
+              "nativeQueryRef": "Total Moving Time"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "3c3c982f8e37a0316f93",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Activity Count"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "cbaf85e7222fbfadf3b1",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Total Distance"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "35011ac32b267682ddd8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "activity_type"
+              }
+            },
+            "Property": "activity_type"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

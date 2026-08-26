@@ -1,0 +1,227 @@
+table _measures
+	lineageTag: 01bb9e01-26ea-4e48-8820-451e62af79b0
+
+	measure 'Activity Count' =
+			
+			COUNTROWS(activities)
+		formatString: #,0
+		displayFolder: Activities
+		lineageTag: 1e0d494e-b193-4631-ad1c-038be18c1c02
+
+	measure 'Total Distance' =
+			
+			SUM(activities[distance_miles])
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: f1b6cbd5-1462-48f6-bb00-0fb9c64ad4d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Moving Time' =
+			
+			SUM(activities[moving_time_minutes])
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: ff07796d-dc17-4404-93d6-b818dea4f396
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Elapsed Time' =
+			
+			SUM(activities[elapsed_time_minutes])
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: 5691bb30-9808-4adc-8d78-9fd0d3c3b000
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Elevation Gain' =
+			
+			SUM(activities[total_elevation_gain_feet])
+		formatString: #,0
+		displayFolder: Activities
+		lineageTag: 9ee93310-5a70-4f67-a030-b1087ffdf155
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Calories' =
+			
+			SUM(activities[calories])
+		formatString: #,0
+		displayFolder: Activities
+		lineageTag: 96872e0d-f60d-4a0f-bf2c-a6c3ac32e3b9
+
+	measure 'Average Distance' =
+			
+			AVERAGE(activities[distance_miles])
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: 94eda449-bf79-4d9a-ab94-ceb6e8c618c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Moving Time' =
+			
+			AVERAGE(activities[moving_time_minutes])
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: 0da3e368-6ee7-403d-b83e-0ffbce1cc03d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Speed' =
+			
+			DIVIDE(
+			    [Total Distance],
+			    DIVIDE(
+			        [Total Moving Time],
+			        60
+			    )
+			)
+		formatString: #,0.00
+		displayFolder: Performance
+		lineageTag: b0fa1a9d-eb6a-4249-9100-46edc880bfd6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Segment Effort Count' =
+			
+			COUNTROWS(segment_effort)
+		formatString: #,0
+		displayFolder: Segments
+		lineageTag: 34b89245-77b0-414d-b783-95bdd6c0da4d
+
+	measure 'Segment Miles Ridden' =
+			
+			SUM(segment_effort[distance_miles])
+		formatString: #,0.00
+		displayFolder: Segments
+		lineageTag: c1e8b4c1-7f67-4500-a4bc-a7273fc21080
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Segment Moving Time' =
+			
+			SUM(segment_effort[moving_time_minutes])
+		formatString: #,0.00
+		displayFolder: Segments
+		lineageTag: e2810fd1-c4bc-4193-b52f-41363773c898
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Trail Ride Count' =
+			
+			DISTINCTCOUNT(trail_activity[activity_id])
+		formatString: #,0
+		displayFolder: Trails
+		lineageTag: 6fdb6ae6-f36c-4265-9ea1-b57adf70243c
+
+	measure 'Trail Miles Ridden' =
+			
+			SUM(trail_activity[ridden_distance_miles])
+		formatString: #,0.00
+		displayFolder: Trails
+		lineageTag: 1ffd8355-cd88-48cf-b864-6b8f234f2d7c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Trails Ridden' =
+			
+			DISTINCTCOUNT(trail_activity[official_trail_key])
+		formatString: #,0
+		displayFolder: Trails
+		lineageTag: 3a7c88e4-bf5b-45cd-9667-3d4d0002345f
+
+	measure 'Official Trail Miles' =
+			
+			SUM(trail_system[official_trail_length_miles])
+		formatString: #,0.00
+		displayFolder: Trail Systems
+		lineageTag: 6a4a5c08-cb3c-425a-b635-16c123edd11f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Unique Trail Miles Ridden' =
+			
+			SUM(trail_system[unique_covered_distance_miles])
+		formatString: #,0.00
+		displayFolder: Trail Systems
+		lineageTag: 883279e1-4214-4d82-ab05-e804e2a6d8b9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Remaining Trail Miles' =
+			
+			SUM(trail_system[remaining_distance_miles])
+		formatString: #,0.00
+		displayFolder: Trail Systems
+		lineageTag: ee563938-e6dc-48fe-b9da-6e1883507244
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Trail Completion %' =
+			
+			DIVIDE(
+			    [Unique Trail Miles Ridden],
+			    [Official Trail Miles]
+			)
+		formatString: 0.00%
+		displayFolder: Trail Systems
+		lineageTag: a74bd74d-5fd8-4406-a99e-17fcf30fc3ed
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ride Days' =
+			
+			DISTINCTCOUNT(activities[activity_date])
+		formatString: #,0
+		displayFolder: Activities
+		lineageTag: b2f443de-fe4a-4dd0-9bb5-f5026597e85c
+
+	measure 'Miles per Activity' =
+			
+			DIVIDE(
+			    [Total Distance],
+			    [Activity Count]
+			)
+		formatString: #,0.00
+		displayFolder: Activities
+		lineageTag: 0e4018dc-8f0b-475b-a62d-5a393580bbdc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Elevation per Mile' =
+			
+			DIVIDE(
+			    [Total Elevation Gain],
+			    [Total Distance]
+			)
+		formatString: #,0.00
+		displayFolder: Performance
+		lineageTag: 87d24c78-2806-4b96-8f00-4f1f1621add0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Elevation Gain' =
+			
+			AVERAGE(activities[total_elevation_gain_feet])
+		formatString: #,0
+		displayFolder: Activities
+		lineageTag: 7176ec96-8013-4d3e-ba89-a4aba98069fc
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: a2b5cb6c-1547-41f1-9a4b-8064cde4fc0b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _measures = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 8c0eccab84674fb3a66844a15d1539da
+

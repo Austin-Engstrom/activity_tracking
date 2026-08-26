@@ -1,0 +1,93 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "05cb9c1a4ca1d8333efd",
+  "position": {
+    "x": 696,
+    "y": 600,
+    "z": 5,
+    "height": 392,
+    "width": 576,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "trail"
+                    }
+                  },
+                  "Property": "official_trail_name"
+                }
+              },
+              "queryRef": "trail.official_trail_name",
+              "nativeQueryRef": "official_trail_name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trail Ride Count"
+                }
+              },
+              "queryRef": "_measures.Trail Ride Count",
+              "nativeQueryRef": "Ride Count",
+              "displayName": "Ride Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trail Miles Ridden"
+                }
+              },
+              "queryRef": "_measures.Trail Miles Ridden",
+              "nativeQueryRef": "Miles Ridden",
+              "displayName": "Miles Ridden"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

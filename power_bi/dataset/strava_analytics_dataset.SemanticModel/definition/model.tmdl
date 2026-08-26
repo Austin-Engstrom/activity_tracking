@@ -13,6 +13,8 @@ annotation PBI_QueryOrder = ["activities","activity_type","gear","trail","segmen
 
 annotation PBI_ProTooling = ["DevMode"]
 
+annotation __TEdtr = 1
+
 ref table activities
 ref table activity_type
 ref table gear
@@ -24,6 +26,7 @@ ref table trail_progress
 ref table activity_stream_summary
 ref table date
 ref table segment_effort
+ref table _measures
 
 ref cultureInfo en-US
 

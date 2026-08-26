@@ -1,0 +1,173 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "1ebd76ef6dfc43dcd460",
+  "position": {
+    "x": 8,
+    "y": 184,
+    "z": 1,
+    "height": 408,
+    "width": 320,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "date"
+                        }
+                      },
+                      "Hierarchy": "date_hierarchy"
+                    }
+                  },
+                  "Level": "year"
+                }
+              },
+              "queryRef": "date.date_hierarchy.year",
+              "nativeQueryRef": "date_hierarchy year",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "date"
+                        }
+                      },
+                      "Hierarchy": "date_hierarchy"
+                    }
+                  },
+                  "Level": "month"
+                }
+              },
+              "queryRef": "date.date_hierarchy.month",
+              "nativeQueryRef": "date_hierarchy month",
+              "active": false
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "date"
+                        }
+                      },
+                      "Hierarchy": "date_hierarchy"
+                    }
+                  },
+                  "Level": "week_number"
+                }
+              },
+              "queryRef": "date.date_hierarchy.week_number",
+              "nativeQueryRef": "date_hierarchy week_number",
+              "active": false
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "date"
+                        }
+                      },
+                      "Hierarchy": "date_hierarchy"
+                    }
+                  },
+                  "Level": "date"
+                }
+              },
+              "queryRef": "date.date_hierarchy.date",
+              "nativeQueryRef": "date_hierarchy date",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Activity Count"
+                }
+              },
+              "queryRef": "_measures.Activity Count",
+              "nativeQueryRef": "Activity Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Total Distance"
+                }
+              },
+              "queryRef": "_measures.Total Distance",
+              "nativeQueryRef": "Total Distance"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "HierarchyLevel": {
+                "Expression": {
+                  "Hierarchy": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "date"
+                      }
+                    },
+                    "Hierarchy": "date_hierarchy"
+                  }
+                },
+                "Level": "year"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
