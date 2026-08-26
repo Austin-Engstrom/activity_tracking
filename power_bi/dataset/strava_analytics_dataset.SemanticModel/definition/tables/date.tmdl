@@ -1,0 +1,143 @@
+table date
+	lineageTag: 88bcf151-8800-4b1a-9c00-7bd9536eae10
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5d6e4987-0f14-425d-987f-94c626d72adb
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: m/d/yyyy
+		lineageTag: 9b429ac0-623c-4af8-975c-b5c11713e354
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: dateTime
+		formatString: yyyy
+		lineageTag: 46d4d263-ba20-4696-a252-f7b6cb56b33c
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column month
+		dataType: dateTime
+		formatString: mmmm
+		lineageTag: 76a82867-2fae-47c8-b415-09feda8984ae
+		summarizeBy: none
+		sourceColumn: month
+		sortByColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column week
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 5ceaabf9-5e0e-4802-ab48-980fbd595b29
+		summarizeBy: none
+		sourceColumn: week
+		sortByColumn: week_number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column month_number
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 79901c8f-1085-4441-b669-ece8bc065799
+		summarizeBy: none
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_number
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37b4481d-4988-40ca-92fe-fd7f0ad9380e
+		summarizeBy: none
+		sourceColumn: quarter_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 49e36533-aafb-44a3-a525-42906bf4b8e5
+		summarizeBy: none
+		sourceColumn: week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week_number
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1153ffa5-68ae-4dfe-8f6c-b1a8888c4e28
+		summarizeBy: none
+		sourceColumn: day_of_week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: int64
+		formatString: 0
+		lineageTag: c6c7c851-68dc-4bba-a6ed-410ead485819
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy date_hierarchy
+		lineageTag: d1388d33-a823-456a-b68d-984a01f4599d
+
+		level year
+			lineageTag: 4a416eea-bdf4-4ca7-adca-1d3c9dcaf73d
+			column: year
+
+		level month
+			lineageTag: 1497e58c-6533-4411-ae63-c236c1bcda99
+			column: month
+
+		level week_number
+			lineageTag: bc74bd99-35f3-4b32-8f05-06bbc77e010b
+			column: week_number
+
+		level date
+			lineageTag: c9a5b86a-1f04-4aee-a084-6064287b8013
+			column: date
+
+	partition date = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_date.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"quarter"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"year", type date}, {"month", type date}, {"week", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

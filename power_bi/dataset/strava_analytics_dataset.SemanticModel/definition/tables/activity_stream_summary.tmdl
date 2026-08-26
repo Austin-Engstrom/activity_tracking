@@ -1,0 +1,267 @@
+table activity_stream_summary
+	lineageTag: ce2f94c7-dfda-4e30-b9f8-82503279932f
+
+	column activity_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f865d570-0cd1-4840-8db1-addbe5edc947
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column stream_point_count
+		dataType: int64
+		formatString: 0
+		lineageTag: ed29fb16-da2a-4843-b484-83fb851f0b28
+		summarizeBy: none
+		sourceColumn: stream_point_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column minimum_time_minutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 55b1cbe3-1b2a-4f65-aae9-b7147e4e00c7
+		summarizeBy: none
+		sourceColumn: minimum_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+	column maximum_time_minutes
+		dataType: double
+		lineageTag: faa50488-18a6-4140-bd50-4fd3f76ec9f8
+		summarizeBy: none
+		sourceColumn: maximum_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column minimum_distance_miles
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c3e98ec-b9f6-4a12-a510-43b5f86b1967
+		summarizeBy: none
+		sourceColumn: minimum_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+	column maximum_distance_miles
+		dataType: double
+		lineageTag: 13ed721c-a446-4d27-92f7-3846708e9d10
+		summarizeBy: none
+		sourceColumn: maximum_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column minimum_altitude_feet
+		dataType: double
+		lineageTag: 3c7c80cb-306b-4328-b30d-dce0d7083a94
+		summarizeBy: none
+		sourceColumn: minimum_altitude_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_altitude_feet
+		dataType: double
+		lineageTag: 68c7aebb-a092-439d-a329-98d0c40d3a64
+		summarizeBy: none
+		sourceColumn: maximum_altitude_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column altitude_range_feet
+		dataType: double
+		lineageTag: c624729e-f0dc-4ed0-9469-f2041d8e710a
+		summarizeBy: none
+		sourceColumn: altitude_range_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_velocity_mph
+		dataType: double
+		lineageTag: 05785c14-f1fe-49e9-b671-ed7a961bd578
+		summarizeBy: none
+		sourceColumn: average_velocity_mph
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_velocity_mph
+		dataType: double
+		lineageTag: 6db7f910-2cf7-4623-9dba-ca9483bc4b0c
+		summarizeBy: none
+		sourceColumn: maximum_velocity_mph
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_heartrate
+		dataType: double
+		lineageTag: 8c46f62c-86cf-440c-8d3b-ddf41fcaf677
+		summarizeBy: none
+		sourceColumn: average_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_heartrate
+		dataType: double
+		lineageTag: 5561da46-f0e9-4efa-81e2-cc6b5b18b101
+		summarizeBy: none
+		sourceColumn: maximum_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_cadence
+		dataType: double
+		lineageTag: 99447f86-0aec-4e27-8ba1-1506c4487e9c
+		summarizeBy: none
+		sourceColumn: average_cadence
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_cadence
+		dataType: double
+		lineageTag: 828ddcc5-e7c7-4e33-b752-0baf42df3309
+		summarizeBy: none
+		sourceColumn: maximum_cadence
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_watts
+		dataType: double
+		lineageTag: aa028322-adde-48f6-b18e-9956efc1849c
+		summarizeBy: none
+		sourceColumn: average_watts
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_watts
+		dataType: double
+		lineageTag: 91a8746d-a0b0-4d56-9f2d-dab833b59f4b
+		summarizeBy: none
+		sourceColumn: maximum_watts
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_temperature_f
+		dataType: string
+		lineageTag: 81450ebc-0e5e-4e9a-968d-5c5164e289a2
+		summarizeBy: none
+		sourceColumn: average_temperature_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column minimum_temperature_f
+		dataType: string
+		lineageTag: 7902b986-355d-4284-b414-c6ebcce319a2
+		summarizeBy: none
+		sourceColumn: minimum_temperature_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column maximum_temperature_f
+		dataType: string
+		lineageTag: 9899013b-f9f1-4d3f-806c-db92cc22ba62
+		summarizeBy: none
+		sourceColumn: maximum_temperature_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_grade_percent
+		dataType: double
+		lineageTag: dff1db04-de21-482e-8353-d7cd0ebb72a4
+		summarizeBy: none
+		sourceColumn: average_grade_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column minimum_grade_percent
+		dataType: double
+		lineageTag: 180f79c2-e5a4-454d-b01b-63f769bc7198
+		summarizeBy: none
+		sourceColumn: minimum_grade_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_grade_percent
+		dataType: double
+		lineageTag: 79262363-cf0a-4181-8ae8-e78926d1ed00
+		summarizeBy: none
+		sourceColumn: maximum_grade_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column moving_point_count
+		dataType: int64
+		formatString: 0
+		lineageTag: b7731557-51ee-4240-9b5d-faf2c92ba136
+		summarizeBy: none
+		sourceColumn: moving_point_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column stopped_point_count
+		dataType: int64
+		formatString: 0
+		lineageTag: ee34d231-0e35-4012-a65c-11ab4a7e0c3b
+		summarizeBy: none
+		sourceColumn: stopped_point_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column moving_point_percent
+		dataType: double
+		lineageTag: 808fd590-079a-4640-bd1f-8c1ee785d1f9
+		summarizeBy: none
+		sourceColumn: moving_point_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition activity_stream_summary = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_activity_stream_summary.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"activity_id", Int64.Type}, {"stream_point_count", Int64.Type}, {"minimum_time_minutes", Int64.Type}, {"maximum_time_minutes", type number}, {"minimum_distance_miles", Int64.Type}, {"maximum_distance_miles", type number}, {"minimum_altitude_feet", type number}, {"maximum_altitude_feet", type number}, {"altitude_range_feet", type number}, {"average_velocity_mph", type number}, {"maximum_velocity_mph", type number}, {"average_heartrate", type number}, {"maximum_heartrate", type number}, {"average_cadence", type number}, {"maximum_cadence", type number}, {"average_watts", type number}, {"maximum_watts", type number}, {"average_temperature_f", type any}, {"minimum_temperature_f", type any}, {"maximum_temperature_f", type any}, {"average_grade_percent", type number}, {"minimum_grade_percent", type number}, {"maximum_grade_percent", type number}, {"moving_point_count", Int64.Type}, {"stopped_point_count", Int64.Type}, {"moving_point_percent", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

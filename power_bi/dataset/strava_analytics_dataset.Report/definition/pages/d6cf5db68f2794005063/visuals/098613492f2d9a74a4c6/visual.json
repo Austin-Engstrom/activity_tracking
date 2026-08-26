@@ -1,0 +1,133 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "098613492f2d9a74a4c6",
+  "position": {
+    "x": 8,
+    "y": 600,
+    "z": 4,
+    "height": 392,
+    "width": 680,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "segment"
+                    }
+                  },
+                  "Property": "segment_name"
+                }
+              },
+              "queryRef": "segment.segment_name",
+              "nativeQueryRef": "segment_name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Segment Effort Count"
+                }
+              },
+              "queryRef": "_measures.Segment Effort Count",
+              "nativeQueryRef": "Effort Count",
+              "displayName": "Effort Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Segment Miles Ridden"
+                }
+              },
+              "queryRef": "_measures.Segment Miles Ridden",
+              "nativeQueryRef": "Miles Ridden",
+              "displayName": "Miles Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Segment Moving Time"
+                }
+              },
+              "queryRef": "_measures.Moving Time",
+              "nativeQueryRef": "Moving Time",
+              "displayName": "Moving Time"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_measures"
+                  }
+                },
+                "Property": "Segment Effort Count"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "segment.segment_name"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

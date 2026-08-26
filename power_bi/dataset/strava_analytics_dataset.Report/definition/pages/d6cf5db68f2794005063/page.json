@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "d6cf5db68f2794005063",
+  "displayName": "strava_analytics_dataset",
+  "displayOption": "FitToWidth",
+  "height": 1440,
+  "width": 1280
+}

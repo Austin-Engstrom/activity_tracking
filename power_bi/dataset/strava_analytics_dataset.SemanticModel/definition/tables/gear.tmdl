@@ -1,0 +1,145 @@
+table gear
+	lineageTag: 70d3c206-4657-439d-85f8-3f7e71ff82a2
+
+	column gear_key
+		dataType: string
+		isHidden
+		lineageTag: ff1e8945-3dd8-4b39-b46b-63d1b6e7a31b
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_id
+		dataType: string
+		isHidden
+		lineageTag: 15e55aa9-30a4-4e74-b89e-17552f7351ea
+		summarizeBy: none
+		sourceColumn: gear_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column athlete_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: aaaba955-ebf0-4226-9fa7-dec9a65cd15c
+		summarizeBy: none
+		sourceColumn: athlete_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_name
+		dataType: string
+		lineageTag: 8257c315-a433-4945-a2b2-309bef2aee99
+		summarizeBy: none
+		sourceColumn: gear_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column brand_name
+		dataType: string
+		lineageTag: f526b1ab-bf87-43ab-b025-a626da9596ee
+		summarizeBy: none
+		sourceColumn: brand_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_name
+		dataType: string
+		lineageTag: 01f3aa56-4379-4307-9c6a-124173643892
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: 7b40cdc8-0abf-44a9-bcd7-7856944a6a74
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_miles
+		dataType: double
+		lineageTag: c957303e-4f0f-4b20-a006-254e2ee8c9af
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_primary
+		dataType: int64
+		formatString: 0
+		lineageTag: 4009ceaa-a84d-4ab2-a77a-681e81137b13
+		summarizeBy: none
+		sourceColumn: is_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_retired
+		dataType: string
+		lineageTag: 0cb83224-ad44-4730-bc2f-1bd693c97094
+		summarizeBy: none
+		sourceColumn: is_retired
+
+		annotation SummarizationSetBy = Automatic
+
+	column frame_type
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ad0b66e-846a-4b7c-8607-751692086bb2
+		summarizeBy: none
+		sourceColumn: frame_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column detail_loaded_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2cc3bb22-f89f-4852-848a-e6849ebd35c5
+		summarizeBy: none
+		sourceColumn: detail_loaded_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 061d411c-e391-44f0-a715-93c1534b7225
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f2d6b460-6403-431f-a5bb-5accb02b6da5
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gear = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_gear.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"gear_key", type text}, {"gear_id", type text}, {"athlete_id", Int64.Type}, {"gear_name", type text}, {"brand_name", type text}, {"model_name", type text}, {"description", type text}, {"distance_miles", type number}, {"is_primary", Int64.Type}, {"is_retired", type any}, {"frame_type", Int64.Type}, {"detail_loaded_at", type datetimezone}, {"created_at", type datetimezone}, {"updated_at", type datetimezone}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,258 @@
+table segment
+	lineageTag: 5fcd9f52-9533-42e4-897a-c4e9215905b5
+
+	column segment_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 43b6e241-4542-432b-9175-c8c4203b0bd6
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 77568a7a-2612-43a5-88c7-35772c448062
+		summarizeBy: none
+		sourceColumn: segment_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_name
+		dataType: string
+		lineageTag: b4cffb63-6fe8-4fe1-91c2-7cd6dc8a2592
+		summarizeBy: none
+		sourceColumn: segment_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_type
+		dataType: string
+		lineageTag: f06d1f72-6464-487c-86ae-04a5b08e35bf
+		summarizeBy: none
+		sourceColumn: activity_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_miles
+		dataType: double
+		lineageTag: be318536-127f-48d3-8c24-33374c70e102
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_grade
+		dataType: double
+		lineageTag: 10de8da0-b616-42a1-b6ac-0628311b2a48
+		summarizeBy: none
+		sourceColumn: average_grade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_grade
+		dataType: double
+		lineageTag: e411d3a3-40df-4f1f-a699-cb33b3198e24
+		summarizeBy: none
+		sourceColumn: maximum_grade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column elevation_high_feet
+		dataType: double
+		lineageTag: 4de6156e-f225-4f5f-b68a-98bdd0b0dea0
+		summarizeBy: none
+		sourceColumn: elevation_high_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column elevation_low_feet
+		dataType: double
+		lineageTag: 4e0d5258-6682-438f-90a9-9c035b6d5c15
+		summarizeBy: none
+		sourceColumn: elevation_low_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column elevation_range_feet
+		dataType: double
+		lineageTag: e17a0604-381e-442a-b436-18f5f9a89a7d
+		summarizeBy: none
+		sourceColumn: elevation_range_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column start_latitude
+		dataType: double
+		lineageTag: 90fadc53-2a5f-4e0a-a7fe-638178d67108
+		summarizeBy: none
+		sourceColumn: start_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column start_longitude
+		dataType: double
+		lineageTag: 7472b286-5531-471a-a569-c4b101ee970d
+		summarizeBy: none
+		sourceColumn: start_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column end_latitude
+		dataType: double
+		lineageTag: bde91460-3e46-4e7a-965e-be2d56148e30
+		summarizeBy: none
+		sourceColumn: end_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column end_longitude
+		dataType: double
+		lineageTag: 80668e96-848e-428b-8d8f-d263ae4a6c23
+		summarizeBy: none
+		sourceColumn: end_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column climb_category
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b957065-151b-496a-848b-258577ecb8e7
+		summarizeBy: none
+		sourceColumn: climb_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: f3d4e07f-671f-4a1f-83fe-5af76cb72ba1
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: cf6895b2-65a9-44c6-b8ec-dac126faa3f7
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: 29c0fa05-6a9a-4596-a9dd-5e43b00f9290
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_private
+		dataType: int64
+		formatString: 0
+		lineageTag: 28358d11-b509-4cba-97e7-0eb3e12a2db4
+		summarizeBy: none
+		sourceColumn: is_private
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_hazardous
+		dataType: int64
+		formatString: 0
+		lineageTag: 40f37e35-5c9d-4e19-8122-3e41ea7a46b7
+		summarizeBy: none
+		sourceColumn: is_hazardous
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_starred
+		dataType: int64
+		formatString: 0
+		lineageTag: 721f6324-9bce-40b8-b834-710c3ba09957
+		summarizeBy: none
+		sourceColumn: is_starred
+
+		annotation SummarizationSetBy = Automatic
+
+	column effort_count
+		dataType: string
+		lineageTag: ad3db1ac-65eb-4b08-ad9f-bfe03a3e2533
+		summarizeBy: none
+		sourceColumn: effort_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column athlete_count
+		dataType: string
+		lineageTag: 71b97705-c037-4265-b25c-4ba82d9a6fd4
+		summarizeBy: none
+		sourceColumn: athlete_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column star_count
+		dataType: string
+		lineageTag: b60b54c2-1d34-464c-aa1a-65c32ae60284
+		summarizeBy: none
+		sourceColumn: star_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 977dcab4-01a2-4533-902c-914429fe4247
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b105ecb6-0e69-404b-8c94-4351e5cccb8a
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition segment = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_segment.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"segment_key", Int64.Type}, {"segment_id", Int64.Type}, {"segment_name", type text}, {"activity_type", type text}, {"distance_miles", type number}, {"average_grade", type number}, {"maximum_grade", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"elevation_range_feet", type number}, {"start_latitude", type number}, {"start_longitude", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"climb_category", Int64.Type}, {"city", type text}, {"state", type text}, {"country", type text}, {"is_private", Int64.Type}, {"is_hazardous", Int64.Type}, {"is_starred", Int64.Type}, {"effort_count", type any}, {"athlete_count", type any}, {"star_count", type any}, {"created_at", type datetimezone}, {"updated_at", type datetimezone}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

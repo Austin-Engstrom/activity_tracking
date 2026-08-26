@@ -1,0 +1,190 @@
+table trail_progress
+	lineageTag: a5a7b8db-5c22-4cfb-8e6b-27c5afb5488a
+
+	column official_trail_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 009d90f8-71aa-482c-b7ef-d6ae2d38d1c3
+		summarizeBy: none
+		sourceColumn: official_trail_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_ridden_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6af8b43d-40e9-452b-8878-23f6f8137641
+		summarizeBy: sum
+		sourceColumn: first_ridden_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_ridden_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d2553c5b-0e77-4ad5-930e-068b403b38ed
+		summarizeBy: sum
+		sourceColumn: last_ridden_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column progress_updated_date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: ef6a2a00-1ad6-4bb5-9f37-2fd01d04f4cc
+		summarizeBy: sum
+		sourceColumn: progress_updated_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 8cdb0204-69ff-498e-a0de-cfcd7e53dfb7
+		summarizeBy: sum
+		sourceColumn: activity_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_ridden_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ba2044a8-93e4-42cc-9ee7-f322efb5ff43
+		summarizeBy: none
+		sourceColumn: first_ridden_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_ridden_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f50ced1c-77ac-4cae-aede-6ef832ecbcfa
+		summarizeBy: none
+		sourceColumn: last_ridden_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_ridden_distance_miles
+		dataType: double
+		lineageTag: 0cd4bf58-449e-4b71-983d-272e670ff1cb
+		summarizeBy: sum
+		sourceColumn: total_ridden_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column estimated_coverage_percent
+		dataType: double
+		lineageTag: c941a2c8-d229-4af7-af28-7c7f20aa1ba5
+		summarizeBy: sum
+		sourceColumn: estimated_coverage_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column unique_covered_distance_miles
+		dataType: double
+		lineageTag: ab32c60d-3160-4e7d-8a56-84bf1be99eac
+		summarizeBy: sum
+		sourceColumn: unique_covered_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column remaining_distance_miles
+		dataType: double
+		lineageTag: e94f3e40-d86e-4c7f-987c-e2637eb45beb
+		summarizeBy: sum
+		sourceColumn: remaining_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column progress_status
+		dataType: string
+		lineageTag: f302bf7d-f628-4c16-a252-1ba00a7b1978
+		summarizeBy: none
+		sourceColumn: progress_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_completed
+		dataType: int64
+		formatString: 0
+		lineageTag: 261a6b07-0a4a-444f-95a5-7168028a8539
+		summarizeBy: sum
+		sourceColumn: is_completed
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_nearly_complete
+		dataType: int64
+		formatString: 0
+		lineageTag: 898d93d4-3c6d-42b5-afe1-30ab4c39db77
+		summarizeBy: sum
+		sourceColumn: is_nearly_complete
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_partial
+		dataType: int64
+		formatString: 0
+		lineageTag: a519f2a9-55b5-4fbb-9a19-087182b69463
+		summarizeBy: sum
+		sourceColumn: is_partial
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_started
+		dataType: int64
+		formatString: 0
+		lineageTag: 65e519c3-6348-4210-8249-431bc849aff9
+		summarizeBy: sum
+		sourceColumn: is_started
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_unridden
+		dataType: int64
+		formatString: 0
+		lineageTag: f3016091-2ed7-49dd-8180-ff2881d8b265
+		summarizeBy: sum
+		sourceColumn: is_unridden
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b11e5ed0-dfa7-4f7b-87a0-517e2c55dd8a
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition trail_progress = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_trail_progress.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"official_trail_key", Int64.Type}, {"first_ridden_date_key", Int64.Type}, {"last_ridden_date_key", Int64.Type}, {"progress_updated_date_key", Int64.Type}, {"activity_count", Int64.Type}, {"first_ridden_at", type datetimezone}, {"last_ridden_at", type datetimezone}, {"total_ridden_distance_miles", type number}, {"estimated_coverage_percent", type number}, {"unique_covered_distance_miles", type number}, {"remaining_distance_miles", type number}, {"progress_status", type text}, {"is_completed", Int64.Type}, {"is_nearly_complete", Int64.Type}, {"is_partial", Int64.Type}, {"is_started", Int64.Type}, {"is_unridden", Int64.Type}, {"updated_at", type datetimezone}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

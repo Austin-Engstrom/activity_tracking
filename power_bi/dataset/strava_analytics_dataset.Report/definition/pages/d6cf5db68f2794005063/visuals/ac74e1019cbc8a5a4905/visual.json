@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ac74e1019cbc8a5a4905",
+  "position": {
+    "x": 8,
+    "y": 1000,
+    "z": 6,
+    "height": 432,
+    "width": 1264,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "trail_system"
+                    }
+                  },
+                  "Property": "trail_system_name"
+                }
+              },
+              "queryRef": "trail_system.trail_system_name",
+              "nativeQueryRef": "trail_system_name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trail Ride Count"
+                }
+              },
+              "queryRef": "_measures.Trail Ride Count",
+              "nativeQueryRef": "Trail Ride Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trail Miles Ridden"
+                }
+              },
+              "queryRef": "_measures.Trail Miles Ridden",
+              "nativeQueryRef": "Trail Miles Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trails Ridden"
+                }
+              },
+              "queryRef": "_measures.Trails Ridden",
+              "nativeQueryRef": "Trails Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Trail Completion %"
+                }
+              },
+              "queryRef": "_measures.Trail Completion %",
+              "nativeQueryRef": "Trail Completion %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Official Trail Miles"
+                }
+              },
+              "queryRef": "_measures.Official Trail Miles",
+              "nativeQueryRef": "Official Trail Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Remaining Trail Miles"
+                }
+              },
+              "queryRef": "_measures.Remaining Trail Miles",
+              "nativeQueryRef": "Remaining Trail Miles"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_measures"
+                  }
+                },
+                "Property": "Trail Miles Ridden"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
