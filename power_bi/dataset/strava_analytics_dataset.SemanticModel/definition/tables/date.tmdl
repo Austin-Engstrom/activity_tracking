@@ -1,0 +1,108 @@
+table date
+	lineageTag: 88bcf151-8800-4b1a-9c00-7bd9536eae10
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5d6e4987-0f14-425d-987f-94c626d72adb
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9b429ac0-623c-4af8-975c-b5c11713e354
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		dataType: string
+		lineageTag: 46d4d263-ba20-4696-a252-f7b6cb56b33c
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: string
+		lineageTag: 76a82867-2fae-47c8-b415-09feda8984ae
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column week
+		dataType: string
+		lineageTag: 5ceaabf9-5e0e-4802-ab48-980fbd595b29
+		summarizeBy: none
+		sourceColumn: week
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 79901c8f-1085-4441-b669-ece8bc065799
+		summarizeBy: none
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 37b4481d-4988-40ca-92fe-fd7f0ad9380e
+		summarizeBy: none
+		sourceColumn: quarter_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 49e36533-aafb-44a3-a525-42906bf4b8e5
+		summarizeBy: none
+		sourceColumn: week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 1153ffa5-68ae-4dfe-8f6c-b1a8888c4e28
+		summarizeBy: none
+		sourceColumn: day_of_week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: int64
+		formatString: 0
+		lineageTag: c6c7c851-68dc-4bba-a6ed-410ead485819
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	partition date = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_date.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"quarter"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

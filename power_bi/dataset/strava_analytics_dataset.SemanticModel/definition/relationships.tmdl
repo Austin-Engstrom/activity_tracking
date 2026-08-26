@@ -1,0 +1,40 @@
+relationship AutoDetected_396b305d-cc9d-4007-9f80-5303e9a02040
+	fromColumn: trail_activity.activity_id
+	toColumn: activities.activity_id
+
+relationship AutoDetected_0a0db404-2f70-4ccb-b9c2-390b7eca0c2f
+	fromColumn: activities.activity_type_key
+	toColumn: activity_type.activity_type_key
+
+relationship AutoDetected_9445ec6e-f28d-4b94-a041-3f6d9b9f607d
+	fromColumn: activities.gear_key
+	toColumn: gear.gear_key
+
+relationship AutoDetected_68506ebb-3cdd-4912-9754-fc7f42d3df16
+	fromColumn: trail_activity.official_trail_key
+	toColumn: trail.official_trail_key
+
+relationship AutoDetected_1d9f0380-47a6-48f8-ae9c-24456346160d
+	fromColumn: trail_progress.official_trail_key
+	toColumn: trail.official_trail_key
+
+relationship AutoDetected_3a903101-06c9-47b3-ad61-3070f055687a
+	fromColumn: trail.trail_system_key
+	toColumn: trail_system.trail_system_key
+
+relationship c35f6165-cc8f-a6bf-3cd4-394ce8d1b5ec
+	fromColumn: activities.activity_id
+	toColumn: activity_stream_summary.activity_id
+
+relationship bd7955c6-dc9d-7097-4caf-127e2a8e3d95
+	fromColumn: activities.activity_date_key
+	toColumn: date.date_key
+
+relationship AutoDetected_13cdfece-b3bf-45c5-a0cd-80525e86875b
+	fromColumn: segment_effort.segment_key
+	toColumn: segment.segment_key
+
+relationship 866863ba-fc66-c6aa-d8b8-da99f270afd4
+	fromColumn: segment_effort.activity_id
+	toColumn: activities.activity_id
+

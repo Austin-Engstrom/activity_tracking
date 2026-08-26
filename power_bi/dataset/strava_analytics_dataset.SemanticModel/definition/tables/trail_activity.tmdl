@@ -1,0 +1,172 @@
+table trail_activity
+	lineageTag: c07e4e6f-9952-4b4d-b237-5191677482d5
+
+	column official_trail_activity_match_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 089715c0-26e7-4f36-8db2-521d0fe22077
+		summarizeBy: sum
+		sourceColumn: official_trail_activity_match_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column official_trail_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f6786902-0802-46e4-9e60-573f201b1361
+		summarizeBy: none
+		sourceColumn: official_trail_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4b0aa76f-1190-4973-92ec-842e8615f4d6
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ae86b2e1-57e8-4757-a438-fbfcdd7f7069
+		summarizeBy: sum
+		sourceColumn: activity_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_type_key
+		dataType: string
+		isHidden
+		lineageTag: 56ef4c70-3250-43f8-abd3-c888daf5a2f6
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_key
+		dataType: string
+		isHidden
+		lineageTag: bde45216-40cd-4845-ac76-8b0799294127
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_name
+		dataType: string
+		lineageTag: 6fc1a2ca-7294-477b-a1b5-c6e7aeb7bdb4
+		summarizeBy: none
+		sourceColumn: activity_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cbbbf68e-0180-4ab9-b716-79238062ea7b
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column matched_trail_length_miles
+		dataType: double
+		lineageTag: ed62bd52-ca1d-4abf-8325-43e541c95a36
+		summarizeBy: sum
+		sourceColumn: matched_trail_length_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ridden_distance_miles
+		dataType: double
+		lineageTag: 48d8d73a-329b-4420-bfe7-06883bb455de
+		summarizeBy: sum
+		sourceColumn: ridden_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column trail_coverage_percent
+		dataType: double
+		lineageTag: 4fffad0c-8467-4e46-b405-7d6ebe150350
+		summarizeBy: sum
+		sourceColumn: trail_coverage_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column matched_point_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 5edab142-99fd-4161-8009-30a7619a691d
+		summarizeBy: sum
+		sourceColumn: matched_point_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column tolerance_feet
+		dataType: double
+		lineageTag: 2cdfd62c-6adc-4303-9aed-c52ef21a1587
+		summarizeBy: sum
+		sourceColumn: tolerance_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3680b9be-cf26-40f2-a613-4cfb9a4a58e1
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c25d28c1-c482-43d2-af91-75eb6a7dec1c
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition trail_activity = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_trail_activity.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"official_trail_activity_match_id", Int64.Type}, {"official_trail_key", Int64.Type}, {"activity_id", Int64.Type}, {"activity_date_key", Int64.Type}, {"activity_type_key", type text}, {"gear_key", type text}, {"activity_name", type text}, {"start_date", type date}, {"matched_trail_length_miles", type number}, {"ridden_distance_miles", type number}, {"trail_coverage_percent", type number}, {"matched_point_count", Int64.Type}, {"tolerance_feet", type number}, {"created_at", type datetimezone}, {"updated_at", type datetimezone}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

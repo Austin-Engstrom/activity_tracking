@@ -1,0 +1,29 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["activities","activity_type","gear","trail","segment","trail_system","trail_activity","trail_progress","activity_stream_summary","date","segment_effort"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table activities
+ref table activity_type
+ref table gear
+ref table trail
+ref table segment
+ref table trail_system
+ref table trail_activity
+ref table trail_progress
+ref table activity_stream_summary
+ref table date
+ref table segment_effort
+
+ref cultureInfo en-US
+

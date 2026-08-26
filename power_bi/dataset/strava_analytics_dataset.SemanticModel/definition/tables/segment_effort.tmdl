@@ -1,0 +1,235 @@
+table segment_effort
+	lineageTag: 0ae5ebba-0034-44f0-b51f-3e9354b33770
+
+	column segment_effort_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d2e55153-83bb-4e54-ae30-a237210ea8a2
+		summarizeBy: sum
+		sourceColumn: segment_effort_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0b66c3a2-b85d-4356-9d65-fc9b81c9eb84
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 67bdcea8-2924-4ce7-8387-fc064826a408
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column effort_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5912a209-acec-4ff5-9cea-97fc341c311e
+		summarizeBy: sum
+		sourceColumn: effort_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_effort_name
+		dataType: string
+		lineageTag: 23826cde-6bd7-4c93-86f6-793b877b1070
+		summarizeBy: none
+		sourceColumn: segment_effort_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1dd940cf-40df-4a1f-aedd-692214fc9bfd
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column start_date_local
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 77268dac-b7bd-44b5-a061-a46ff753b30d
+		summarizeBy: none
+		sourceColumn: start_date_local
+
+		annotation SummarizationSetBy = Automatic
+
+	column elapsed_time_minutes
+		dataType: double
+		lineageTag: 83e941f2-ed6c-4072-89fb-7f6c2c01dca9
+		summarizeBy: sum
+		sourceColumn: elapsed_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column moving_time_minutes
+		dataType: double
+		lineageTag: 2b502e5b-5dff-4ff8-aa81-b51ea83a4bb0
+		summarizeBy: sum
+		sourceColumn: moving_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column distance_miles
+		dataType: double
+		lineageTag: 71381ec5-17b5-4b89-8551-26a456a58a61
+		summarizeBy: sum
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column start_index
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c2f6827-076d-4616-9666-f434127e68e8
+		summarizeBy: sum
+		sourceColumn: start_index
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_index
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b800f8c-d67c-496a-86ee-c2b48b4bab86
+		summarizeBy: sum
+		sourceColumn: end_index
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_cadence
+		dataType: double
+		lineageTag: 121e621a-ab66-4a0c-8039-8ac8c2cf7486
+		summarizeBy: sum
+		sourceColumn: average_cadence
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_watts
+		dataType: double
+		lineageTag: 49b62c3c-cff0-48b4-8c37-19de3f2b3c1a
+		summarizeBy: sum
+		sourceColumn: average_watts
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_device_watts
+		dataType: int64
+		formatString: 0
+		lineageTag: d0143ff9-2ab9-4ee1-800b-13d08dbee552
+		summarizeBy: sum
+		sourceColumn: is_device_watts
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_heartrate
+		dataType: double
+		lineageTag: 94177c28-6470-4b60-8bc1-720e996500d7
+		summarizeBy: sum
+		sourceColumn: average_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column max_heartrate
+		dataType: double
+		lineageTag: 754eef79-4beb-4731-b796-7c9b3b961cf9
+		summarizeBy: sum
+		sourceColumn: max_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column kom_rank
+		dataType: double
+		lineageTag: d088746f-01bb-45ac-b056-82e45aaf055c
+		summarizeBy: sum
+		sourceColumn: kom_rank
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pr_rank
+		dataType: double
+		lineageTag: 4b9d7314-bf8f-4e85-b168-64fb466c5fbe
+		summarizeBy: sum
+		sourceColumn: pr_rank
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_hidden
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c36982f-aa7d-463c-8ee6-8ed790d3a744
+		summarizeBy: sum
+		sourceColumn: is_hidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6a80183a-418b-47b7-8d5e-c11cd8e443ea
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b8b54873-4181-4d8f-a78b-28ab5d4268a4
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition segment_effort = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_segment_effort.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

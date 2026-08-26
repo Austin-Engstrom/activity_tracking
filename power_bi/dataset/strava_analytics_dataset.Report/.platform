@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "strava_analytics_dataset"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ed14c999-94cd-4f43-bfad-cd28517f2e0b"
+  }
+}

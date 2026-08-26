@@ -1,0 +1,266 @@
+table activities
+	lineageTag: 7c6c1f43-d838-4b5f-aff5-e49cde32be63
+
+	column activity_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1e65c421-ac07-449a-9d47-edf3fdaffaee
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c95102a9-59bd-41c0-8a29-b1afca5557ac
+		summarizeBy: none
+		sourceColumn: activity_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_type_key
+		dataType: string
+		isHidden
+		lineageTag: aa538f92-cc15-434b-92cd-2b68c4ac1cb7
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_key
+		dataType: string
+		isHidden
+		lineageTag: c2f9e410-f2e6-40c4-bfe3-b0dc8229cfb2
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_name
+		dataType: string
+		lineageTag: c9deb88a-8311-4121-a96e-e3b4f2166602
+		summarizeBy: none
+		sourceColumn: activity_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column sport_type
+		dataType: string
+		lineageTag: ecf3c62a-65bb-47c8-a100-8428436f0e32
+		summarizeBy: none
+		sourceColumn: sport_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ca427277-875d-4d5c-9cdc-67a10f8ed676
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column activity_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e6a5f069-0392-4f90-9eab-02e9cc7fe641
+		summarizeBy: none
+		sourceColumn: activity_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column distance_miles
+		dataType: double
+		lineageTag: b1d57d07-15d7-4b8c-8a97-a487b0926e6f
+		summarizeBy: sum
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column moving_time_minutes
+		dataType: double
+		lineageTag: 2766d0bb-3de5-4eb3-81a7-25cc56064c2d
+		summarizeBy: sum
+		sourceColumn: moving_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column elapsed_time_minutes
+		dataType: double
+		lineageTag: aed6512a-5bd0-4523-af54-a60456d26481
+		summarizeBy: sum
+		sourceColumn: elapsed_time_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_elevation_gain_feet
+		dataType: double
+		lineageTag: 2fb9eb7f-e729-4b18-baf3-37474d989622
+		summarizeBy: sum
+		sourceColumn: total_elevation_gain_feet
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_speed_mph
+		dataType: double
+		lineageTag: ece8371d-ed30-4e3d-a857-d40df19e917b
+		summarizeBy: sum
+		sourceColumn: average_speed_mph
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column max_speed_mph
+		dataType: double
+		lineageTag: 7336ae07-55d5-46ec-bdf0-4841cb365bed
+		summarizeBy: sum
+		sourceColumn: max_speed_mph
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_heartrate
+		dataType: double
+		lineageTag: d695cd20-d39e-400c-8f65-ab28a943d987
+		summarizeBy: sum
+		sourceColumn: average_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column max_heartrate
+		dataType: int64
+		lineageTag: 25da2102-2016-43cb-be91-7a5886c6a8e4
+		summarizeBy: sum
+		sourceColumn: max_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_cadence
+		dataType: double
+		lineageTag: 6edf32d7-d4a8-412d-be35-d637478a6507
+		summarizeBy: sum
+		sourceColumn: average_cadence
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_watts
+		dataType: double
+		lineageTag: ef2b3ee4-54f9-4a36-b705-9685c7eaef5d
+		summarizeBy: sum
+		sourceColumn: average_watts
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column kilojoules
+		dataType: double
+		lineageTag: a6c44ca3-7f4e-49a5-8493-3e4a3322a0d0
+		summarizeBy: sum
+		sourceColumn: kilojoules
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column calories
+		dataType: int64
+		lineageTag: 1c17e192-de78-48d3-bdd3-ecde4acb0fa5
+		summarizeBy: sum
+		sourceColumn: calories
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column suffer_score
+		dataType: int64
+		lineageTag: d0c345e0-b1dd-4803-9357-c3df4ab3c08d
+		summarizeBy: sum
+		sourceColumn: suffer_score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_commute
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e450852-c012-4d95-8b49-c03030d96a8d
+		summarizeBy: sum
+		sourceColumn: is_commute
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_trainer
+		dataType: int64
+		formatString: 0
+		lineageTag: 29996547-d25e-44da-9245-3785b9d13b85
+		summarizeBy: sum
+		sourceColumn: is_trainer
+
+		annotation SummarizationSetBy = Automatic
+
+	column stream_point_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 77ba1e37-ab6c-4064-b684-ac775458b30b
+		summarizeBy: sum
+		sourceColumn: stream_point_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_effort_count
+		dataType: int64
+		formatString: 0
+		lineageTag: f97068b6-6411-4697-b14e-038dfa6dabe8
+		summarizeBy: sum
+		sourceColumn: segment_effort_count
+
+		annotation SummarizationSetBy = Automatic
+
+	partition activities = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_activity.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"activity_id", Int64.Type}, {"activity_date_key", Int64.Type}, {"activity_type_key", type text}, {"gear_key", type text}, {"activity_name", type text}, {"sport_type", type text}, {"start_date", type date}, {"activity_date", type date}, {"distance_miles", type number}, {"moving_time_minutes", type number}, {"elapsed_time_minutes", type number}, {"total_elevation_gain_feet", type number}, {"average_speed_mph", type number}, {"max_speed_mph", type number}, {"average_heartrate", type number}, {"max_heartrate", Int64.Type}, {"average_cadence", type number}, {"average_watts", type number}, {"kilojoules", type number}, {"calories", Int64.Type}, {"suffer_score", Int64.Type}, {"is_commute", Int64.Type}, {"is_trainer", Int64.Type}, {"stream_point_count", Int64.Type}, {"segment_effort_count", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

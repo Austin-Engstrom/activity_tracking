@@ -1,0 +1,231 @@
+table trail
+	lineageTag: 4f1bca4d-1d6c-4927-a890-32ab46fbddc8
+
+	column official_trail_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1cb2b58b-af9f-4ac6-a11b-949c84e2ed2f
+		summarizeBy: none
+		sourceColumn: official_trail_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column official_trail_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 46983283-422d-41a8-a98a-5083750ac499
+		summarizeBy: sum
+		sourceColumn: official_trail_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c43f7795-cd2a-42f5-ad13-dd22fa0d662d
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_name
+		dataType: string
+		lineageTag: c9bc3e12-7efe-4d7f-8ffc-a63b21779af8
+		summarizeBy: none
+		sourceColumn: trail_system_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_city
+		dataType: string
+		lineageTag: 9f2d4a8f-fbb3-4fc5-901c-8094c9f28ae1
+		summarizeBy: none
+		sourceColumn: trail_system_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_state
+		dataType: string
+		lineageTag: 2b6e3f66-fefa-4c00-a2ce-9f65dcb3493a
+		summarizeBy: none
+		sourceColumn: trail_system_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_country
+		dataType: string
+		lineageTag: 6a78d6f0-d8be-403a-9461-2550a4e5d5bb
+		summarizeBy: none
+		sourceColumn: trail_system_country
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_latitude
+		dataType: string
+		lineageTag: 8aa21ef9-98bb-4e30-975f-477f3f2fca4e
+		summarizeBy: none
+		sourceColumn: trail_system_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column trail_system_longitude
+		dataType: string
+		lineageTag: 6ee0cc64-8d76-4d90-aca5-748f0630bf23
+		summarizeBy: none
+		sourceColumn: trail_system_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column official_trail_name
+		dataType: string
+		lineageTag: 61c2a3ee-9dbd-4cc8-b464-7ddbb8c4cd78
+		summarizeBy: none
+		sourceColumn: official_trail_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column normalized_name
+		dataType: string
+		lineageTag: 851db380-6f44-4906-8bc1-04ea62a5df64
+		summarizeBy: none
+		sourceColumn: normalized_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_length_miles
+		dataType: double
+		lineageTag: b52091f7-8e08-4604-9f33-b6feb2437189
+		summarizeBy: sum
+		sourceColumn: total_length_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column section_count
+		dataType: int64
+		formatString: 0
+		lineageTag: b384e67f-2587-4b9d-9ba7-c41b245cef9e
+		summarizeBy: sum
+		sourceColumn: section_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column primary_surface
+		dataType: string
+		lineageTag: 9983aec9-6be2-4107-a039-70f431974978
+		summarizeBy: none
+		sourceColumn: primary_surface
+
+		annotation SummarizationSetBy = Automatic
+
+	column bicycle_access
+		dataType: string
+		lineageTag: 23711f0c-0952-40c8-bff3-0c2cb1ea7111
+		summarizeBy: none
+		sourceColumn: bicycle_access
+
+		annotation SummarizationSetBy = Automatic
+
+	column mtb_scale
+		dataType: int64
+		formatString: 0
+		lineageTag: 435842fb-d415-459a-9207-175504fb99c4
+		summarizeBy: sum
+		sourceColumn: mtb_scale
+
+		annotation SummarizationSetBy = Automatic
+
+	column mtb_type
+		dataType: string
+		lineageTag: 0686c742-b4c7-4334-b86c-1a82965edcac
+		summarizeBy: none
+		sourceColumn: mtb_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column boundary_source
+		dataType: string
+		lineageTag: b5270cca-c57d-49fc-b17e-c2d983d8917b
+		summarizeBy: none
+		sourceColumn: boundary_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column boundary_confirmed
+		dataType: int64
+		formatString: 0
+		lineageTag: c0d7ff12-932e-4eff-bfaa-1342c728ac8f
+		summarizeBy: sum
+		sourceColumn: boundary_confirmed
+
+		annotation SummarizationSetBy = Automatic
+
+	column osm_element_type
+		dataType: string
+		lineageTag: c788397c-8bfd-4198-a022-3a70937822e1
+		summarizeBy: none
+		sourceColumn: osm_element_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column osm_element_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e5eefb97-4c4d-40bc-b3be-c1fe263b268a
+		summarizeBy: sum
+		sourceColumn: osm_element_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column osm_display_name
+		dataType: string
+		lineageTag: aaf5f38a-8884-4a36-a359-bd98a5d4f9fa
+		summarizeBy: none
+		sourceColumn: osm_display_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c00a288e-8a54-42a8-ba8f-cab64de32075
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 79eabfe5-bf1e-4631-9ef7-1fdceb83373b
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition trail = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_official_trail.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"official_trail_key", Int64.Type}, {"official_trail_id", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"trail_system_city", type text}, {"trail_system_state", type text}, {"trail_system_country", type text}, {"trail_system_latitude", type any}, {"trail_system_longitude", type any}, {"official_trail_name", type text}, {"normalized_name", type text}, {"total_length_miles", type number}, {"section_count", Int64.Type}, {"primary_surface", type text}, {"bicycle_access", type text}, {"mtb_scale", Int64.Type}, {"mtb_type", type any}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}, {"osm_display_name", type text}, {"created_at", type datetimezone}, {"updated_at", type datetimezone}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,35 @@
+table activity_type
+	lineageTag: 41056e58-b7eb-4437-8555-3dd43ed446fc
+
+	column activity_type_key
+		dataType: string
+		isHidden
+		lineageTag: 2023f9a7-c4ce-4c6e-88e6-bd24800df4f5
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_type
+		dataType: string
+		lineageTag: 1c76a2d3-ef19-46b0-8f2e-e4c8edfe993a
+		summarizeBy: none
+		sourceColumn: activity_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition activity_type = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_activity_type.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"activity_type_key", type text}, {"activity_type", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
