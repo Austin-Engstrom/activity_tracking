@@ -19,6 +19,7 @@ from src.services import (
     ActivityStreamService,
     GearService,
 )
+from src.tools.export_power_bi import run as export_power_bi
 
 
 def print_etl_summary(etl_result) -> bool:
@@ -69,8 +70,8 @@ def print_detail_summary(detail_result) -> bool:
         f"{detail_result.detail_activities_loaded}"
     )
     print(
-        f"Segments loaded:"
-        f" {detail_result.segment_activities_loaded}"
+        f"Segments loaded: "
+        f"{detail_result.segment_activities_loaded}"
     )
     print(f"Failed:         {detail_result.failed}")
     print(f"Remaining:      {detail_result.remaining}")
@@ -82,6 +83,7 @@ def print_detail_summary(detail_result) -> bool:
         print("Status:         Batch completed")
 
     return True
+
 
 def print_gear_summary(gear_result) -> bool:
     """Print the gear-load summary when work occurred."""
@@ -145,6 +147,7 @@ def print_stream_summary(stream_result) -> bool:
 
     return True
 
+
 def print_segment_summary(detail_result) -> bool:
     """Print the segment-load summary when work occurred."""
 
@@ -184,6 +187,7 @@ def print_segment_summary(detail_result) -> bool:
     )
 
     return True
+
 
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
@@ -270,7 +274,17 @@ def main() -> None:
         print("Database is fully synchronized.")
 
     print("\n" + "=" * 45)
-    print("Strava ETL Complete")
+    print("STRAVA ETL COMPLETE")
+    print("=" * 45)
+
+    print("\nPreparing Power BI data...")
+
+    export_power_bi(
+        exit_on_failure=False
+    )
+
+    print("=" * 45)
+    print("STRAVA ANALYTICS REFRESH COMPLETE")
     print("=" * 45)
 
 
