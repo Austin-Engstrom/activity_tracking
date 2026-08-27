@@ -288,7 +288,9 @@ def print_summary(
 # =============================================================================
 
 
-def run() -> None:
+def run(
+    exit_on_failure: bool = True,
+) -> list[ExportResult]:
     """Export all approved Power BI reporting views."""
 
     started_at = time.perf_counter()
@@ -322,9 +324,15 @@ def run() -> None:
         elapsed_seconds=elapsed_seconds,
     )
 
-    if any(not result.success for result in results):
+    has_failures = any(
+        not result.success
+        for result in results
+    )
+
+    if has_failures and exit_on_failure:
         raise SystemExit(1)
 
+    return results
 
 if __name__ == "__main__":
     run()
