@@ -31,6 +31,7 @@ POWER_BI_VIEWS = [
     "view_trail_activity",
     "view_trail_progress",
     "view_trail_system",
+    "view_component_service_status",
 ]
 
 PARQUET_COMPRESSION = "snappy"

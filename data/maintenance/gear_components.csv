@@ -1,3 +1,2 @@
 component_id,gear_id,component_type,manufacturer,model,installed_at,removed_at,service_interval_hours,notes
 1,b17417153,Fork,Fox,38 Factory,2026-02-09,,50,
-2,b17417153,Shock,Fox,Float X2,2026-02-09,,50,
