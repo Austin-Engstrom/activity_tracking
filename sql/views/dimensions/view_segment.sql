@@ -51,4 +51,7 @@ select
     , s.star_count
     , s.created_at
     , s.updated_at
-from segments s;
+    , sts.trail_system_id as trail_system_key
+from segments s
+left join segment_trail_systems sts
+    on s.segment_id = sts.segment_id;

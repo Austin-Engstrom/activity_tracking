@@ -18,7 +18,7 @@ table trail_system
 		isHidden
 		formatString: 0
 		lineageTag: 89829f7c-5760-4960-93b4-ae32cb2a0453
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: trail_system_id
 
 		changedProperty = IsHidden
@@ -94,7 +94,7 @@ table trail_system
 		isHidden
 		formatString: 0
 		lineageTag: 6c9aa4c5-26e3-416e-873c-ef31556487e6
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: osm_element_id
 
 		changedProperty = IsHidden
@@ -121,7 +121,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: 0e4450f1-78b7-456b-8ab7-e7f5c9116067
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: boundary_confirmed
 
 		annotation SummarizationSetBy = Automatic
@@ -139,7 +139,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: 3770bc35-c44c-470a-ad6b-0435a326dffb
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: official_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -148,7 +148,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: c56fa4dd-2b79-4427-a8b2-db9b8111885e
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: assigned_osm_section_count
 
 		annotation SummarizationSetBy = Automatic
@@ -156,7 +156,7 @@ table trail_system
 	column official_trail_length_miles
 		dataType: double
 		lineageTag: f6a0315d-40b0-43d2-adc9-8936bc78535f
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: official_trail_length_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -167,7 +167,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: 14981c00-31c8-4c63-9fc6-b44b427b0afc
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: completed_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -176,7 +176,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: ed0de6ec-0cdd-48b5-b45d-87b6dc9f9d87
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: nearly_complete_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -185,7 +185,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: acf9fdf7-d83e-4beb-b76b-ac6f64e5d3f3
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: partial_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -194,7 +194,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: 64600977-dcc1-4ae0-ac19-124204b6d74c
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: started_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -203,7 +203,7 @@ table trail_system
 		dataType: int64
 		formatString: 0
 		lineageTag: 40ccc764-42e6-4caf-9398-f44a9156d6cf
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: unridden_trail_count
 
 		annotation SummarizationSetBy = Automatic
@@ -211,7 +211,7 @@ table trail_system
 	column unique_covered_distance_miles
 		dataType: double
 		lineageTag: ebac1f6a-19c1-4465-a13d-f24005494f8f
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: unique_covered_distance_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -221,7 +221,7 @@ table trail_system
 	column remaining_distance_miles
 		dataType: double
 		lineageTag: bd6d91da-5448-41ea-a190-af4a6b59c75e
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: remaining_distance_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -231,7 +231,7 @@ table trail_system
 	column weighted_completion_percent
 		dataType: double
 		lineageTag: d1ae2ab2-3b11-41d6-85fd-2b6c6b7599dc
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: weighted_completion_percent
 
 		annotation SummarizationSetBy = Automatic

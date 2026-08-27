@@ -66,6 +66,8 @@ table segment_effort
 
 		annotation SummarizationSetBy = Automatic
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column start_date_local
 		dataType: dateTime
 		formatString: General Date

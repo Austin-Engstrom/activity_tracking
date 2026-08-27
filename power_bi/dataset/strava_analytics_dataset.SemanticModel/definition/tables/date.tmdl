@@ -22,6 +22,8 @@ table date
 
 		annotation SummarizationSetBy = Automatic
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column year
 		dataType: dateTime
 		formatString: yyyy
