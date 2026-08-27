@@ -42,3 +42,7 @@ relationship 8da6ee82-749d-966a-bd16-505d51e631be
 	fromColumn: segment_effort.segment_key
 	toColumn: segment.segment_key
 
+relationship AutoDetected_ebde1dc0-986f-4c9c-ac08-a22161bc97c0
+	fromColumn: component_service_status.gear_key
+	toColumn: gear.gear_key
+

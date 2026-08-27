@@ -9,7 +9,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["activities","activity_type","gear","trail","segment","trail_system","trail_activity","trail_progress","activity_stream_summary","date","segment_effort"]
+annotation PBI_QueryOrder = ["activities","activity_type","gear","trail","segment","trail_system","trail_activity","trail_progress","activity_stream_summary","date","segment_effort","component_service_status"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -27,6 +27,7 @@ ref table activity_stream_summary
 ref table date
 ref table segment_effort
 ref table _measures
+ref table component_service_status
 
 ref cultureInfo en-US
 

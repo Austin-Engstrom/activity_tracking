@@ -1,0 +1,232 @@
+table component_service_status
+	lineageTag: f2ea4d4e-4c06-41aa-b0de-4483a6665c2b
+
+	column component_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 818a9840-3b85-4cb6-872a-4d0198421250
+		summarizeBy: sum
+		sourceColumn: component_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column component_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 54aa87c1-c9a3-413e-9fd3-2a9bb91a20a7
+		summarizeBy: sum
+		sourceColumn: component_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_key
+		dataType: string
+		lineageTag: 7856dbc0-0237-4c5b-a4e8-4ceef3e1907b
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column gear_name
+		dataType: string
+		lineageTag: 9921245f-92c4-4b98-a3a4-d7f5da1b3fff
+		summarizeBy: none
+		sourceColumn: gear_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column component_type
+		dataType: string
+		lineageTag: 4f6bdef0-a36f-4007-b51e-52b92bc54089
+		summarizeBy: none
+		sourceColumn: component_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column manufacturer
+		dataType: string
+		lineageTag: c6f12d53-595d-4cc5-93ec-721c77890ab8
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column model
+		dataType: string
+		lineageTag: d994485e-d5c2-434e-b3aa-f2e6e4c253e1
+		summarizeBy: none
+		sourceColumn: model
+
+		annotation SummarizationSetBy = Automatic
+
+	column component_name
+		dataType: string
+		lineageTag: 2859f434-7ef8-45f4-a8d9-743a6065066b
+		summarizeBy: none
+		sourceColumn: component_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column installed_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bc9f2408-683c-45c3-ad54-7ae8df83bc85
+		summarizeBy: none
+		sourceColumn: installed_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: int64
+		formatString: 0
+		lineageTag: ca1e5821-bcfd-486b-ac64-8e75faaca16f
+		summarizeBy: sum
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_interval_hours
+		dataType: double
+		lineageTag: 8f0970ed-9f23-4269-882d-a1c96db72d96
+		summarizeBy: sum
+		sourceColumn: service_interval_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column latest_service_id
+		dataType: int64
+		formatString: 0
+		lineageTag: fae99878-3961-49b1-a5c7-e883f01a2cb7
+		summarizeBy: sum
+		sourceColumn: latest_service_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_service_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 19cee250-2de3-4c2d-8b7a-3aabf549dfb5
+		summarizeBy: none
+		sourceColumn: latest_service_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column latest_service_type
+		dataType: string
+		lineageTag: 42f343bc-28dc-4157-965f-e123e1da75be
+		summarizeBy: none
+		sourceColumn: latest_service_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_service_notes
+		dataType: string
+		lineageTag: c7e13a37-a3a6-4b05-b9dc-0174b72d33c7
+		summarizeBy: none
+		sourceColumn: latest_service_notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_baseline_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e9723da0-d898-4075-9c39-409481f5a6bb
+		summarizeBy: none
+		sourceColumn: service_baseline_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column service_baseline_date_key
+		dataType: string
+		lineageTag: b8fc21d7-85f3-4082-9d58-6931f1be0245
+		summarizeBy: none
+		sourceColumn: service_baseline_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column hours_since_service
+		dataType: double
+		lineageTag: a27a48e6-f037-4438-8930-cdc4ef6a1956
+		summarizeBy: sum
+		sourceColumn: hours_since_service
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column lifetime_component_hours
+		dataType: double
+		lineageTag: c8299f3a-94b3-4f68-a960-1b0513f6a635
+		summarizeBy: sum
+		sourceColumn: lifetime_component_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column hours_remaining
+		dataType: double
+		lineageTag: 2807e9cf-95a8-4f43-83b8-f050ea142eec
+		summarizeBy: sum
+		sourceColumn: hours_remaining
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column hours_overdue
+		dataType: double
+		lineageTag: f12d021e-910b-48c9-8d31-4e9c991d9e0f
+		summarizeBy: sum
+		sourceColumn: hours_overdue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column service_interval_percent
+		dataType: double
+		lineageTag: c38ed334-0eb6-4440-ba81-b651891a845c
+		summarizeBy: sum
+		sourceColumn: service_interval_percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column service_status
+		dataType: string
+		lineageTag: 01595bfd-68e1-4bc0-ae2b-682576ecf5f8
+		summarizeBy: none
+		sourceColumn: service_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column component_notes
+		dataType: string
+		lineageTag: 179044ec-f278-4bb6-805c-31635d3f1fed
+		summarizeBy: none
+		sourceColumn: component_notes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition component_service_status = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\view_component_service_status.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"component_notes", type text}, {"removed_at", type date}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"removed_at"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
