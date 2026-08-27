@@ -18,15 +18,15 @@ Consumers:
     Power BI
 
 Notes:
-    Ride hours are calculated from activity moving time for the gear on which
-    the component is installed.
+    Calculates both ride hours and ride miles since the most recent service.
 
-    The most recent service event resets the service interval. If no service
-    event exists, the component installation date is used as the baseline.
+    The component's service_interval_type determines whether maintenance
+    status is evaluated using hours or miles.
+
+    If no service event exists, the component installation date is used
+    as the service baseline.
 
     Activities after a component removal date are excluded.
-
-    Hours remaining may be negative when a component is overdue for service.
 ===============================================================================
 */
 
@@ -59,7 +59,8 @@ component_baseline as (
         , gc.model
         , gc.installed_at
         , gc.removed_at
-        , gc.service_interval_hours
+        , gc.service_interval_type
+        , gc.service_interval_value
         , gc.notes as component_notes
 
         , ls.service_id as latest_service_id
@@ -79,7 +80,7 @@ component_baseline as (
        and ls.service_rank = 1
 ),
 
-ride_time as (
+component_usage as (
     select
           cb.component_id
 
@@ -100,6 +101,20 @@ ride_time as (
         , sum(
               case
                   when datetime(a.start_date)
+                       >= datetime(cb.service_baseline_date)
+                   and (
+                          cb.removed_at is null
+                          or datetime(a.start_date)
+                             <= datetime(cb.removed_at)
+                       )
+                      then a.distance_meters
+                  else 0
+              end
+          ) / 1609.344 as miles_since_service
+
+        , sum(
+              case
+                  when datetime(a.start_date)
                        >= datetime(cb.installed_at)
                    and (
                           cb.removed_at is null
@@ -111,6 +126,20 @@ ride_time as (
               end
           ) / 3600.0 as lifetime_component_hours
 
+        , sum(
+              case
+                  when datetime(a.start_date)
+                       >= datetime(cb.installed_at)
+                   and (
+                          cb.removed_at is null
+                          or datetime(a.start_date)
+                             <= datetime(cb.removed_at)
+                       )
+                      then a.distance_meters
+                  else 0
+              end
+          ) / 1609.344 as lifetime_component_miles
+
     from component_baseline cb
 
     left join activities a
@@ -118,104 +147,146 @@ ride_time as (
 
     group by
         cb.component_id
+),
+
+usage_calculation as (
+    select
+          cb.*
+        , coalesce(cu.hours_since_service, 0.0)
+            as hours_since_service
+        , coalesce(cu.miles_since_service, 0.0)
+            as miles_since_service
+        , coalesce(cu.lifetime_component_hours, 0.0)
+            as lifetime_component_hours
+        , coalesce(cu.lifetime_component_miles, 0.0)
+            as lifetime_component_miles
+
+        , case
+              when cb.service_interval_type = 'hours'
+                  then coalesce(cu.hours_since_service, 0.0)
+
+              when cb.service_interval_type = 'miles'
+                  then coalesce(cu.miles_since_service, 0.0)
+          end as usage_since_service
+
+    from component_baseline cb
+
+    left join component_usage cu
+        on cb.component_id = cu.component_id
 )
 
 select
-      cb.component_id as component_key
-    , cb.component_id
-    , cb.gear_id as gear_key
+      uc.component_id as component_key
+    , uc.component_id
+    , uc.gear_id as gear_key
 
     , g.name as gear_name
 
-    , cb.component_type
-    , cb.manufacturer
-    , cb.model
+    , uc.component_type
+    , uc.manufacturer
+    , uc.model
 
     , trim(
-          coalesce(cb.manufacturer || ' ', '')
-          || coalesce(cb.model, cb.component_type)
+          coalesce(uc.manufacturer || ' ', '')
+          || coalesce(uc.model, uc.component_type)
       ) as component_name
 
-    , cb.installed_at
-    , cb.removed_at
+    , uc.installed_at
+    , uc.removed_at
 
     , case
-          when cb.removed_at is null then 1
+          when uc.removed_at is null then 1
           else 0
       end as is_active
 
-    , cb.service_interval_hours
+    , uc.service_interval_type
+    , uc.service_interval_value
 
-    , cb.latest_service_id
-    , cb.latest_service_date
-    , cb.latest_service_type
-    , cb.latest_service_notes
+    , uc.latest_service_id
+    , uc.latest_service_date
+    , uc.latest_service_type
+    , uc.latest_service_notes
 
-    , cb.service_baseline_date
+    , uc.service_baseline_date
 
     , cast(
           strftime(
               '%Y%m%d',
-              date(cb.service_baseline_date)
+              date(uc.service_baseline_date)
           ) as integer
       ) as service_baseline_date_key
 
     , round(
-          coalesce(rt.hours_since_service, 0.0),
+          uc.hours_since_service,
           2
       ) as hours_since_service
 
     , round(
-          coalesce(rt.lifetime_component_hours, 0.0),
+          uc.miles_since_service,
+          2
+      ) as miles_since_service
+
+    , round(
+          uc.lifetime_component_hours,
           2
       ) as lifetime_component_hours
 
     , round(
-          cb.service_interval_hours
-          - coalesce(rt.hours_since_service, 0.0),
+          uc.lifetime_component_miles,
           2
-      ) as hours_remaining
+      ) as lifetime_component_miles
+
+    , round(
+          uc.usage_since_service,
+          2
+      ) as usage_since_service
+
+    , round(
+          uc.service_interval_value
+          - uc.usage_since_service,
+          2
+      ) as usage_remaining
 
     , round(
           max(
-              coalesce(rt.hours_since_service, 0.0)
-              - cb.service_interval_hours,
+              uc.usage_since_service
+              - uc.service_interval_value,
               0.0
           ),
           2
-      ) as hours_overdue
+      ) as usage_overdue
 
     , round(
-          coalesce(rt.hours_since_service, 0.0)
-          / nullif(cb.service_interval_hours, 0)
+          uc.usage_since_service
+          / nullif(uc.service_interval_value, 0)
           * 100.0,
           2
       ) as service_interval_percent
 
     , case
-          when cb.removed_at is not null
+          when uc.removed_at is not null
               then 'Inactive'
 
-          when cb.service_interval_hours is null
+          when uc.service_interval_type is null
               then 'No Schedule'
 
-          when coalesce(rt.hours_since_service, 0.0)
-               >= cb.service_interval_hours
+          when uc.service_interval_value is null
+              then 'No Schedule'
+
+          when uc.usage_since_service
+               >= uc.service_interval_value
               then 'Due'
 
-          when coalesce(rt.hours_since_service, 0.0)
-               >= cb.service_interval_hours * 0.80
+          when uc.usage_since_service
+               >= uc.service_interval_value * 0.80
               then 'Due Soon'
 
           else 'Current'
       end as service_status
 
-    , cb.component_notes
+    , uc.component_notes
 
-from component_baseline cb
-
-left join ride_time rt
-    on cb.component_id = rt.component_id
+from usage_calculation uc
 
 left join gear g
-    on cb.gear_id = g.gear_id;
+    on uc.gear_id = g.gear_id;
