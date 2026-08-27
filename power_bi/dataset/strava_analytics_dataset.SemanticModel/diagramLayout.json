@@ -94,8 +94,8 @@
         },
         {
           "location": {
-            "x": 516.9174418927422,
-            "y": 760.47031094042529
+            "x": 501.9174418927422,
+            "y": 973.80364427375855
           },
           "nodeIndex": "trail",
           "nodeLineageTag": "4f1bca4d-1d6c-4927-a890-32ab46fbddc8",
@@ -122,8 +122,8 @@
         },
         {
           "location": {
-            "x": 516.93576267453864,
-            "y": 1038.3333333333333
+            "x": 995.26909600787189,
+            "y": 993.33333333333326
           },
           "nodeIndex": "trail_progress",
           "nodeLineageTag": "a5a7b8db-5c22-4cfb-8e6b-27c5afb5488a",
@@ -172,7 +172,7 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 12
         }
       ],
       "name": "All tables",

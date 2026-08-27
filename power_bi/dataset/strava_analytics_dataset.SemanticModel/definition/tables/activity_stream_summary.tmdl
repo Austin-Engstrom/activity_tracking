@@ -17,7 +17,7 @@ table activity_stream_summary
 		dataType: int64
 		formatString: 0
 		lineageTag: ed29fb16-da2a-4843-b484-83fb851f0b28
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: stream_point_count
 
 		annotation SummarizationSetBy = Automatic
@@ -26,7 +26,7 @@ table activity_stream_summary
 		dataType: int64
 		formatString: 0
 		lineageTag: 55b1cbe3-1b2a-4f65-aae9-b7147e4e00c7
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: minimum_time_minutes
 
 		annotation SummarizationSetBy = Automatic
@@ -34,7 +34,7 @@ table activity_stream_summary
 	column maximum_time_minutes
 		dataType: double
 		lineageTag: faa50488-18a6-4140-bd50-4fd3f76ec9f8
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_time_minutes
 
 		annotation SummarizationSetBy = Automatic
@@ -45,7 +45,7 @@ table activity_stream_summary
 		dataType: int64
 		formatString: 0
 		lineageTag: 9c3e98ec-b9f6-4a12-a510-43b5f86b1967
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: minimum_distance_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -53,7 +53,7 @@ table activity_stream_summary
 	column maximum_distance_miles
 		dataType: double
 		lineageTag: 13ed721c-a446-4d27-92f7-3846708e9d10
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_distance_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -63,7 +63,7 @@ table activity_stream_summary
 	column minimum_altitude_feet
 		dataType: double
 		lineageTag: 3c7c80cb-306b-4328-b30d-dce0d7083a94
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: minimum_altitude_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -73,7 +73,7 @@ table activity_stream_summary
 	column maximum_altitude_feet
 		dataType: double
 		lineageTag: 68c7aebb-a092-439d-a329-98d0c40d3a64
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_altitude_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -83,7 +83,7 @@ table activity_stream_summary
 	column altitude_range_feet
 		dataType: double
 		lineageTag: c624729e-f0dc-4ed0-9469-f2041d8e710a
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: altitude_range_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -93,7 +93,7 @@ table activity_stream_summary
 	column average_velocity_mph
 		dataType: double
 		lineageTag: 05785c14-f1fe-49e9-b671-ed7a961bd578
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_velocity_mph
 
 		annotation SummarizationSetBy = Automatic
@@ -103,7 +103,7 @@ table activity_stream_summary
 	column maximum_velocity_mph
 		dataType: double
 		lineageTag: 6db7f910-2cf7-4623-9dba-ca9483bc4b0c
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_velocity_mph
 
 		annotation SummarizationSetBy = Automatic
@@ -113,7 +113,7 @@ table activity_stream_summary
 	column average_heartrate
 		dataType: double
 		lineageTag: 8c46f62c-86cf-440c-8d3b-ddf41fcaf677
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_heartrate
 
 		annotation SummarizationSetBy = Automatic
@@ -123,7 +123,7 @@ table activity_stream_summary
 	column maximum_heartrate
 		dataType: double
 		lineageTag: 5561da46-f0e9-4efa-81e2-cc6b5b18b101
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_heartrate
 
 		annotation SummarizationSetBy = Automatic
@@ -133,7 +133,7 @@ table activity_stream_summary
 	column average_cadence
 		dataType: double
 		lineageTag: 99447f86-0aec-4e27-8ba1-1506c4487e9c
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_cadence
 
 		annotation SummarizationSetBy = Automatic
@@ -143,7 +143,7 @@ table activity_stream_summary
 	column maximum_cadence
 		dataType: double
 		lineageTag: 828ddcc5-e7c7-4e33-b752-0baf42df3309
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_cadence
 
 		annotation SummarizationSetBy = Automatic
@@ -153,7 +153,7 @@ table activity_stream_summary
 	column average_watts
 		dataType: double
 		lineageTag: aa028322-adde-48f6-b18e-9956efc1849c
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_watts
 
 		annotation SummarizationSetBy = Automatic
@@ -163,7 +163,7 @@ table activity_stream_summary
 	column maximum_watts
 		dataType: double
 		lineageTag: 91a8746d-a0b0-4d56-9f2d-dab833b59f4b
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_watts
 
 		annotation SummarizationSetBy = Automatic
@@ -197,7 +197,7 @@ table activity_stream_summary
 	column average_grade_percent
 		dataType: double
 		lineageTag: dff1db04-de21-482e-8353-d7cd0ebb72a4
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_grade_percent
 
 		annotation SummarizationSetBy = Automatic
@@ -207,7 +207,7 @@ table activity_stream_summary
 	column minimum_grade_percent
 		dataType: double
 		lineageTag: 180f79c2-e5a4-454d-b01b-63f769bc7198
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: minimum_grade_percent
 
 		annotation SummarizationSetBy = Automatic
@@ -217,7 +217,7 @@ table activity_stream_summary
 	column maximum_grade_percent
 		dataType: double
 		lineageTag: 79262363-cf0a-4181-8ae8-e78926d1ed00
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_grade_percent
 
 		annotation SummarizationSetBy = Automatic
@@ -228,7 +228,7 @@ table activity_stream_summary
 		dataType: int64
 		formatString: 0
 		lineageTag: b7731557-51ee-4240-9b5d-faf2c92ba136
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: moving_point_count
 
 		annotation SummarizationSetBy = Automatic
@@ -237,7 +237,7 @@ table activity_stream_summary
 		dataType: int64
 		formatString: 0
 		lineageTag: ee34d231-0e35-4012-a65c-11ab4a7e0c3b
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: stopped_point_count
 
 		annotation SummarizationSetBy = Automatic
@@ -245,7 +245,7 @@ table activity_stream_summary
 	column moving_point_percent
 		dataType: double
 		lineageTag: 808fd590-079a-4640-bd1f-8c1ee785d1f9
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: moving_point_percent
 
 		annotation SummarizationSetBy = Automatic

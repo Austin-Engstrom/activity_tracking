@@ -209,8 +209,21 @@ table _measures
 		displayFolder: Activities
 		lineageTag: 7176ec96-8013-4d3e-ba89-a4aba98069fc
 
+	measure 'Activity Miles by Trail Context' =
+			
+			CALCULATE (
+			    [Total Distance],
+			    TREATAS (
+			        VALUES ( trail_activity[activity_id] ),
+			        activities[activity_id]
+			    )
+			)
+		displayFolder: Trails
+		lineageTag: 778a6324-fb02-4f83-869e-0c4f758368ef
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column Column
-		isHidden
 		formatString: 0
 		lineageTag: a2b5cb6c-1547-41f1-9a4b-8064cde4fc0b
 		summarizeBy: sum

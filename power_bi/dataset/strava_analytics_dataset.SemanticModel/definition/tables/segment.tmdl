@@ -18,7 +18,7 @@ table segment
 		isHidden
 		formatString: 0
 		lineageTag: 77568a7a-2612-43a5-88c7-35772c448062
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: segment_id
 
 		changedProperty = IsHidden
@@ -44,7 +44,7 @@ table segment
 	column distance_miles
 		dataType: double
 		lineageTag: be318536-127f-48d3-8c24-33374c70e102
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: distance_miles
 
 		annotation SummarizationSetBy = Automatic
@@ -54,7 +54,7 @@ table segment
 	column average_grade
 		dataType: double
 		lineageTag: 10de8da0-b616-42a1-b6ac-0628311b2a48
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: average_grade
 
 		annotation SummarizationSetBy = Automatic
@@ -64,7 +64,7 @@ table segment
 	column maximum_grade
 		dataType: double
 		lineageTag: e411d3a3-40df-4f1f-a699-cb33b3198e24
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: maximum_grade
 
 		annotation SummarizationSetBy = Automatic
@@ -74,7 +74,7 @@ table segment
 	column elevation_high_feet
 		dataType: double
 		lineageTag: 4de6156e-f225-4f5f-b68a-98bdd0b0dea0
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: elevation_high_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -84,7 +84,7 @@ table segment
 	column elevation_low_feet
 		dataType: double
 		lineageTag: 4e0d5258-6682-438f-90a9-9c035b6d5c15
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: elevation_low_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -94,7 +94,7 @@ table segment
 	column elevation_range_feet
 		dataType: double
 		lineageTag: e17a0604-381e-442a-b436-18f5f9a89a7d
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: elevation_range_feet
 
 		annotation SummarizationSetBy = Automatic
@@ -104,7 +104,7 @@ table segment
 	column start_latitude
 		dataType: double
 		lineageTag: 90fadc53-2a5f-4e0a-a7fe-638178d67108
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: start_latitude
 
 		annotation SummarizationSetBy = Automatic
@@ -114,7 +114,7 @@ table segment
 	column start_longitude
 		dataType: double
 		lineageTag: 7472b286-5531-471a-a569-c4b101ee970d
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: start_longitude
 
 		annotation SummarizationSetBy = Automatic
@@ -124,7 +124,7 @@ table segment
 	column end_latitude
 		dataType: double
 		lineageTag: bde91460-3e46-4e7a-965e-be2d56148e30
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: end_latitude
 
 		annotation SummarizationSetBy = Automatic
@@ -134,7 +134,7 @@ table segment
 	column end_longitude
 		dataType: double
 		lineageTag: 80668e96-848e-428b-8d8f-d263ae4a6c23
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: end_longitude
 
 		annotation SummarizationSetBy = Automatic
@@ -145,7 +145,7 @@ table segment
 		dataType: int64
 		formatString: 0
 		lineageTag: 6b957065-151b-496a-848b-258577ecb8e7
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: climb_category
 
 		annotation SummarizationSetBy = Automatic
@@ -178,7 +178,7 @@ table segment
 		dataType: int64
 		formatString: 0
 		lineageTag: 28358d11-b509-4cba-97e7-0eb3e12a2db4
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: is_private
 
 		annotation SummarizationSetBy = Automatic
@@ -187,7 +187,7 @@ table segment
 		dataType: int64
 		formatString: 0
 		lineageTag: 40f37e35-5c9d-4e19-8122-3e41ea7a46b7
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: is_hazardous
 
 		annotation SummarizationSetBy = Automatic
@@ -196,7 +196,7 @@ table segment
 		dataType: int64
 		formatString: 0
 		lineageTag: 721f6324-9bce-40b8-b834-710c3ba09957
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: is_starred
 
 		annotation SummarizationSetBy = Automatic
@@ -242,6 +242,16 @@ table segment
 		sourceColumn: updated_at
 
 		annotation SummarizationSetBy = Automatic
+
+	column trail_system_key
+		dataType: double
+		lineageTag: 2ecc1e5f-ba14-4b44-b9d3-c0e810d2e27d
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition segment = m
 		mode: import
