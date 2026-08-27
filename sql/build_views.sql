@@ -63,6 +63,9 @@ Notes:
 .print 'Creating view_activity_stream_summary...'
 .read sql/views/facts/view_activity_stream_summary.sql
 
+.print 'Creating view_component_service_status...'
+.read sql/views/facts/view_component_service_status.sql
+
 .print ''
 .print '============================================================'
 .print 'REPORTING VIEWS BUILT SUCCESSFULLY'
