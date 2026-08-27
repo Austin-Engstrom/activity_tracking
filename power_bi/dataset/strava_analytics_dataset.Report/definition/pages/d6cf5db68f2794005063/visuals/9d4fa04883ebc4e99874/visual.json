@@ -1,0 +1,317 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "9d4fa04883ebc4e99874",
+  "position": {
+    "x": 824,
+    "y": 392,
+    "z": 15,
+    "height": 200,
+    "width": 447.99999999999994,
+    "tabOrder": 15
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "component_service_status"
+                    }
+                  },
+                  "Property": "component_name"
+                }
+              },
+              "queryRef": "component_service_status.component_name",
+              "nativeQueryRef": "component_name",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "component_service_status"
+                    }
+                  },
+                  "Property": "component_type"
+                }
+              },
+              "queryRef": "component_service_status.component_type",
+              "nativeQueryRef": "type",
+              "active": false,
+              "displayName": "type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gear"
+                    }
+                  },
+                  "Property": "gear_name"
+                }
+              },
+              "queryRef": "gear.gear_name",
+              "nativeQueryRef": "gear_name",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Service Interval %"
+                }
+              },
+              "queryRef": "_measures.Service Interval %",
+              "nativeQueryRef": "Service Interval %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Service Remaining"
+                }
+              },
+              "queryRef": "_measures.Service Remaining",
+              "nativeQueryRef": "Service Remaining"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measures"
+                    }
+                  },
+                  "Property": "Service Unit"
+                }
+              },
+              "queryRef": "_measures.Service Unit",
+              "nativeQueryRef": "Unit",
+              "displayName": "Unit"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "component_service_status.component_name"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "component_service_status.component_type"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "gear.gear_name"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gear"
+                    }
+                  },
+                  "Property": "gear_name"
+                }
+              }
+            ],
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "7bb9327c1be8be83cf86",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "component_service_status"
+              }
+            },
+            "Property": "component_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "31492cb6337e5f92d707",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Tracked Components"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "_",
+              "Entity": "_measures",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 1,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "_"
+                        }
+                      },
+                      "Property": "Tracked Components"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "0L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      },
+      {
+        "name": "a4c1dfbd91fbc87ee149",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "component_service_status"
+              }
+            },
+            "Property": "component_type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f82d8fc7ccdd2d987cf0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Service Interval %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1ec94384441190ddf580",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gear"
+              }
+            },
+            "Property": "gear_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f81c30dd14183230944e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Service Remaining"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "a39cf4f80b455ca7ce5d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_measures"
+              }
+            },
+            "Property": "Service Unit"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -22,6 +22,8 @@ MAINTENANCE_DIR = PROJECT_ROOT / "data" / "maintenance"
 GEAR_COMPONENTS_PATH = MAINTENANCE_DIR / "gear_components.csv"
 COMPONENT_SERVICES_PATH = MAINTENANCE_DIR / "component_services.csv"
 
+VALID_SERVICE_INTERVAL_TYPES = {"hours", "miles"}
+
 
 # =============================================================================
 # Result Models
@@ -39,8 +41,22 @@ class ImportResult:
 # Database Setup
 # =============================================================================
 
+def column_exists(
+    conn: sqlite3.Connection,
+    table_name: str,
+    column_name: str,
+) -> bool:
+    """Return True when a column exists on a SQLite table."""
+
+    rows = conn.execute(
+        f"pragma table_info({table_name})"
+    ).fetchall()
+
+    return any(row[1] == column_name for row in rows)
+
+
 def create_tables(conn: sqlite3.Connection) -> None:
-    """Create maintenance tables if they do not already exist."""
+    """Create maintenance tables and apply lightweight schema migrations."""
 
     conn.executescript(
         """
@@ -52,7 +68,8 @@ def create_tables(conn: sqlite3.Connection) -> None:
             model text,
             installed_at text not null,
             removed_at text,
-            service_interval_hours real,
+            service_interval_type text,
+            service_interval_value real,
             notes text,
             foreign key (gear_id)
                 references gear(gear_id)
@@ -92,6 +109,31 @@ def create_tables(conn: sqlite3.Connection) -> None:
         );
         """
     )
+
+    # Existing databases may still have the original hour-only schema.
+    if not column_exists(
+        conn,
+        "gear_components",
+        "service_interval_type",
+    ):
+        conn.execute(
+            """
+            alter table gear_components
+            add column service_interval_type text
+            """
+        )
+
+    if not column_exists(
+        conn,
+        "gear_components",
+        "service_interval_value",
+    ):
+        conn.execute(
+            """
+            alter table gear_components
+            add column service_interval_value real
+            """
+        )
 
 
 # =============================================================================
@@ -161,6 +203,8 @@ def import_gear_components(
         "gear_id",
         "component_type",
         "installed_at",
+        "service_interval_type",
+        "service_interval_value",
     }
 
     with path.open(
@@ -190,43 +234,17 @@ def import_gear_components(
             gear_id = clean(row.get("gear_id"))
             component_type = clean(row.get("component_type"))
             installed_at = clean(row.get("installed_at"))
+            service_interval_type = clean(
+                row.get("service_interval_type")
+            )
+            service_interval_value_raw = clean(
+                row.get("service_interval_value")
+            )
 
             if not component_id_raw:
                 print(
                     f"Skipping row {result.read}: "
                     "component_id is required."
-                )
-                result.skipped += 1
-                continue
-
-            if not gear_id:
-                print(
-                    f"Skipping component {component_id_raw}: "
-                    "gear_id is required."
-                )
-                result.skipped += 1
-                continue
-
-            if gear_id not in valid_gear_ids:
-                print(
-                    f"Skipping component {component_id_raw}: "
-                    f"gear_id '{gear_id}' does not exist."
-                )
-                result.skipped += 1
-                continue
-
-            if not component_type:
-                print(
-                    f"Skipping component {component_id_raw}: "
-                    "component_type is required."
-                )
-                result.skipped += 1
-                continue
-
-            if not installed_at:
-                print(
-                    f"Skipping component {component_id_raw}: "
-                    "installed_at is required."
                 )
                 result.skipped += 1
                 continue
@@ -241,15 +259,82 @@ def import_gear_components(
                 result.skipped += 1
                 continue
 
-            service_interval_raw = clean(
-                row.get("service_interval_hours")
-            )
+            if not gear_id:
+                print(
+                    f"Skipping component {component_id}: "
+                    "gear_id is required."
+                )
+                result.skipped += 1
+                continue
 
-            service_interval_hours = (
-                float(service_interval_raw)
-                if service_interval_raw
-                else None
-            )
+            if gear_id not in valid_gear_ids:
+                print(
+                    f"Skipping component {component_id}: "
+                    f"gear_id '{gear_id}' does not exist."
+                )
+                result.skipped += 1
+                continue
+
+            if not component_type:
+                print(
+                    f"Skipping component {component_id}: "
+                    "component_type is required."
+                )
+                result.skipped += 1
+                continue
+
+            if not installed_at:
+                print(
+                    f"Skipping component {component_id}: "
+                    "installed_at is required."
+                )
+                result.skipped += 1
+                continue
+
+            if service_interval_type:
+                service_interval_type = (
+                    service_interval_type.lower()
+                )
+
+            if (
+                service_interval_type
+                not in VALID_SERVICE_INTERVAL_TYPES
+            ):
+                print(
+                    f"Skipping component {component_id}: "
+                    "service_interval_type must be "
+                    "'hours' or 'miles'."
+                )
+                result.skipped += 1
+                continue
+
+            if not service_interval_value_raw:
+                print(
+                    f"Skipping component {component_id}: "
+                    "service_interval_value is required."
+                )
+                result.skipped += 1
+                continue
+
+            try:
+                service_interval_value = float(
+                    service_interval_value_raw
+                )
+            except ValueError:
+                print(
+                    f"Skipping component {component_id}: "
+                    "service_interval_value must be numeric."
+                )
+                result.skipped += 1
+                continue
+
+            if service_interval_value <= 0:
+                print(
+                    f"Skipping component {component_id}: "
+                    "service_interval_value must be greater than 0."
+                )
+                result.skipped += 1
+                continue
 
             exists = conn.execute(
                 """
@@ -267,7 +352,8 @@ def import_gear_components(
                 clean(row.get("model")),
                 installed_at,
                 clean(row.get("removed_at")),
-                service_interval_hours,
+                service_interval_type,
+                service_interval_value,
                 clean(row.get("notes")),
             )
 
@@ -282,7 +368,8 @@ def import_gear_components(
                         model = ?,
                         installed_at = ?,
                         removed_at = ?,
-                        service_interval_hours = ?,
+                        service_interval_type = ?,
+                        service_interval_value = ?,
                         notes = ?
                     where component_id = ?
                     """,
@@ -302,10 +389,11 @@ def import_gear_components(
                         model,
                         installed_at,
                         removed_at,
-                        service_interval_hours,
+                        service_interval_type,
+                        service_interval_value,
                         notes
                     )
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (component_id,) + values,
                 )

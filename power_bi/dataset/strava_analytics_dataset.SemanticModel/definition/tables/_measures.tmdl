@@ -223,7 +223,112 @@ table _measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure 'Service Usage' = ```
+			MAX( component_service_status[usage_since_service] )
+			
+			```
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 9a01b57a-c96e-4b9b-a77f-da06f0ddae3d
+
+	measure 'Service Interval' = MAX( component_service_status[service_interval_value] )
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 846c060c-e44c-410e-a350-e3d9cffecced
+
+	measure 'Service Remaining' = MAX( component_service_status[usage_remaining] )
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 641698f0-8aa8-4580-aabe-39e73783d9bd
+
+	measure 'Service Overdue' = MAX( component_service_status[usage_overdue] )
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 7b5e2be3-b4c8-4e92-97d0-cbf35fcd78ce
+
+	measure 'Service Interval %' = DIVIDE( [Service Usage], [Service Interval] )
+		formatString: 0.0%
+		displayFolder: Maintenance
+		lineageTag: caa79970-40c2-4665-95f2-dff7ee52769a
+
+	measure 'Service Progress %' = MIN( [Service Interval %], 1 )
+		formatString: 0.0%
+		displayFolder: Maintenance
+		lineageTag: 5a4f8279-8f15-40fa-90cc-2a63d1540f7e
+
+	measure 'Hours Since Service' = MAX( component_service_status[hours_since_service] )
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 7eda5ac4-8a09-4fbf-be3d-7cf962d353cd
+
+	measure 'Miles Since Service' = MAX( component_service_status[miles_since_service] )
+		formatString: 0.00
+		displayFolder: Maintenance
+		lineageTag: 20503457-3fba-4380-85fd-51b02e0c099f
+
+	measure 'Service Status' =
+			SELECTEDVALUE(
+			    component_service_status[service_status],
+			    "Multiple Components"
+			)
+		displayFolder: Maintenance
+		lineageTag: 876abac1-1f3f-4b49-b1d1-364a3b902a3c
+
+	measure 'Selected Component' =
+			SELECTEDVALUE(
+			    component_service_status[component_name],
+			    "Multiple Components"
+			)
+		displayFolder: Maintenance
+		lineageTag: 2eacbc94-58aa-4000-8e53-ac3d05233c52
+
+	measure 'Last Service Date' = MAX( component_service_status[latest_service_date] )
+		formatString: mmm d, yyyy
+		displayFolder: Maintenance
+		lineageTag: 4324bc60-d3dc-4938-94d6-4ca06660683e
+
+	measure 'Tracked Components' = DISTINCTCOUNT( component_service_status[component_key] )
+		formatString: 0
+		displayFolder: Maintenance
+		lineageTag: e6bcd579-493f-4528-a316-487d8202b1c4
+
+	measure 'Components Due' =
+			CALCULATE(
+			    DISTINCTCOUNT( component_service_status[component_key] ),
+			    component_service_status[service_status] = "Due"
+			)
+		formatString: 0
+		displayFolder: Maintenance
+		lineageTag: d519f447-8379-40e4-8d08-354fe2f69543
+
+	measure 'Components Due Soon' =
+			CALCULATE(
+			    DISTINCTCOUNT( component_service_status[component_key] ),
+			    component_service_status[service_status] = "Due Soon"
+			)
+		formatString: 0
+		displayFolder: Maintenance
+		lineageTag: 6f06395a-ab02-41bf-9f9b-8419a9449bce
+
+	measure 'Components Needing Service' = [Components Due] + [Components Due Soon]
+		formatString: 0
+		displayFolder: Maintenance
+		lineageTag: 09ea2291-5a0b-47aa-ace9-bb4bcf83e6cf
+
+	measure 'Service Unit' =
+			SWITCH(
+			    SELECTEDVALUE(
+			        component_service_status[service_interval_type]
+			    ),
+			    "hours", "hrs",
+			    "miles", "mi",
+			    BLANK( )
+			)
+		displayFolder: Maintenance
+		lineageTag: 6a471557-0114-43fc-9aec-4ab95c5818a1
+
 	column Column
+		isHidden
 		formatString: 0
 		lineageTag: a2b5cb6c-1547-41f1-9a4b-8064cde4fc0b
 		summarizeBy: sum

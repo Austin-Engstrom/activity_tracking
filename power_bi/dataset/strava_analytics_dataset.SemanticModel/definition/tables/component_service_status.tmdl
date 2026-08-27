@@ -3,35 +3,47 @@ table component_service_status
 
 	column component_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 818a9840-3b85-4cb6-872a-4d0198421250
 		summarizeBy: sum
 		sourceColumn: component_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column component_id
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 54aa87c1-c9a3-413e-9fd3-2a9bb91a20a7
 		summarizeBy: sum
 		sourceColumn: component_id
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column gear_key
 		dataType: string
+		isHidden
 		lineageTag: 7856dbc0-0237-4c5b-a4e8-4ceef3e1907b
 		summarizeBy: none
 		sourceColumn: gear_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
 	column gear_name
 		dataType: string
+		isHidden
 		lineageTag: 9921245f-92c4-4b98-a3a4-d7f5da1b3fff
 		summarizeBy: none
 		sourceColumn: gear_name
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -85,18 +97,8 @@ table component_service_status
 
 		annotation SummarizationSetBy = Automatic
 
-	column service_interval_hours
-		dataType: double
-		lineageTag: 8f0970ed-9f23-4269-882d-a1c96db72d96
-		summarizeBy: sum
-		sourceColumn: service_interval_hours
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column latest_service_id
-		dataType: int64
+		dataType: double
 		formatString: 0
 		lineageTag: fae99878-3961-49b1-a5c7-e883f01a2cb7
 		summarizeBy: sum
@@ -143,10 +145,14 @@ table component_service_status
 		annotation UnderlyingDateTimeDataType = Date
 
 	column service_baseline_date_key
-		dataType: string
+		dataType: int64
+		isHidden
+		formatString: 0
 		lineageTag: b8fc21d7-85f3-4082-9d58-6931f1be0245
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: service_baseline_date_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -165,26 +171,6 @@ table component_service_status
 		lineageTag: c8299f3a-94b3-4f68-a960-1b0513f6a635
 		summarizeBy: sum
 		sourceColumn: lifetime_component_hours
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column hours_remaining
-		dataType: double
-		lineageTag: 2807e9cf-95a8-4f43-83b8-f050ea142eec
-		summarizeBy: sum
-		sourceColumn: hours_remaining
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column hours_overdue
-		dataType: double
-		lineageTag: f12d021e-910b-48c9-8d31-4e9c991d9e0f
-		summarizeBy: sum
-		sourceColumn: hours_overdue
 
 		annotation SummarizationSetBy = Automatic
 
@@ -215,6 +201,74 @@ table component_service_status
 		sourceColumn: component_notes
 
 		annotation SummarizationSetBy = Automatic
+
+	column service_interval_type
+		dataType: string
+		lineageTag: 2864eed5-318a-4284-b17b-ca5f8d88326f
+		summarizeBy: none
+		sourceColumn: service_interval_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_interval_value
+		dataType: double
+		lineageTag: e3d5d75f-1977-4fab-be80-74a154a3de56
+		summarizeBy: sum
+		sourceColumn: service_interval_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column miles_since_service
+		dataType: double
+		lineageTag: f2683318-7f30-4cae-a1af-02a32f1a592d
+		summarizeBy: sum
+		sourceColumn: miles_since_service
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column lifetime_component_miles
+		dataType: double
+		lineageTag: ba369bfa-bbec-456d-891b-e178ded02c0e
+		summarizeBy: sum
+		sourceColumn: lifetime_component_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column usage_since_service
+		dataType: double
+		lineageTag: 421b0375-af35-4137-9c94-efa30af26e91
+		summarizeBy: sum
+		sourceColumn: usage_since_service
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column usage_remaining
+		dataType: double
+		lineageTag: c7cc679b-74c2-487c-9e17-de080d8a67ba
+		summarizeBy: sum
+		sourceColumn: usage_remaining
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column usage_overdue
+		dataType: double
+		lineageTag: 7fdd86b8-0263-46a8-9eb3-b3fea3fdbe72
+		summarizeBy: sum
+		sourceColumn: usage_overdue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition component_service_status = m
 		mode: import
