@@ -27,6 +27,10 @@ create view view_activity_type as
 select distinct
       a.sport_type as activity_type_key
     , a.sport_type as activity_type
+    , atc.activity_category
 from activities a
+left join activity_type_categories atc
+    on a.sport_type = atc.activity_type
 where a.sport_type is not null
-order by a.sport_type;
+order by
+    a.sport_type;
