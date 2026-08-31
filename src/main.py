@@ -1,11 +1,18 @@
 """Main entry point for the Strava analytics ETL pipeline."""
 
+import sqlite3
+from pathlib import Path
+
 from src.api.authenticate import StravaAuthenticator
 from src.api.client import StravaClient
 from src.database import (
     DATABASE_PATH,
     SessionLocal,
     initialize_database,
+)
+from src.loader.activity_type_category_loader import (
+    find_unmapped_activity_types,
+    load_activity_type_categories,
 )
 from src.repositories import (
     ActivityRepository,
@@ -189,6 +196,52 @@ def print_segment_summary(detail_result) -> bool:
     return True
 
 
+def rebuild_reporting_views() -> None:
+    """Rebuild reporting views in build_views.sql dependency order."""
+
+    project_root = Path(__file__).resolve().parents[1]
+    build_views_path = project_root / "sql" / "build_views.sql"
+
+    if not build_views_path.exists():
+        raise FileNotFoundError(
+            f"View build script not found: {build_views_path}"
+        )
+
+    view_files: list[Path] = []
+
+    for raw_line in build_views_path.read_text(
+        encoding="utf-8"
+    ).splitlines():
+        line = raw_line.strip()
+
+        if not line.startswith(".read "):
+            continue
+
+        relative_path = line.removeprefix(".read ").strip()
+        view_path = project_root / relative_path
+
+        if not view_path.exists():
+            raise FileNotFoundError(
+                f"View SQL file not found: {view_path}"
+            )
+
+        view_files.append(view_path)
+
+    print("\nRebuilding reporting views...")
+
+    with sqlite3.connect(DATABASE_PATH) as conn:
+        for view_path in view_files:
+            conn.executescript(
+                view_path.read_text(encoding="utf-8")
+            )
+            print(f"  Rebuilt: {view_path.stem}")
+
+    print(
+        f"Reporting views rebuilt successfully: "
+        f"{len(view_files)} views"
+    )
+
+
 def main() -> None:
     """Run the Strava analytics ETL pipeline."""
 
@@ -276,6 +329,21 @@ def main() -> None:
     print("\n" + "=" * 45)
     print("STRAVA ETL COMPLETE")
     print("=" * 45)
+
+    print("\nLoading reference data...")
+
+    load_activity_type_categories()
+
+    unmapped = find_unmapped_activity_types()
+
+    if unmapped:
+        print("\nUnmapped activity types:")
+        for activity_type in unmapped:
+            print(f"  - {activity_type}")
+    else:
+        print("All activity types are mapped.")
+
+    rebuild_reporting_views()
 
     print("\nPreparing Power BI data...")
 
