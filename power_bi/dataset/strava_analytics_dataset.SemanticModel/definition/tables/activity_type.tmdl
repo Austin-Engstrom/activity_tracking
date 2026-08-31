@@ -20,6 +20,14 @@ table activity_type
 
 		annotation SummarizationSetBy = Automatic
 
+	column activity_category
+		dataType: string
+		lineageTag: e169eed4-1ebb-4185-ab1a-09fa4055c98c
+		summarizeBy: none
+		sourceColumn: activity_category
+
+		annotation SummarizationSetBy = Automatic
+
 	partition activity_type = m
 		mode: import
 		source =
