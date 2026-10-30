@@ -1,4 +1,7 @@
 component_id,gear_id,component_type,manufacturer,model,installed_at,removed_at,service_interval_type,service_interval_value,notes
-1,b17417153,Fork,Fox,36 Factory,2026-02-09,,hours,50,
-2,b17417153,Chain,SRAM,NX,2026-03-26,,miles,1000,
-3,b17417153,Cassette,SRAM,GX,2026-04-01,,miles,1000,
+1,b17417153,Fork,Fox,36 Factory,2/9/2026,,hours,50,
+2,b17417153,Chain,SRAM,NX,3/26/2026,,miles,1000,
+3,b17417153,Cassette,SRAM,GX,4/1/2026,,miles,1000,
+4,b18838408,Fork,RockShox,Pike Ultimate,10/17/2026,,hours,50,
+5,b18838408,Chain,SRAM,GX,10/3/2026,,miles,1000,
+6,b18838408,Shock,RockShox,Super Deluxe Ultimate,10/3/2026,,hours,50,
