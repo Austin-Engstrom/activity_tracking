@@ -1,10 +1,11 @@
 # Quanta Check
 
-Open `quanta_check.pbip` in Power BI Desktop. This is a separate, single-page
-validation report connected by relative path to the existing
-`../gps/activity_tracking.SemanticModel`. It adds no second dataset, SQL views or
-Parquet files. Close Desktop before switching branches or pulling model edits.
-Existing generated Parquet files can be reused; refresh the shared model normally.
+Open `power_bi/gps/activity_tracking.pbip` in Power BI Desktop. Its sole report
+page is Quanta Check. This keeps the validation canvas with the dataset project;
+other reports can connect to the shared `activity_tracking.SemanticModel`.
+No extra dataset, SQL views or Parquet files are introduced. Close Desktop before
+switching branches or pulling model edits. Existing generated Parquet files can
+be reused; refresh the shared model normally.
 
 The uploaded `strava_analytics_dataset.pbip` identifies the older companion report,
 whose repository layout provided the reference: summary cards across the top,
@@ -40,7 +41,7 @@ report targets. New data and filters change them.
 
 Static tests validate project paths, visual bindings and page bounds. Desktop
 opening, visual rendering, interaction and DAX evaluation need Windows validation.
-The original report and `activity_tracking` starter report remain separate.
+The older `strava_analytics_dataset` reference project remains separate.
 For future deployed thin reports, publish the shared semantic model and bind
 reports to that published model through Power BI; this project's byPath binding
 is the local development arrangement.
