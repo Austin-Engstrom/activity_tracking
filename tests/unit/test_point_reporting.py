@@ -1,0 +1,119 @@
+"""Offline regression checks for GPS grain and mileage attribution."""
+import json
+import unittest
+from datetime import datetime
+from pathlib import Path
+from sqlalchemy import create_engine, text
+from src.models import Base
+from src.services.point_reporting_service import DDL, rebuild_points
+
+ROOT = Path(__file__).resolve().parents[2]
+
+class PointReportingTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = create_engine('sqlite://')
+        Base.metadata.create_all(self.engine)
+        self.c = self.engine.connect()
+        for sql in DDL.split(';'):
+            if sql.strip(): self.c.exec_driver_sql(sql)
+        self.c.exec_driver_sql("CREATE TABLE activity_type_categories(activity_type TEXT PRIMARY KEY,activity_category TEXT)")
+        self.c.exec_driver_sql("INSERT INTO activities(activity_id,athlete_id,name,sport_type,start_date,distance_meters,moving_time_seconds,elapsed_time_seconds,total_elevation_gain_meters,trainer,commute,created_at,updated_at) VALUES (1,1,'ride','Ride','2026-01-02 00:00:00',100,20,20,0,0,0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(2,1,'indoor','Ride','2026-01-02 00:00:00',100,20,20,0,1,0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        polygon=json.dumps({'type':'Polygon','coordinates':[[[-94,40],[-92,40],[-92,42],[-94,42],[-94,40]]]})
+        for key in [1,2]:
+            self.c.execute(text("INSERT INTO trail_systems(trail_system_id,name,country,boundary_confirmed,boundary_geojson,created_at,updated_at) VALUES (:id,:name,'US',1,:g,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"),dict(id=key,name=f'system{key}',g=polygon))
+        line=json.dumps({'type':'LineString','coordinates':[[-93,40],[-93,42]]})
+        self.c.execute(text("INSERT INTO official_trails(official_trail_id,trail_system_id,name,normalized_name,total_length_meters,section_count,combined_geometry_geojson,created_at,updated_at) VALUES (1,1,'trail','trail',100,1,:g,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"),dict(g=line))
+        self.c.exec_driver_sql("INSERT INTO point_reporting_metadata VALUES (1,'America/Chicago')")
+
+    def tearDown(self):
+        self.c.close();self.engine.dispose()
+
+    def streams(self, rows):
+        self.c.execute(text('INSERT INTO activity_streams(activity_id,point_index,time_seconds,distance_meters,latitude,longitude,altitude_meters,velocity_mps,temperature_c,is_moving,created_at) VALUES(1,:i,:t,:d,:lat,-93,100,1,0,1,:created)'),[dict(i=i,t=t,d=d,lat=lat,created=datetime.now()) for i,t,d,lat in rows])
+
+    def views(self):
+        files=['sql/views/facts/view_activity.sql','sql/views/dimensions/view_segment.sql','sql/views/dimensions/view_date.sql']
+        files += [str(p.relative_to(ROOT)) for p in (ROOT/'sql/views/points').glob('*.sql')]
+        for f in files:
+            for sql in (ROOT/f).read_text().split(';'):
+                if sql.strip(): self.c.exec_driver_sql(sql)
+
+    def test_grain_units_system_trail_timezone_and_repeatability(self):
+        self.streams([(0,0,0,41),(1,10,25,41),(2,20,100,41)])
+        self.assertEqual(rebuild_points(self.c),3)
+        self.views()
+        row=self.c.execute(text('SELECT sum(incremental_distance_miles),min(date_key),max(trail_system_key),max(trail_key) FROM view_activity_points')).one()
+        self.assertAlmostEqual(row[0],100/1609.344)
+        self.assertEqual(tuple(row[1:]),(20260101,1,1))
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_activity').scalar(),1)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_date').scalar(),1)
+        self.assertAlmostEqual(self.c.exec_driver_sql('SELECT elevation_feet FROM view_activity_points LIMIT 1').scalar(),100/.3048)
+        self.assertEqual(rebuild_points(self.c),3)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM activity_points').scalar(),3)
+
+    def test_missing_coordinates_gaps_and_negative_distance(self):
+        self.streams([(0,0,0,41),(1,10,25,None),(2,20,50,41),(3,200,75,41),(4,210,70,41)])
+        rebuild_points(self.c);self.views()
+        rows=self.c.exec_driver_sql('SELECT point_index,quality_status,incremental_distance_meters FROM activity_points ORDER BY point_index').all()
+        self.assertEqual([r[0] for r in rows],[0,2,3,4])
+        self.assertEqual([r[1] for r in rows],['first_point','invalid_interval','recording_gap','invalid_interval'])
+        self.assertTrue(all(r[2] is None for r in rows))
+
+    def test_overlapping_segments_and_repeated_efforts(self):
+        self.streams([(0,0,0,41),(1,10,25,41),(2,20,50,41)])
+        self.c.exec_driver_sql("INSERT INTO segments(segment_id,name,created_at,updated_at) VALUES (1,'segment',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(2,'overlap',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql("INSERT INTO segment_efforts(segment_effort_id,activity_id,segment_id,name,elapsed_time_seconds,moving_time_seconds,start_date,start_index,end_index,created_at,updated_at) VALUES (1,1,1,'first',10,10,'2026-01-02',0,1,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(2,1,2,'overlap',10,10,'2026-01-02',1,2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(3,1,1,'repeat',10,10,'2026-01-02',2,2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql('INSERT INTO stream_index_alignment VALUES (1,1)')
+        rebuild_points(self.c);self.views()
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_segment').scalar(),2)
+        self.assertEqual(self.c.exec_driver_sql("SELECT count(*) FROM view_activity_point_segments WHERE activity_point_key='1:1'").scalar(),2)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_point_segment_effort').scalar(),3)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_activity_points').scalar(),3)
+
+    def test_ambiguous_trail_is_not_arbitrarily_assigned(self):
+        self.streams([(0,0,0,41)])
+        self.c.exec_driver_sql("INSERT INTO official_trails SELECT 2,trail_system_id,'other','other',total_length_meters,section_count,primary_surface,bicycle_access,mtb_scale,mtb_type,combined_geometry_geojson,created_at,updated_at FROM official_trails WHERE official_trail_id=1")
+        rebuild_points(self.c)
+        row=self.c.exec_driver_sql('SELECT trail_key,match_method FROM activity_points').one()
+        self.assertIsNone(row[0]);self.assertIn('ambiguous_trail',row[1])
+
+    def test_unverified_streams_do_not_link_segments(self):
+        self.test_overlapping_segments_and_repeated_efforts()
+        self.c.exec_driver_sql('DELETE FROM stream_index_alignment')
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM view_activity_point_segments').scalar(),0)
+
+    def test_parquet_round_trip_preserves_small_distance(self):
+        from tempfile import TemporaryDirectory
+        import pandas as pd
+        from src.tools.export_power_bi import export_view
+        self.streams([(0,0,0,41),(1,1,0.1,41)])
+        rebuild_points(self.c);self.views()
+        with TemporaryDirectory() as folder:
+            result=export_view(self.c,'view_activity_points',Path(folder))
+            self.assertTrue(result.success,result.error)
+            frame=pd.read_parquet(Path(folder)/'view_activity_points.parquet')
+            self.assertEqual(len(frame),2)
+            self.assertAlmostEqual(frame.incremental_distance_miles.sum(),0.1/1609.344)
+
+    def test_mapper_captures_timezone(self):
+        from src.etl.activity_mapper import ActivityMapper
+        activity=ActivityMapper.from_api(dict(id=1,athlete={'id':1},name='ride',sport_type='Ride',start_date='2026-01-01T00:00:00Z',timezone='(GMT-06:00) America/Chicago'))
+        self.assertEqual(activity.reporting_timezone,'America/Chicago')
+
+    def test_failed_rebuild_rolls_back_derived_rows(self):
+        self.streams([(0,0,0,41)])
+        rebuild_points(self.c)
+        self.c.exec_driver_sql("UPDATE point_reporting_metadata SET timezone_name='Invalid/Zone'")
+        with self.assertRaises(Exception):
+            with self.c.begin_nested():
+                rebuild_points(self.c)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM activity_points').scalar(),1)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM activity_streams').scalar(),1)
+
+    def test_outside_boundary_stays_unmatched(self):
+        self.streams([(0,0,0,45)])
+        rebuild_points(self.c)
+        row=self.c.exec_driver_sql('SELECT trail_system_key,trail_key,match_method FROM activity_points').one()
+        self.assertEqual(tuple(row),(None,None,'unmatched'))
+
+if __name__=='__main__': unittest.main()

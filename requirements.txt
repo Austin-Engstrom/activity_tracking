@@ -14,3 +14,7 @@ six==1.17.0
 SQLAlchemy==2.0.51
 typing_extensions==4.16.0
 urllib3==2.7.0
+
+shapely==2.2.0
+pyarrow==26.0.0
+pyproj==3.7.2

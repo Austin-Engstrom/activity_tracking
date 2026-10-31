@@ -20,18 +20,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXPORT_DIRECTORY = PROJECT_ROOT / "exports" / "power_bi"
 
 POWER_BI_VIEWS = [
+    "view_activity_points",
     "view_activity",
     "view_activity_type",
     "view_date",
     "view_gear",
     "view_segment",
-    "view_segment_effort",
-    "view_activity_stream_summary",
-    "view_official_trail",
-    "view_trail_activity",
-    "view_trail_progress",
+    "view_trail",
     "view_trail_system",
-    "view_component_service_status",
+    "view_point_segment_effort",
+    "view_activity_point_segments",
+]
+
+LEGACY_VIEWS = [
+    "view_segment_effort", "view_activity_stream_summary", "view_official_trail",
+    "view_trail_activity", "view_trail_progress", "view_component_service_status",
 ]
 
 PARQUET_COMPRESSION = "snappy"
@@ -130,6 +133,7 @@ def prepare_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
         # Timestamp columns.
         elif (
             column_lower.endswith("_at")
+            or column_lower == "recorded_at_utc"
             or column_lower in {
                 "start_date",
                 "start_date_local",
@@ -291,6 +295,7 @@ def print_summary(
 
 def run(
     exit_on_failure: bool = True,
+    include_legacy: bool = False,
 ) -> list[ExportResult]:
     """Export all approved Power BI reporting views."""
 
@@ -308,7 +313,8 @@ def run(
     with SessionLocal() as session:
         connection = session.connection()
 
-        for view_name in POWER_BI_VIEWS:
+        selected_views = POWER_BI_VIEWS + (LEGACY_VIEWS if include_legacy else [])
+        for view_name in selected_views:
             result = export_view(
                 connection=connection,
                 view_name=view_name,

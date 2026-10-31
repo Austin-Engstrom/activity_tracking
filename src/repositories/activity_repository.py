@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, or_, select, text
 from sqlalchemy.orm import Session
 
 from src.models.activity import Activity
@@ -49,6 +49,16 @@ class ActivityRepository:
                 else:
                     result.skipped += 1
 
+            self.session.flush()
+            from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+            for activity in activities:
+                zone = getattr(activity, 'reporting_timezone', None)
+                if zone:
+                    try:
+                        ZoneInfo(zone)
+                    except ZoneInfoNotFoundError:
+                        continue
+                    self.session.execute(text("INSERT INTO point_reporting_metadata(activity_id,timezone_name) VALUES (:id,:zone) ON CONFLICT(activity_id) DO UPDATE SET timezone_name=excluded.timezone_name"), {'id':activity.activity_id,'zone':zone})
             self.session.commit()
 
         except Exception:

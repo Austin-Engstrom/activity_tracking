@@ -20,3 +20,8 @@ Power BI
 - Create interactive Power BI dashboards
 - Track bike usage and maintenance
 - Analyze long-term training trends
+
+## GPS reporting redesign
+
+See [schema, measurement rules, and migration steps](docs/gps-schema.md).
+The new point-grain Power BI semantic model is in `power_bi/gps`.

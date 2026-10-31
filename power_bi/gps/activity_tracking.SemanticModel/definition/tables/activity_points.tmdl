@@ -1,0 +1,161 @@
+table activity_points
+
+	column activity_point_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_point_key
+
+	column activity_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: activity_key
+
+	column activity_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: activity_id
+
+	column point_index
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: point_index
+
+	column gear_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_key
+
+	column activity_type_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+	column date_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column trail_system_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+	column trail_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: trail_key
+
+	column recorded_at_utc
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: recorded_at_utc
+
+	column latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column elapsed_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elapsed_time_seconds
+
+	column cumulative_distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: cumulative_distance_miles
+
+	column incremental_distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: incremental_distance_miles
+
+	column incremental_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: incremental_time_seconds
+
+	column moving_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: moving_time_seconds
+
+	column elevation_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_feet
+
+	column speed_mph
+		dataType: double
+		summarizeBy: none
+		sourceColumn: speed_mph
+
+	column temperature_f
+		dataType: double
+		summarizeBy: none
+		sourceColumn: temperature_f
+
+	column heartrate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: heartrate
+
+	column cadence
+		dataType: double
+		summarizeBy: none
+		sourceColumn: cadence
+
+	column watts
+		dataType: double
+		summarizeBy: none
+		sourceColumn: watts
+
+	column is_moving
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_moving
+
+	column grade_percent
+		dataType: double
+		summarizeBy: none
+		sourceColumn: grade_percent
+
+	column quality_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: quality_status
+
+	column match_method
+		dataType: string
+		summarizeBy: none
+		sourceColumn: match_method
+
+	column date_basis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: date_basis
+
+	measure 'Miles Ridden' = SUM(activity_points[incremental_distance_miles])
+		formatString: #,0.00
+
+	measure 'Moving Hours' = DIVIDE(SUM(activity_points[moving_time_seconds]),3600)
+		formatString: #,0.00
+
+	measure 'Activities Ridden' = DISTINCTCOUNT(activity_points[activity_key])
+		formatString: #,0.00
+
+	measure 'Miles in Selected Segments' = CALCULATE([Miles Ridden], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
+		formatString: #,0.00
+
+	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance_miles]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+		formatString: #,0.00
+
+	partition activity_points = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet"))

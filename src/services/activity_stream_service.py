@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from src.api.client import (
     StravaApiError,
@@ -117,11 +117,29 @@ class ActivityStreamService:
                     )
                     continue
 
+                self.repository.session.execute(text(
+                    'DELETE FROM stream_index_alignment WHERE activity_id=:id'
+                ), {'id':activity_id})
                 inserted = self.repository.insert_many(
                     transformed_rows,
                     replace_existing=True,
                 )
 
+                # Effort indexes refer to original streams. Link only when metadata
+                # proves these arrays retain that indexing.
+                time_stream = raw_streams.get('time') or {}
+                gps_stream = raw_streams.get('latlng') or {}
+                verified = all(
+                    isinstance(stream.get('data'), list)
+                    and stream.get('original_size') == len(stream['data'])
+                    and stream.get('series_type') in ('time', 'distance')
+                    for stream in [time_stream, gps_stream]
+                ) and time_stream.get('series_type') == gps_stream.get('series_type') and len(time_stream.get('data', [])) == len(gps_stream.get('data', []))
+                self.repository.session.execute(text(
+                    'INSERT INTO stream_index_alignment VALUES (:id,:verified) '
+                    'ON CONFLICT(activity_id) DO UPDATE SET verified=excluded.verified'
+                ), {'id':activity_id, 'verified':int(verified)})
+                self.repository.session.commit()
                 loaded += 1
                 rows_inserted += inserted
 
