@@ -1,0 +1,99 @@
+table segments
+
+	column segment_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column segment_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_id
+
+		annotation SummarizationSetBy = User
+
+	column segment_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: segment_name
+
+	column activity_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type
+
+	column distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	column average_grade
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_grade
+
+	column maximum_grade
+		dataType: double
+		summarizeBy: none
+		sourceColumn: maximum_grade
+
+	column elevation_high_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_high_feet
+
+	column elevation_low_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_low_feet
+
+	column start_latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: start_latitude
+
+	column start_longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: start_longitude
+
+	column end_latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: end_latitude
+
+	column end_longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: end_longitude
+
+	column climb_category
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: climb_category
+
+	column city
+		dataType: string
+		summarizeBy: none
+		sourceColumn: city
+
+	column state
+		dataType: string
+		summarizeBy: none
+		sourceColumn: state
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	partition segments = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"segment_id", Int64.Type}, {"segment_name", type text}, {"activity_type", type text}, {"distance_miles", type number}, {"average_grade", type number}, {"maximum_grade", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"start_latitude", type number}, {"start_longitude", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"climb_category", Int64.Type}, {"city", type text}, {"state", type text}, {"country", type text}})
+			in
+			    Typed

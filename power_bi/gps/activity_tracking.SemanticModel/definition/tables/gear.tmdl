@@ -1,0 +1,86 @@
+table gear
+
+	column gear_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
+
+	column gear_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_id
+
+		annotation SummarizationSetBy = User
+
+	column athlete_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: athlete_id
+
+		annotation SummarizationSetBy = User
+
+	column gear_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_name
+
+	column brand_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: brand_name
+
+	column model_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model_name
+
+	column description
+		dataType: string
+		summarizeBy: none
+		sourceColumn: description
+
+	column distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	column is_primary
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_primary
+
+	column is_retired
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_retired
+
+	column frame_type
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: frame_type
+
+	column detail_loaded_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: detail_loaded_at
+
+	column created_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column updated_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: updated_at
+
+	partition gear = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_gear.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"gear_key", type text}, {"gear_id", type text}, {"athlete_id", Int64.Type}, {"gear_name", type text}, {"brand_name", type text}, {"model_name", type text}, {"description", type text}, {"distance_miles", type number}, {"is_primary", Int64.Type}, {"is_retired", Int64.Type}, {"frame_type", Int64.Type}, {"detail_loaded_at", type datetime}, {"created_at", type datetime}, {"updated_at", type datetime}})
+			in
+			    Typed

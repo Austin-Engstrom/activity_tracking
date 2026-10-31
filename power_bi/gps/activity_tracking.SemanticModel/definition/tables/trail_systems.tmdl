@@ -1,0 +1,74 @@
+table trail_systems
+
+	column trail_system_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_system_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: trail_system_name
+
+	column city
+		dataType: string
+		summarizeBy: none
+		sourceColumn: city
+
+	column state
+		dataType: string
+		summarizeBy: none
+		sourceColumn: state
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	column latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column description
+		dataType: string
+		summarizeBy: none
+		sourceColumn: description
+
+	column boundary_source
+		dataType: string
+		summarizeBy: none
+		sourceColumn: boundary_source
+
+	column boundary_confirmed
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: boundary_confirmed
+
+	column osm_element_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: osm_element_type
+
+	column osm_element_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: osm_element_id
+
+		annotation SummarizationSetBy = User
+
+	partition trail_systems = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"latitude", type number}, {"longitude", type number}, {"description", type text}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}})
+			in
+			    Typed

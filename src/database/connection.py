@@ -31,6 +31,11 @@ def initialize_database() -> None:
 
     DATABASE_DIRECTORY.mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bind=engine)
+    from src.services.point_reporting_service import DDL
+    with engine.begin() as connection:
+        for statement in DDL.split(';'):
+            if statement.strip():
+                connection.exec_driver_sql(statement)
 
 
 def get_database_session() -> Generator[Session, None, None]:

@@ -1,0 +1,27 @@
+table activity_types
+
+	column activity_type_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		annotation SummarizationSetBy = User
+
+	column activity_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type
+
+	column activity_category
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_category
+
+	partition activity_types = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_type.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_type_key", type text}, {"activity_type", type text}, {"activity_category", type text}})
+			in
+			    Typed

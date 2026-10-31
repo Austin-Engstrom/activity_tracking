@@ -1,0 +1,34 @@
+table activity_point_segments
+
+	column activity_point_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_point_key
+
+		annotation SummarizationSetBy = User
+
+	column segment_effort_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: segment_effort_key
+
+		annotation SummarizationSetBy = User
+
+	column segment_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	partition activity_point_segments = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_point_segments.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}})
+			in
+			    Typed

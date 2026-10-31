@@ -24,9 +24,9 @@ Notes:
 ===============================================================================
 */
 
-drop view if exists view_activity;
+drop view if exists view_activity_all;
 
-create view view_activity as
+create view view_activity_all as
 
 with stream_summary as (
     select
@@ -49,6 +49,9 @@ select
     , a.gear_id as gear_key
     , a.name as activity_name
     , a.sport_type
+    , a.description
+    , a.device_name
+    , a.workout_type
     , a.start_date
     , date(a.start_date) as activity_date
     , round(a.distance_meters / 1609.344, 2) as distance_miles
@@ -73,3 +76,6 @@ left join stream_summary ss
     on a.activity_id = ss.activity_id
 left join segment_effort_summary ses
     on a.activity_id = ses.activity_id;
+
+DROP VIEW IF EXISTS view_activity;
+CREATE VIEW view_activity AS SELECT a.*, a.activity_id AS activity_key FROM view_activity_all a WHERE EXISTS (SELECT 1 FROM activity_points p WHERE p.activity_id=a.activity_id);

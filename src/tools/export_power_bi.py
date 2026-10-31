@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -20,18 +21,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXPORT_DIRECTORY = PROJECT_ROOT / "exports" / "power_bi"
 
 POWER_BI_VIEWS = [
+    "view_activity_points",
     "view_activity",
     "view_activity_type",
     "view_date",
     "view_gear",
     "view_segment",
-    "view_segment_effort",
-    "view_activity_stream_summary",
-    "view_official_trail",
-    "view_trail_activity",
-    "view_trail_progress",
+    "view_trail",
     "view_trail_system",
-    "view_component_service_status",
+    "view_point_segment_effort",
+    "view_activity_point_segments",
+]
+
+LEGACY_VIEWS = [
+    "view_segment_effort", "view_activity_stream_summary", "view_official_trail",
+    "view_trail_activity", "view_trail_progress", "view_component_service_status",
 ]
 
 PARQUET_COMPRESSION = "snappy"
@@ -117,31 +121,19 @@ def prepare_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
     for column in dataframe.columns:
         column_lower = column.lower()
 
-        # Date-only columns.
+        # Strava calls timestamps start_date: handle them before date suffixes.
         if (
-            column_lower == "date"
-            or column_lower.endswith("_date")
-        ):
-            dataframe[column] = pd.to_datetime(
-                dataframe[column],
-                errors="coerce",
-            ).dt.date
-
-        # Timestamp columns.
-        elif (
             column_lower.endswith("_at")
-            or column_lower in {
-                "start_date",
-                "start_date_local",
-                "first_ridden_at",
-                "last_ridden_at",
-            }
+            or column_lower == "recorded_at_utc"
+            or column_lower in {"start_date", "start_date_local"}
         ):
             dataframe[column] = pd.to_datetime(
-                dataframe[column],
-                errors="coerce",
-                utc=True,
+                dataframe[column], errors="coerce", utc=True,
             )
+        elif column_lower == "date" or column_lower.endswith("_date"):
+            dataframe[column] = pd.to_datetime(
+                dataframe[column], errors="coerce",
+            ).dt.date
 
     return dataframe
 
@@ -174,12 +166,24 @@ def export_view(
 
         # Write to a temporary file first so an interrupted export does not
         # leave Power BI with a partially written Parquet file.
-        dataframe.to_parquet(
-            temporary_path,
-            engine="pyarrow",
-            compression=PARQUET_COMPRESSION,
-            index=False,
-        )
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+        contract = json.loads((PROJECT_ROOT / 'src/reporting/gps_schema.json').read_text())
+        columns = contract.get(view_name)
+        if columns is not None:
+            if set(columns) != set(dataframe.columns):
+                raise ValueError(f'Reporting schema mismatch for {view_name}; update the explicit export contract')
+            arrow_types = {'string': pa.string(), 'int64': pa.int64(),
+                           'double': pa.float64(), 'dateTime': pa.timestamp('us', tz='UTC')}
+            schema = pa.schema([
+                pa.field(name, pa.date32() if name in {'date','activity_date'} else arrow_types[columns[name]])
+                for name in dataframe.columns
+            ])
+            table = pa.Table.from_pandas(dataframe, schema=schema, preserve_index=False, safe=True)
+        else:
+            # Legacy/ad-hoc exports retain inference; the new GPS model is explicit.
+            table = pa.Table.from_pandas(dataframe, preserve_index=False)
+        pq.write_table(table, temporary_path, compression=PARQUET_COMPRESSION)
 
         temporary_path.replace(output_path)
 
@@ -291,6 +295,7 @@ def print_summary(
 
 def run(
     exit_on_failure: bool = True,
+    include_legacy: bool = False,
 ) -> list[ExportResult]:
     """Export all approved Power BI reporting views."""
 
@@ -308,7 +313,8 @@ def run(
     with SessionLocal() as session:
         connection = session.connection()
 
-        for view_name in POWER_BI_VIEWS:
+        selected_views = POWER_BI_VIEWS + (LEGACY_VIEWS if include_legacy else [])
+        for view_name in selected_views:
             result = export_view(
                 connection=connection,
                 view_name=view_name,

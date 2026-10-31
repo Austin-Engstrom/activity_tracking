@@ -1,0 +1,174 @@
+table activity_points
+
+	column activity_point_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_point_key
+
+		annotation SummarizationSetBy = User
+
+	column activity_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_key
+
+		annotation SummarizationSetBy = User
+
+	column activity_id
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		annotation SummarizationSetBy = User
+
+	column point_index
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: point_index
+
+	column gear_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
+
+	column activity_type_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_system_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: trail_key
+
+		annotation SummarizationSetBy = User
+
+	column recorded_at_utc
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: recorded_at_utc
+
+	column latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column elapsed_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elapsed_time_seconds
+
+	column cumulative_distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: cumulative_distance_miles
+
+	column incremental_distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: incremental_distance_miles
+
+	column incremental_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: incremental_time_seconds
+
+	column moving_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: moving_time_seconds
+
+	column elevation_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_feet
+
+	column speed_mph
+		dataType: double
+		summarizeBy: none
+		sourceColumn: speed_mph
+
+	column temperature_f
+		dataType: double
+		summarizeBy: none
+		sourceColumn: temperature_f
+
+	column heartrate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: heartrate
+
+	column cadence
+		dataType: double
+		summarizeBy: none
+		sourceColumn: cadence
+
+	column watts
+		dataType: double
+		summarizeBy: none
+		sourceColumn: watts
+
+	column is_moving
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_moving
+
+	column grade_percent
+		dataType: double
+		summarizeBy: none
+		sourceColumn: grade_percent
+
+	column quality_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: quality_status
+
+	column match_method
+		dataType: string
+		summarizeBy: none
+		sourceColumn: match_method
+
+	column date_basis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: date_basis
+
+	partition activity_points = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"activity_key", Int64.Type}, {"activity_id", Int64.Type}, {"point_index", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"date_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_key", Int64.Type}, {"recorded_at_utc", type datetime}, {"latitude", type number}, {"longitude", type number}, {"elapsed_time_seconds", type number}, {"cumulative_distance_miles", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"moving_time_seconds", type number}, {"elevation_feet", type number}, {"speed_mph", type number}, {"temperature_f", type number}, {"heartrate", type number}, {"cadence", type number}, {"watts", type number}, {"is_moving", Int64.Type}, {"grade_percent", type number}, {"quality_status", type text}, {"match_method", type text}, {"date_basis", type text}})
+			in
+			    Typed

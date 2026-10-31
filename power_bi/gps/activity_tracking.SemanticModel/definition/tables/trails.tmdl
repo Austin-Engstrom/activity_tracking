@@ -1,0 +1,52 @@
+table trails
+
+	column trail_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: trail_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: trail_name
+
+	column normalized_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: normalized_name
+
+	column length_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: length_miles
+
+	column primary_surface
+		dataType: string
+		summarizeBy: none
+		sourceColumn: primary_surface
+
+	column bicycle_access
+		dataType: string
+		summarizeBy: none
+		sourceColumn: bicycle_access
+
+	column mtb_scale
+		dataType: string
+		summarizeBy: none
+		sourceColumn: mtb_scale
+
+	column mtb_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: mtb_type
+
+	partition trails = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"trail_key", Int64.Type}, {"trail_name", type text}, {"normalized_name", type text}, {"length_miles", type number}, {"primary_surface", type text}, {"bicycle_access", type text}, {"mtb_scale", type text}, {"mtb_type", type text}})
+			in
+			    Typed

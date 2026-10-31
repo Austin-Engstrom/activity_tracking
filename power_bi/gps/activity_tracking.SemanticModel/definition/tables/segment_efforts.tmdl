@@ -1,0 +1,58 @@
+table segment_efforts
+
+	column segment_effort_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_effort_key
+
+		annotation SummarizationSetBy = User
+
+	column activity_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_key
+
+		annotation SummarizationSetBy = User
+
+	column segment_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column start_index
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: start_index
+
+	column end_index
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: end_index
+
+	column elapsed_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elapsed_time_seconds
+
+	column moving_time_seconds
+		dataType: double
+		summarizeBy: none
+		sourceColumn: moving_time_seconds
+
+	column distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	partition segment_efforts = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"activity_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}, {"end_index", Int64.Type}, {"elapsed_time_seconds", type number}, {"moving_time_seconds", type number}, {"distance_miles", type number}})
+			in
+			    Typed
