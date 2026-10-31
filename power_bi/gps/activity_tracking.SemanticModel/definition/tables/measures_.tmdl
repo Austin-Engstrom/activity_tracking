@@ -24,6 +24,38 @@ table measures_
 		formatString: #,0.00
 		displayFolder: Time
 
+	measure 'GPS Points' = COUNTROWS(activity_points)
+		formatString: #,0
+		displayFolder: Validation
+
+	measure 'Point Minus Activity Miles' = [Miles Ridden] - [Whole Activity Miles]
+		formatString: #,0.00;−#,0.00;0.00
+		displayFolder: Validation
+
+	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Activity Moving Hours]
+		formatString: #,0.00;−#,0.00;0.00
+		displayFolder: Validation
+
+	measure 'UTC Fallback Points' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[date_basis] = "utc_fallback")), 0)
+		formatString: #,0
+		displayFolder: Validation
+
+	measure 'Recording Gap Intervals' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[quality_status] = "recording_gap")), 0)
+		formatString: #,0
+		displayFolder: Validation
+
+	measure 'Unmatched System Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(ISBLANK(activity_points[trail_system_key])))
+		formatString: #,0.00
+		displayFolder: Validation
+
+	measure 'Unmatched Trail Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(ISBLANK(activity_points[trail_key])))
+		formatString: #,0.00
+		displayFolder: Validation
+
+	measure 'Segment Linked Points' = CALCULATE([GPS Points], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
+		formatString: #,0
+		displayFolder: Validation
+
 	column Placeholder
 		dataType: int64
 		isHidden

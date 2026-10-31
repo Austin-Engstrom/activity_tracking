@@ -1,0 +1,122 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "280c11cd5f49394d3b79",
+  "position": {
+    "x": 8,
+    "y": 1000,
+    "z": 13,
+    "height": 432,
+    "width": 520,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "trail_systems"
+                    }
+                  },
+                  "Property": "trail_system_name"
+                }
+              },
+              "queryRef": "trail_systems.trail_system_name",
+              "nativeQueryRef": "trail_system_name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Activities Ridden"
+                }
+              },
+              "queryRef": "measures_.Activities Ridden",
+              "nativeQueryRef": "Activities Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Miles Ridden"
+                }
+              },
+              "queryRef": "measures_.Miles Ridden",
+              "nativeQueryRef": "Miles Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Unmatched Trail Miles"
+                }
+              },
+              "queryRef": "measures_.Unmatched Trail Miles",
+              "nativeQueryRef": "Unmatched Trail Miles"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trail systems | blank means unmatched'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
