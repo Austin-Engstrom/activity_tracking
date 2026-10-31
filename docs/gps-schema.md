@@ -138,3 +138,35 @@ populated database stored elsewhere, add `--source "C:\path\existing.db"`.
 The previous destination is backed up before replacement, and the source remains
 unchanged. Both databases and backups are Git-ignored; pulling the branch brings
 the helper, not cloud data. Then run the reporting rebuild and export commands.
+
+### Validate populated data and verify historical segment indexes
+
+After rebuilding, run locally:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.validate_point_reporting
+.\.venv\Scripts\python.exe -m src.tools.validate_point_reporting --verify-streams --limit 5
+```
+
+The first command is offline and writes `exports/validation/summary.json` plus
+activity-mileage, trail-mileage, and trail-system-mileage CSVs. It checks duplicate
+point keys and non-null dimension references, and reports interval quality,
+matching outcomes, and timezone fallbacks. Mileage differences are reported for
+review, not declared failures: filtering uncertain intervals can legitimately
+reduce point mileage. CSVs contain activity names; review before sharing them.
+
+The second command requires local Strava credentials. It fetches original time and
+GPS arrays for a bounded batch and compares every stored sample's index, time, and
+coordinates. It requires original-size metadata, compatible series types, and valid
+effort index bounds. It changes only alignment/check metadata, never source streams
+or efforts. Mismatched or resampled streams remain unlinked for investigation.
+Verification attempts are recorded locally so untouched activities are prioritized
+on subsequent runs. Verified activities are skipped; API rate limits stop the batch
+without discarding completed checks. Each activity needs one stream API read, plus
+OAuth authentication. Increase the batch size only within your Strava limits.
+
+The bridge view reflects successful verification immediately; no spatial rebuild
+is necessary. Re-export Parquet after verifying links. Then review several known
+routes in Power BI, including rides spanning systems and repeated segments, before
+merging. Static audits do not establish spatial matching accuracy or validate DAX
+execution in Power BI Desktop.

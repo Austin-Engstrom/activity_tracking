@@ -116,4 +116,25 @@ class PointReportingTests(unittest.TestCase):
         row=self.c.exec_driver_sql('SELECT trail_system_key,trail_key,match_method FROM activity_points').one()
         self.assertEqual(tuple(row),(None,None,'unmatched'))
 
+    def test_populated_audit_outputs(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from src.tools.validate_point_reporting import audit
+        self.streams([(0,0,0,41),(1,10,100,41)])
+        rebuild_points(self.c);self.views()
+        for name in ['view_gear','view_activity_type','view_trail_system']:
+            sql=(ROOT/'sql/views/dimensions'/f'{name}.sql').read_text()
+            for statement in sql.split(';'):
+                if statement.strip(): self.c.exec_driver_sql(statement)
+        self.c.commit()
+        with TemporaryDirectory() as folder:
+            with patch('src.tools.validate_point_reporting.engine',self.engine):
+                audit(Path(folder))
+            summary=json.loads((Path(folder)/'summary.json').read_text())
+            self.assertEqual(summary['activity_points'],2)
+            self.assertEqual(summary['view_activity'],1)
+            self.assertEqual(summary['duplicate_point_keys'],0)
+            self.assertTrue(all(v==0 for v in summary['orphan_dimension_keys'].values()))
+            self.assertTrue((Path(folder)/'activity_mileage.csv').exists())
+
 if __name__=='__main__': unittest.main()
