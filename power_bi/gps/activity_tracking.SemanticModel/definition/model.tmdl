@@ -4,6 +4,7 @@ model Model
 	sourceQueryCulture: en-US
 
 ref table activity_points
+ref table measures_
 ref table activities
 ref table gear
 ref table activity_types

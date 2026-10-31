@@ -1,0 +1,31 @@
+table measures_
+
+	measure 'Miles Ridden' = SUM(activity_points[incremental_distance_miles])
+		formatString: #,0.00
+		displayFolder: Distance
+
+	measure 'Moving Hours' = DIVIDE(SUM(activity_points[moving_time_seconds]),3600)
+		formatString: #,0.00
+		displayFolder: Time
+
+	measure 'Activities Ridden' = DISTINCTCOUNT(activity_points[activity_key])
+		formatString: #,0
+		displayFolder: Activities
+
+	measure 'Miles in Selected Segments' = CALCULATE([Miles Ridden], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
+		formatString: #,0.00
+		displayFolder: Segments
+
+	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance_miles]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+		formatString: #,0.00
+		displayFolder: Activities
+
+	column Placeholder
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: [Placeholder]
+
+	partition measures_ = calculated
+		mode: import
+		source = ROW("Placeholder", 0)

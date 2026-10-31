@@ -239,3 +239,13 @@ PBIP, set the `ExportFolder` text parameter, and apply/refresh again. No databas
 rebuild is needed. If the error persists, collect Desktop's Copy details text;
 Parquet typing is validated offline, but Desktop refresh itself requires Windows
 validation and this message can have other causes.
+
+### Measure organization
+
+All GPS-model DAX measures belong to the `measures_` table, defined in
+`power_bi/gps/activity_tracking.SemanticModel/definition/tables/measures_.tmdl`.
+The table has one hidden `Placeholder` column and a local calculated partition;
+it needs no SQL view, export or relationship. Keep future measures in this file
+and assign a display folder. Current folders are Activities, Distance, Time and
+Segments. Measure names and calculations are retained when moving home tables;
+Activities Ridden uses an integer format.

@@ -37,6 +37,8 @@ class ReportingTypeTests(unittest.TestCase):
         seen=set()
         for path in model.glob('*.tmdl'):
             content=path.read_text()
+            if path.stem == 'measures_':
+                continue
             view=re.search(r'ExportFolder & "(view_\w+).parquet"',content)[1]
             seen.add(view)
             types=dict(re.findall(r'\n\tcolumn (\w+)\n\t\tdataType: (\w+)',content))
@@ -45,3 +47,18 @@ class ReportingTypeTests(unittest.TestCase):
             for column in types:
                 self.assertIn('{"'+column+'", ',content)
         self.assertEqual(seen,set(CONTRACT))
+
+    def test_measures_are_centralized_and_organized(self):
+        base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition'
+        measures=(base/'tables/measures_.tmdl').read_text()
+        names=re.findall(r"\n\tmeasure '([^']+)'",measures)
+        self.assertEqual(set(names),{'Miles Ridden','Moving Hours','Activities Ridden',
+                                    'Miles in Selected Segments','Whole Activity Miles'})
+        self.assertEqual(measures.count('displayFolder:'),len(names))
+        self.assertEqual(re.findall(r'\n\tcolumn (\w+)',measures),['Placeholder'])
+        self.assertIn('\t\tisHidden',measures)
+        self.assertIn('partition measures_ = calculated',measures)
+        self.assertIn('ref table measures_',(base/'model.tmdl').read_text())
+        for path in (base/'tables').glob('*.tmdl'):
+            if path.stem != 'measures_':
+                self.assertNotRegex(path.read_text(),r'\n\tmeasure ')
