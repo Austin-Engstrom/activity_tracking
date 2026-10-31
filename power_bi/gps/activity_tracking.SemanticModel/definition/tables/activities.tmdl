@@ -1,0 +1,151 @@
+table activities
+
+	column activity_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: activity_id
+
+	column activity_date_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: activity_date_key
+
+	column activity_type_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+	column gear_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_key
+
+	column activity_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_name
+
+	column sport_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: sport_type
+
+	column start_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: start_date
+
+	column activity_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: activity_date
+
+	column distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	column moving_time_minutes
+		dataType: double
+		summarizeBy: none
+		sourceColumn: moving_time_minutes
+
+	column elapsed_time_minutes
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elapsed_time_minutes
+
+	column total_elevation_gain_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: total_elevation_gain_feet
+
+	column average_speed_mph
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_speed_mph
+
+	column max_speed_mph
+		dataType: double
+		summarizeBy: none
+		sourceColumn: max_speed_mph
+
+	column average_heartrate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_heartrate
+
+	column max_heartrate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: max_heartrate
+
+	column average_cadence
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_cadence
+
+	column average_watts
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_watts
+
+	column kilojoules
+		dataType: double
+		summarizeBy: none
+		sourceColumn: kilojoules
+
+	column calories
+		dataType: double
+		summarizeBy: none
+		sourceColumn: calories
+
+	column suffer_score
+		dataType: double
+		summarizeBy: none
+		sourceColumn: suffer_score
+
+	column is_commute
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_commute
+
+	column is_trainer
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_trainer
+
+	column stream_point_count
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: stream_point_count
+
+	column segment_effort_count
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_effort_count
+
+	column activity_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: activity_key
+
+	column description
+		dataType: string
+		summarizeBy: none
+		sourceColumn: description
+
+	column device_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: device_name
+
+	column workout_type
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: workout_type
+
+	partition activities = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_activity.parquet"))

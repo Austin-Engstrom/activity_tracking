@@ -80,7 +80,7 @@ class ActivityMapper:
                 f"Activity is missing required fields: {missing}"
             )
 
-        return Activity(
+        activity = Activity(
             activity_id=int(activity_id),
             athlete_id=int(athlete_id),
             name=str(name),
@@ -119,6 +119,10 @@ class ActivityMapper:
                 activity_data.get("gear_id")
             ),
         )
+        raw_zone = str(activity_data.get('timezone') or '')
+        activity.reporting_timezone = raw_zone.split(') ',1)[-1] or None
+        return activity
+
     @classmethod
     def apply_detail(
         cls,

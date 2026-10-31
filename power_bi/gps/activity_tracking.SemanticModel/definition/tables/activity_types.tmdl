@@ -1,0 +1,21 @@
+table activity_types
+
+	column activity_type_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+	column activity_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type
+
+	column activity_category
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_category
+
+	partition activity_types = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_activity_type.parquet"))

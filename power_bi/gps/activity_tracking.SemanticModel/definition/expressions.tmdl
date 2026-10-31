@@ -1,0 +1,2 @@
+expression ExportFolder = "C:\activity_tracking\exports\power_bi\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	kind: m

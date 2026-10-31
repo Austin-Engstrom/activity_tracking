@@ -1,0 +1,31 @@
+relationship 8a31b406-fbea-4a0c-acfd-789ad2c88574
+	fromColumn: activity_points.activity_key
+	toColumn: activities.activity_key
+
+relationship 1dfaaf3f-0a81-4781-8be2-06bebb55f0cf
+	fromColumn: activity_points.gear_key
+	toColumn: gear.gear_key
+
+relationship 74aaf444-f2a2-44be-ba90-af4407ac25ca
+	fromColumn: activity_points.activity_type_key
+	toColumn: activity_types.activity_type_key
+
+relationship d0e3b3ad-c132-49ab-8149-49b13d52bc0a
+	fromColumn: activity_points.date_key
+	toColumn: dates.date_key
+
+relationship c1720bdc-9a67-4887-89e7-36d1ca25b600
+	fromColumn: activity_points.trail_key
+	toColumn: trails.trail_key
+
+relationship 5fdc6489-7451-4bd7-bd42-d6340f73bd98
+	fromColumn: activity_points.trail_system_key
+	toColumn: trail_systems.trail_system_key
+
+relationship 3a926e9e-6015-47fd-8021-1ebbe487a24e
+	fromColumn: segment_efforts.segment_key
+	toColumn: segments.segment_key
+
+relationship 9f296454-32a7-4d67-8a87-de0ed3192338
+	fromColumn: activity_point_segments.segment_effort_key
+	toColumn: segment_efforts.segment_effort_key

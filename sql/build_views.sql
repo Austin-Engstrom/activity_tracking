@@ -86,3 +86,7 @@ order by name;
 .print 'REPORTING VIEWS BUILT SUCCESSFULLY'
 .print '============================================================'
 .print ''
+.read sql/views/points/view_activity_points.sql
+.read sql/views/points/view_trail.sql
+.read sql/views/points/view_point_segment_effort.sql
+.read sql/views/points/view_activity_point_segments.sql

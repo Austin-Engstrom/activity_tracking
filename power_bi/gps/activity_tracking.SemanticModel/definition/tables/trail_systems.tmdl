@@ -1,0 +1,66 @@
+table trail_systems
+
+	column trail_system_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+	column trail_system_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: trail_system_name
+
+	column city
+		dataType: string
+		summarizeBy: none
+		sourceColumn: city
+
+	column state
+		dataType: string
+		summarizeBy: none
+		sourceColumn: state
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	column latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column description
+		dataType: string
+		summarizeBy: none
+		sourceColumn: description
+
+	column boundary_source
+		dataType: string
+		summarizeBy: none
+		sourceColumn: boundary_source
+
+	column boundary_confirmed
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: boundary_confirmed
+
+	column osm_element_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: osm_element_type
+
+	column osm_element_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: osm_element_id
+
+	partition trail_systems = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet"))

@@ -343,12 +343,13 @@ def main() -> None:
     else:
         print("All activity types are mapped.")
 
-    rebuild_reporting_views()
+    from src.tools.rebuild_point_reporting import run as rebuild_points
+    rebuild_points()
 
     print("\nPreparing Power BI data...")
 
     export_power_bi(
-        exit_on_failure=False
+        exit_on_failure=True
     )
 
     print("=" * 45)

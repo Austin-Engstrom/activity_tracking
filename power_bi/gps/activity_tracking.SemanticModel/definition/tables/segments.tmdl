@@ -1,0 +1,91 @@
+table segments
+
+	column segment_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_key
+
+	column segment_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: segment_id
+
+	column segment_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: segment_name
+
+	column activity_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: activity_type
+
+	column distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	column average_grade
+		dataType: double
+		summarizeBy: none
+		sourceColumn: average_grade
+
+	column maximum_grade
+		dataType: double
+		summarizeBy: none
+		sourceColumn: maximum_grade
+
+	column elevation_high_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_high_feet
+
+	column elevation_low_feet
+		dataType: double
+		summarizeBy: none
+		sourceColumn: elevation_low_feet
+
+	column start_latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: start_latitude
+
+	column start_longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: start_longitude
+
+	column end_latitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: end_latitude
+
+	column end_longitude
+		dataType: double
+		summarizeBy: none
+		sourceColumn: end_longitude
+
+	column climb_category
+		dataType: string
+		summarizeBy: none
+		sourceColumn: climb_category
+
+	column city
+		dataType: string
+		summarizeBy: none
+		sourceColumn: city
+
+	column state
+		dataType: string
+		summarizeBy: none
+		sourceColumn: state
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	partition segments = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_segment.parquet"))

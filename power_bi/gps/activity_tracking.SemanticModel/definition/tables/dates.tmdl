@@ -1,0 +1,41 @@
+table dates
+
+	column date_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: date
+
+	column year
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: year
+
+	column month_number
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: month_number
+
+	column quarter_number
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: quarter_number
+
+	column week_number
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: week_number
+
+	column day_of_week
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+	partition dates = m
+		mode: import
+		source =
+			Parquet.Document(File.Contents(ExportFolder & "view_date.parquet"))
