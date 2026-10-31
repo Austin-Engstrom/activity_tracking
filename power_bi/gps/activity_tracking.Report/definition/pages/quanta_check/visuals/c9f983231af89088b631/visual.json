@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "c9f983231af89088b631",
   "position": {
     "x": 336,
@@ -42,11 +42,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Activities Ridden"
+                  "Property": "Activities"
                 }
               },
               "queryRef": "measures_.Activities Ridden",
-              "nativeQueryRef": "Activities Ridden"
+              "nativeQueryRef": "Activities"
             },
             {
               "field": {
@@ -56,11 +56,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Miles Ridden"
+                  "Property": "Miles"
                 }
               },
               "queryRef": "measures_.Miles Ridden",
-              "nativeQueryRef": "Miles Ridden"
+              "nativeQueryRef": "Miles"
             },
             {
               "field": {
@@ -92,9 +92,109 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "measures_"
+                  }
+                },
+                "Property": "Miles"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
-    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "69.09933619946844D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Activities Ridden"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "68.57051242444683D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Miles Ridden"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "66.33390253497522D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Point Moving Hours"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "activity_types.activity_type"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.52306895774566D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Activity Moving Hours"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -117,20 +217,6 @@
         }
       ]
     },
-    "objects": {
-      "general": [
-        {
-          "properties": {
-            "layout": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Outline'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

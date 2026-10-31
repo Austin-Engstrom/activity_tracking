@@ -1,11 +1,11 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "d6eaec65e74285ce669c",
   "position": {
     "x": 824,
     "y": 184,
     "z": 9,
-    "height": 200,
+    "height": 408,
     "width": 448,
     "tabOrder": 9
   },
@@ -42,11 +42,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Activities Ridden"
+                  "Property": "Activities"
                 }
               },
               "queryRef": "measures_.Activities Ridden",
-              "nativeQueryRef": "Activities Ridden"
+              "nativeQueryRef": "Activities"
             },
             {
               "field": {
@@ -56,11 +56,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Miles Ridden"
+                  "Property": "Miles"
                 }
               },
               "queryRef": "measures_.Miles Ridden",
-              "nativeQueryRef": "Miles Ridden"
+              "nativeQueryRef": "Miles"
             },
             {
               "field": {
@@ -78,9 +78,40 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "measures_"
+                  }
+                },
+                "Property": "Miles"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
-    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -103,20 +134,6 @@
         }
       ]
     },
-    "objects": {
-      "general": [
-        {
-          "properties": {
-            "layout": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Outline'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "de0bccb56502aa2b8c29",
   "position": {
     "x": 536,
@@ -43,7 +43,7 @@
               },
               "queryRef": "activities.activity_name",
               "nativeQueryRef": "activity_name",
-              "active": true
+              "active": false
             }
           ]
         },
@@ -57,11 +57,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Miles Ridden"
+                  "Property": "Miles"
                 }
               },
               "queryRef": "measures_.Miles Ridden",
-              "nativeQueryRef": "Miles Ridden"
+              "nativeQueryRef": "Miles"
             },
             {
               "field": {
@@ -123,7 +123,121 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "activities.activity_id"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "activities.activity_name"
+            ],
+            "isCollapsed": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.31923043653534D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Miles Ridden"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "89.07819787488043D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Whole Activity Miles"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "103.33459538524816D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Point Minus Activity Miles"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "95.51283444636704D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Point Moving Hours"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "102.88972583324795D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "measures_.Activity Moving Hours"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -146,20 +260,6 @@
         }
       ]
     },
-    "objects": {
-      "general": [
-        {
-          "properties": {
-            "layout": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Outline'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

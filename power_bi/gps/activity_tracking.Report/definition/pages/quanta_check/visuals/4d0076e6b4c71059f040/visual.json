@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "4d0076e6b4c71059f040",
   "position": {
     "x": 8,
@@ -23,17 +23,31 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Activities Ridden"
+                  "Property": "Activities"
                 }
               },
               "queryRef": "measures_.Activities Ridden",
-              "nativeQueryRef": "Activities Ridden"
+              "nativeQueryRef": "Activities"
             }
           ]
         }
       }
     },
-    "drillFilterOtherVisuals": true,
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -51,10 +65,18 @@
                   "Value": "'Activities'"
                 }
               }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }
