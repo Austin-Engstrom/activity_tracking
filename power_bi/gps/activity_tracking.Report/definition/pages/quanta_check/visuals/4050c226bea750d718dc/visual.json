@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "4050c226bea750d718dc",
   "position": {
     "x": 8,
@@ -43,7 +43,7 @@
               },
               "queryRef": "dates.month_number",
               "nativeQueryRef": "month_number",
-              "active": true
+              "active": false
             },
             {
               "field": {
@@ -58,7 +58,7 @@
               },
               "queryRef": "dates.date",
               "nativeQueryRef": "date",
-              "active": true
+              "active": false
             }
           ]
         },
@@ -72,11 +72,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Activities Ridden"
+                  "Property": "Activities"
                 }
               },
               "queryRef": "measures_.Activities Ridden",
-              "nativeQueryRef": "Activities Ridden"
+              "nativeQueryRef": "Activities"
             },
             {
               "field": {
@@ -86,17 +86,78 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Miles Ridden"
+                  "Property": "Miles"
                 }
               },
               "queryRef": "measures_.Miles Ridden",
-              "nativeQueryRef": "Miles Ridden"
+              "nativeQueryRef": "Miles"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dates"
+                  }
+                },
+                "Property": "year"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
       }
     },
-    "drillFilterOtherVisuals": true,
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "dates.year"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "dates.month_number"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "dates.date"
+            ],
+            "isCollapsed": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
       "title": [
         {
@@ -119,20 +180,6 @@
         }
       ]
     },
-    "objects": {
-      "general": [
-        {
-          "properties": {
-            "layout": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Outline'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

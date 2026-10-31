@@ -1,7 +1,9 @@
 table gear
+	lineageTag: fd459ba2-8ac3-4d14-9c18-4db5e0df26cf
 
 	column gear_key
 		dataType: string
+		lineageTag: 335fd55f-6c42-484d-874e-b4457d043473
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -9,6 +11,7 @@ table gear
 
 	column gear_id
 		dataType: string
+		lineageTag: 608b31ae-79a4-4043-86dd-d89c6b311f2a
 		summarizeBy: none
 		sourceColumn: gear_id
 
@@ -16,6 +19,7 @@ table gear
 
 	column athlete_id
 		dataType: int64
+		lineageTag: f4c9801e-f32e-4198-897e-40a224571ec9
 		summarizeBy: none
 		sourceColumn: athlete_id
 
@@ -23,64 +27,84 @@ table gear
 
 	column gear_name
 		dataType: string
+		lineageTag: 6445c1ef-ce77-474c-b484-0683d8fadced
 		summarizeBy: none
 		sourceColumn: gear_name
 
 	column brand_name
 		dataType: string
+		lineageTag: b830d346-0144-4a31-92a9-d630273a3503
 		summarizeBy: none
 		sourceColumn: brand_name
 
 	column model_name
 		dataType: string
+		lineageTag: 61e1c9a5-d979-4311-b06d-4b368b4eb22a
 		summarizeBy: none
 		sourceColumn: model_name
 
 	column description
 		dataType: string
+		lineageTag: 4a287561-8476-4f30-a8c0-100ecf354cfa
 		summarizeBy: none
 		sourceColumn: description
 
 	column distance_miles
 		dataType: double
-		summarizeBy: none
+		lineageTag: 82fbaade-8ab4-4c5e-8197-632565668c10
+		summarizeBy: sum
 		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_primary
 		dataType: int64
-		summarizeBy: none
+		lineageTag: b3d3925a-9fa4-45fa-8c12-cb1f2465e3bd
+		summarizeBy: sum
 		sourceColumn: is_primary
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_retired
 		dataType: int64
-		summarizeBy: none
+		lineageTag: b7144306-c5d0-453c-9db5-a8da5c7d3443
+		summarizeBy: sum
 		sourceColumn: is_retired
+
+		annotation SummarizationSetBy = Automatic
 
 	column frame_type
 		dataType: int64
-		summarizeBy: none
+		lineageTag: 3fa4b2c9-0ca6-4a4d-ad62-771a24f05167
+		summarizeBy: sum
 		sourceColumn: frame_type
+
+		annotation SummarizationSetBy = Automatic
 
 	column detail_loaded_at
 		dataType: dateTime
+		lineageTag: b5d7bfec-fa43-4046-99ae-bd103e737aab
 		summarizeBy: none
 		sourceColumn: detail_loaded_at
 
 	column created_at
 		dataType: dateTime
+		lineageTag: f9a3950a-9516-4151-a22d-3c0cfa6d0c43
 		summarizeBy: none
 		sourceColumn: created_at
 
 	column updated_at
 		dataType: dateTime
+		lineageTag: ca575d78-b285-4726-8607-114a98dd3899
 		summarizeBy: none
 		sourceColumn: updated_at
 
 	partition gear = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_gear.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"gear_key", type text}, {"gear_id", type text}, {"athlete_id", Int64.Type}, {"gear_name", type text}, {"brand_name", type text}, {"model_name", type text}, {"description", type text}, {"distance_miles", type number}, {"is_primary", Int64.Type}, {"is_retired", Int64.Type}, {"frame_type", Int64.Type}, {"detail_loaded_at", type datetime}, {"created_at", type datetime}, {"updated_at", type datetime}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_gear.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"gear_key", type text}, {"gear_id", type text}, {"athlete_id", Int64.Type}, {"gear_name", type text}, {"brand_name", type text}, {"model_name", type text}, {"description", type text}, {"distance_miles", type number}, {"is_primary", Int64.Type}, {"is_retired", Int64.Type}, {"frame_type", Int64.Type}, {"detail_loaded_at", type datetime}, {"created_at", type datetime}, {"updated_at", type datetime}})
+				in
+				    Typed
+

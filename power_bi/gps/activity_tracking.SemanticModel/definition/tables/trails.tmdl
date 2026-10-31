@@ -1,7 +1,9 @@
 table trails
+	lineageTag: 75bb23b1-212a-4a6b-aa2a-24f294fd4f44
 
 	column trail_key
 		dataType: int64
+		lineageTag: c7709570-2a64-4031-a6ef-557c969a98d0
 		summarizeBy: none
 		sourceColumn: trail_key
 
@@ -9,44 +11,52 @@ table trails
 
 	column trail_name
 		dataType: string
+		lineageTag: cf659fbf-50ae-49f2-8b89-3f122b25c716
 		summarizeBy: none
 		sourceColumn: trail_name
 
 	column normalized_name
 		dataType: string
+		lineageTag: 4269dea8-6a7a-432c-b712-f81702949832
 		summarizeBy: none
 		sourceColumn: normalized_name
 
 	column length_miles
 		dataType: double
+		lineageTag: 3632491a-deca-42bf-a587-8c55bda3adee
 		summarizeBy: none
 		sourceColumn: length_miles
 
 	column primary_surface
 		dataType: string
+		lineageTag: 23db8e4e-cc2a-4a91-8972-bee3c15df056
 		summarizeBy: none
 		sourceColumn: primary_surface
 
 	column bicycle_access
 		dataType: string
+		lineageTag: 42329d42-ef12-411b-aa46-5cccf90907f9
 		summarizeBy: none
 		sourceColumn: bicycle_access
 
 	column mtb_scale
 		dataType: string
+		lineageTag: 1158ffd2-c3be-4096-8428-81e6217c89b1
 		summarizeBy: none
 		sourceColumn: mtb_scale
 
 	column mtb_type
 		dataType: string
+		lineageTag: b447443e-cfe8-4528-b58e-6f5eb8a77734
 		summarizeBy: none
 		sourceColumn: mtb_type
 
 	partition trails = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"trail_key", Int64.Type}, {"trail_name", type text}, {"normalized_name", type text}, {"length_miles", type number}, {"primary_surface", type text}, {"bicycle_access", type text}, {"mtb_scale", type text}, {"mtb_type", type text}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"trail_key", Int64.Type}, {"trail_name", type text}, {"normalized_name", type text}, {"length_miles", type number}, {"primary_surface", type text}, {"bicycle_access", type text}, {"mtb_scale", type text}, {"mtb_type", type text}})
+				in
+				    Typed
+

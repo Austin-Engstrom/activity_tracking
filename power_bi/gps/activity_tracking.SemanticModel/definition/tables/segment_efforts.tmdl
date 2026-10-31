@@ -1,7 +1,9 @@
 table segment_efforts
+	lineageTag: 16b83d8a-a726-4867-8319-da2acac3d6c4
 
 	column segment_effort_key
 		dataType: int64
+		lineageTag: c4febbb1-6f2e-45dd-9984-74ad19f22215
 		summarizeBy: none
 		sourceColumn: segment_effort_key
 
@@ -10,6 +12,7 @@ table segment_efforts
 	column activity_key
 		dataType: int64
 		isHidden
+		lineageTag: cee43e0b-fd17-43b2-801b-16a20a553c87
 		summarizeBy: none
 		sourceColumn: activity_key
 
@@ -18,6 +21,7 @@ table segment_efforts
 	column segment_key
 		dataType: int64
 		isHidden
+		lineageTag: 147cbc47-925d-4e1c-9996-49f904d20a96
 		summarizeBy: none
 		sourceColumn: segment_key
 
@@ -25,34 +29,40 @@ table segment_efforts
 
 	column start_index
 		dataType: int64
+		lineageTag: dabe7825-8bcc-4e36-8716-9ba7ff4ca6a6
 		summarizeBy: none
 		sourceColumn: start_index
 
 	column end_index
 		dataType: int64
+		lineageTag: 6a0b7731-8952-4354-bbe5-ae09dd9d989a
 		summarizeBy: none
 		sourceColumn: end_index
 
 	column elapsed_time_seconds
 		dataType: double
+		lineageTag: d4e1fa77-7a87-4d8d-a70d-18cfb8865f93
 		summarizeBy: none
 		sourceColumn: elapsed_time_seconds
 
 	column moving_time_seconds
 		dataType: double
+		lineageTag: e1b5eec3-13dd-4c71-a3c8-2b7624f807f2
 		summarizeBy: none
 		sourceColumn: moving_time_seconds
 
 	column distance_miles
 		dataType: double
+		lineageTag: 650c8e69-27bc-4d51-97a5-209c472f388e
 		summarizeBy: none
 		sourceColumn: distance_miles
 
 	partition segment_efforts = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"activity_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}, {"end_index", Int64.Type}, {"elapsed_time_seconds", type number}, {"moving_time_seconds", type number}, {"distance_miles", type number}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"activity_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}, {"end_index", Int64.Type}, {"elapsed_time_seconds", type number}, {"moving_time_seconds", type number}, {"distance_miles", type number}})
+				in
+				    Typed
+

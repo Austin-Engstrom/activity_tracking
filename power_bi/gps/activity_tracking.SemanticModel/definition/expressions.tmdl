@@ -1,4 +1,5 @@
 expression ExportFolder = "C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
-	kind: m
+	lineageTag: de0a8833-7490-4fd4-b3db-d94b3eebe6d3
 
 	annotation PBI_ResultType = Text
+

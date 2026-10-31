@@ -1,8 +1,10 @@
 table activity_points
+	lineageTag: 5c8ac6cc-0446-4b14-9211-4885df110fc6
 
 	column activity_point_key
 		dataType: string
 		isHidden
+		lineageTag: 7d512446-5002-4f9f-9aab-3f40dac65911
 		summarizeBy: none
 		sourceColumn: activity_point_key
 
@@ -11,6 +13,7 @@ table activity_points
 	column activity_key
 		dataType: int64
 		isHidden
+		lineageTag: 146543e1-fcad-4d73-8b40-3b1060b4f905
 		summarizeBy: none
 		sourceColumn: activity_key
 
@@ -19,6 +22,7 @@ table activity_points
 	column activity_id
 		dataType: int64
 		isHidden
+		lineageTag: 18ce8da3-eb12-4084-a722-88ccf7f265bc
 		summarizeBy: none
 		sourceColumn: activity_id
 
@@ -26,12 +30,16 @@ table activity_points
 
 	column point_index
 		dataType: int64
-		summarizeBy: none
+		lineageTag: e11cac14-41e6-4b08-ae40-f03d6eb92a73
+		summarizeBy: sum
 		sourceColumn: point_index
+
+		annotation SummarizationSetBy = Automatic
 
 	column gear_key
 		dataType: string
 		isHidden
+		lineageTag: 593dadf2-0bc5-4cdc-9b3b-9468be2be614
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -40,6 +48,7 @@ table activity_points
 	column activity_type_key
 		dataType: string
 		isHidden
+		lineageTag: ac5af7bf-a495-4065-8b2d-f75e176fd0c7
 		summarizeBy: none
 		sourceColumn: activity_type_key
 
@@ -48,6 +57,7 @@ table activity_points
 	column date_key
 		dataType: int64
 		isHidden
+		lineageTag: 9dac86ec-6ebc-4f2c-918c-b2393518d987
 		summarizeBy: none
 		sourceColumn: date_key
 
@@ -56,6 +66,7 @@ table activity_points
 	column trail_system_key
 		dataType: int64
 		isHidden
+		lineageTag: a7cddc92-50cc-44d3-9187-aace73ac03fa
 		summarizeBy: none
 		sourceColumn: trail_system_key
 
@@ -64,6 +75,7 @@ table activity_points
 	column trail_key
 		dataType: int64
 		isHidden
+		lineageTag: 4286c468-0dd8-4ba5-8ef4-c7803d58ca51
 		summarizeBy: none
 		sourceColumn: trail_key
 
@@ -71,104 +83,154 @@ table activity_points
 
 	column recorded_at_utc
 		dataType: dateTime
+		lineageTag: 07ae2a88-5c88-41ea-962f-248fab91e14f
 		summarizeBy: none
 		sourceColumn: recorded_at_utc
 
 	column latitude
 		dataType: double
-		summarizeBy: none
+		lineageTag: 4f898af4-ba55-4c26-b2ef-fbde7524d8cd
+		summarizeBy: sum
 		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
 
 	column longitude
 		dataType: double
-		summarizeBy: none
+		lineageTag: 947b6a9f-6376-4a49-a1aa-38bd7f9f6432
+		summarizeBy: sum
 		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
 
 	column elapsed_time_seconds
 		dataType: double
-		summarizeBy: none
+		lineageTag: c4a38e92-c803-44be-8094-60aa12f9cb25
+		summarizeBy: sum
 		sourceColumn: elapsed_time_seconds
+
+		annotation SummarizationSetBy = Automatic
 
 	column cumulative_distance_miles
 		dataType: double
-		summarizeBy: none
+		lineageTag: 1bf5bbc3-3550-40f0-911e-b5f1f3d83a02
+		summarizeBy: sum
 		sourceColumn: cumulative_distance_miles
+
+		annotation SummarizationSetBy = Automatic
 
 	column incremental_distance_miles
 		dataType: double
-		summarizeBy: none
+		lineageTag: aa3f0238-44cf-4a2e-b312-313bb0a6fecb
+		summarizeBy: sum
 		sourceColumn: incremental_distance_miles
+
+		annotation SummarizationSetBy = Automatic
 
 	column incremental_time_seconds
 		dataType: double
-		summarizeBy: none
+		lineageTag: b3951d24-0e96-4390-a476-89fb76d99726
+		summarizeBy: sum
 		sourceColumn: incremental_time_seconds
+
+		annotation SummarizationSetBy = Automatic
 
 	column moving_time_seconds
 		dataType: double
-		summarizeBy: none
+		lineageTag: b3d236bc-9e8e-486a-8b0f-781d0da29314
+		summarizeBy: sum
 		sourceColumn: moving_time_seconds
+
+		annotation SummarizationSetBy = Automatic
 
 	column elevation_feet
 		dataType: double
-		summarizeBy: none
+		lineageTag: 91f32035-6227-44c0-98d7-5912c855a9c8
+		summarizeBy: sum
 		sourceColumn: elevation_feet
+
+		annotation SummarizationSetBy = Automatic
 
 	column speed_mph
 		dataType: double
-		summarizeBy: none
+		lineageTag: 59879a9c-d7d2-4b1d-9ba5-675cc6b91b4b
+		summarizeBy: sum
 		sourceColumn: speed_mph
+
+		annotation SummarizationSetBy = Automatic
 
 	column temperature_f
 		dataType: double
-		summarizeBy: none
+		lineageTag: 0afce225-7883-4d79-9f36-ef92a8dda45f
+		summarizeBy: sum
 		sourceColumn: temperature_f
+
+		annotation SummarizationSetBy = Automatic
 
 	column heartrate
 		dataType: double
-		summarizeBy: none
+		lineageTag: 0c52f39a-dba0-45e8-bebc-8bd6ebc1c9b7
+		summarizeBy: sum
 		sourceColumn: heartrate
+
+		annotation SummarizationSetBy = Automatic
 
 	column cadence
 		dataType: double
-		summarizeBy: none
+		lineageTag: 62c4efca-f183-4087-a116-492216c06fc5
+		summarizeBy: sum
 		sourceColumn: cadence
+
+		annotation SummarizationSetBy = Automatic
 
 	column watts
 		dataType: double
-		summarizeBy: none
+		lineageTag: 33e8cea8-1b62-492c-b0a6-8324fa074841
+		summarizeBy: sum
 		sourceColumn: watts
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_moving
 		dataType: int64
-		summarizeBy: none
+		lineageTag: dd9dac2a-f298-4372-8beb-9c3d177a3dbb
+		summarizeBy: sum
 		sourceColumn: is_moving
+
+		annotation SummarizationSetBy = Automatic
 
 	column grade_percent
 		dataType: double
-		summarizeBy: none
+		lineageTag: 97770d54-0429-442a-8406-7b1742f49aa6
+		summarizeBy: sum
 		sourceColumn: grade_percent
+
+		annotation SummarizationSetBy = Automatic
 
 	column quality_status
 		dataType: string
+		lineageTag: 1bfe220d-b4e7-4679-ad8c-8eacc309aeae
 		summarizeBy: none
 		sourceColumn: quality_status
 
 	column match_method
 		dataType: string
+		lineageTag: aaea348d-5dbe-429b-afcc-40c27b1757f5
 		summarizeBy: none
 		sourceColumn: match_method
 
 	column date_basis
 		dataType: string
+		lineageTag: c9442510-aad0-443d-8b7f-8e2c65005ae4
 		summarizeBy: none
 		sourceColumn: date_basis
 
 	partition activity_points = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"activity_key", Int64.Type}, {"activity_id", Int64.Type}, {"point_index", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"date_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_key", Int64.Type}, {"recorded_at_utc", type datetime}, {"latitude", type number}, {"longitude", type number}, {"elapsed_time_seconds", type number}, {"cumulative_distance_miles", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"moving_time_seconds", type number}, {"elevation_feet", type number}, {"speed_mph", type number}, {"temperature_f", type number}, {"heartrate", type number}, {"cadence", type number}, {"watts", type number}, {"is_moving", Int64.Type}, {"grade_percent", type number}, {"quality_status", type text}, {"match_method", type text}, {"date_basis", type text}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"activity_key", Int64.Type}, {"activity_id", Int64.Type}, {"point_index", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"date_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_key", Int64.Type}, {"recorded_at_utc", type datetime}, {"latitude", type number}, {"longitude", type number}, {"elapsed_time_seconds", type number}, {"cumulative_distance_miles", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"moving_time_seconds", type number}, {"elevation_feet", type number}, {"speed_mph", type number}, {"temperature_f", type number}, {"heartrate", type number}, {"cadence", type number}, {"watts", type number}, {"is_moving", Int64.Type}, {"grade_percent", type number}, {"quality_status", type text}, {"match_method", type text}, {"date_basis", type text}})
+				in
+				    Typed
+

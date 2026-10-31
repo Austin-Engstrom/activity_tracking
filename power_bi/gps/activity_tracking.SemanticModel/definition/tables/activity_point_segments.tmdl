@@ -1,8 +1,10 @@
 table activity_point_segments
+	lineageTag: 0c0faf44-ce50-464e-ba42-63835c3212d7
 
 	column activity_point_key
 		dataType: string
 		isHidden
+		lineageTag: 1ac773c9-9fe3-4840-8ed3-7fb9884b335e
 		summarizeBy: none
 		sourceColumn: activity_point_key
 
@@ -11,6 +13,7 @@ table activity_point_segments
 	column segment_effort_key
 		dataType: int64
 		isHidden
+		lineageTag: 10ba16d3-96e5-41b0-a2ba-84e0678ef4ef
 		summarizeBy: none
 		sourceColumn: segment_effort_key
 
@@ -19,6 +22,7 @@ table activity_point_segments
 	column segment_key
 		dataType: int64
 		isHidden
+		lineageTag: 8a410075-66cf-4970-adea-e5cbee968815
 		summarizeBy: none
 		sourceColumn: segment_key
 
@@ -27,8 +31,9 @@ table activity_point_segments
 	partition activity_point_segments = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_point_segments.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_point_segments.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}})
+				in
+				    Typed
+

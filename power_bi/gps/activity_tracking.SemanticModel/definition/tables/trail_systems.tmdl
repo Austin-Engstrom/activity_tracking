@@ -1,7 +1,9 @@
 table trail_systems
+	lineageTag: 33d0a9dc-3da0-46f9-bb5a-fbed68669540
 
 	column trail_system_key
 		dataType: int64
+		lineageTag: c2af6d20-d43d-487d-bd99-50c8b7915f28
 		summarizeBy: none
 		sourceColumn: trail_system_key
 
@@ -9,56 +11,67 @@ table trail_systems
 
 	column trail_system_name
 		dataType: string
+		lineageTag: 5735c9d2-63c1-41d7-bfec-cad612d27f7a
 		summarizeBy: none
 		sourceColumn: trail_system_name
 
 	column city
 		dataType: string
+		lineageTag: c5a5e6d6-7e87-4835-9ef1-6c936195c330
 		summarizeBy: none
 		sourceColumn: city
 
 	column state
 		dataType: string
+		lineageTag: 0d8572bf-f7fa-4d5a-bcc1-fe7268fa43a1
 		summarizeBy: none
 		sourceColumn: state
 
 	column country
 		dataType: string
+		lineageTag: 144cc85d-1af0-48e1-b3d1-4a3d557c796d
 		summarizeBy: none
 		sourceColumn: country
 
 	column latitude
 		dataType: double
+		lineageTag: 8c0e4f74-091b-408d-b1d0-802ba8312a78
 		summarizeBy: none
 		sourceColumn: latitude
 
 	column longitude
 		dataType: double
+		lineageTag: eff990e9-adb8-45f2-858c-27ad03647fc5
 		summarizeBy: none
 		sourceColumn: longitude
 
 	column description
 		dataType: string
+		lineageTag: 93a5803c-20b4-4df9-b946-c9e356001262
 		summarizeBy: none
 		sourceColumn: description
 
 	column boundary_source
 		dataType: string
+		lineageTag: e4f17c28-1a9f-486c-9f93-2789fb549445
 		summarizeBy: none
 		sourceColumn: boundary_source
 
 	column boundary_confirmed
 		dataType: int64
+		lineageTag: 97ebaaa2-8b6c-4463-8e93-5e5a91806962
 		summarizeBy: none
 		sourceColumn: boundary_confirmed
 
 	column osm_element_type
 		dataType: string
+		lineageTag: 2571dff4-5df1-4621-9cc6-b9490fac7b1f
 		summarizeBy: none
 		sourceColumn: osm_element_type
 
 	column osm_element_id
 		dataType: int64
+		lineageTag: 50789e79-307c-4db7-b13d-15229bf95c71
 		summarizeBy: none
 		sourceColumn: osm_element_id
 
@@ -67,8 +80,9 @@ table trail_systems
 	partition trail_systems = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"latitude", type number}, {"longitude", type number}, {"description", type text}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"latitude", type number}, {"longitude", type number}, {"description", type text}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}})
+				in
+				    Typed
+
