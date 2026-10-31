@@ -170,3 +170,29 @@ is necessary. Re-export Parquet after verifying links. Then review several known
 routes in Power BI, including rides spanning systems and repeated segments, before
 merging. Static audits do not establish spatial matching accuracy or validate DAX
 execution in Power BI Desktop.
+
+### Audit progress and query timings
+
+Use `--explain` to capture SQLite query plans:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.validate_point_reporting --explain
+```
+
+Each step prints START and COMPLETED messages immediately, with elapsed seconds.
+While a long SQLite query executes, a progress-handler heartbeat prints roughly
+once every five seconds. Heartbeats indicate SQLite work, not a percentage or ETA;
+waiting on a database lock may not emit them. `audit_status.json` is updated during
+the run and records step timings and completed/failed/interrupted state.
+`query_plans.json` contains plans when `--explain` is used. CSV files are published
+after each finishes. Check this run's status/timestamps when older results exist.
+Do not run concurrent audits into the same output folder; use `--output` to separate
+runs. Ctrl+C is safe for the offline audit; incomplete TEMP tables are discarded
+when the connection closes and source database records are unchanged.
+
+The audit materializes each dimension's distinct keys once into indexed TEMP
+tables and checks grouped point counts against them. This avoids the original
+correlated date-reference query, whose plan could regenerate the recursive calendar
+and scan point date bounds for each point. Point mileage/key groups are calculated
+once and reused across the reference checks and CSV summaries. The grouping retains
+point counts so an orphan shared by many points is counted correctly.

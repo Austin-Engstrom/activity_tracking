@@ -129,12 +129,52 @@ class PointReportingTests(unittest.TestCase):
         self.c.commit()
         with TemporaryDirectory() as folder:
             with patch('src.tools.validate_point_reporting.engine',self.engine):
-                audit(Path(folder))
+                audit(Path(folder), explain=True)
             summary=json.loads((Path(folder)/'summary.json').read_text())
             self.assertEqual(summary['activity_points'],2)
             self.assertEqual(summary['view_activity'],1)
             self.assertEqual(summary['duplicate_point_keys'],0)
             self.assertTrue(all(v==0 for v in summary['orphan_dimension_keys'].values()))
             self.assertTrue((Path(folder)/'activity_mileage.csv').exists())
+            status=json.loads((Path(folder)/'audit_status.json').read_text())
+            self.assertEqual(status['status'],'completed')
+            self.assertTrue(all(step['status']=='completed' for step in status['steps']))
+            plans=json.loads((Path(folder)/'query_plans.json').read_text())
+            date_plan=' '.join(str(row[-1]) for row in plans['Check date_key references'])
+            self.assertNotIn('CORRELATED',date_plan)
+            self.assertNotIn('calendar',date_plan)
+            self.assertIn('audit_dim_date_key_key',date_plan)
+
+
+    def test_audit_counts_orphan_points_after_grouping(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from src.tools.validate_point_reporting import audit
+        self.streams([(0,0,0,41),(1,10,100,41)])
+        rebuild_points(self.c);self.views()
+        for name in ['view_gear','view_activity_type','view_trail_system']:
+            for statement in (ROOT/'sql/views/dimensions'/f'{name}.sql').read_text().split(';'):
+                if statement.strip(): self.c.exec_driver_sql(statement)
+        self.c.exec_driver_sql('UPDATE activity_points SET trail_key=999')
+        self.c.commit()
+        with TemporaryDirectory() as folder:
+            with patch('src.tools.validate_point_reporting.engine',self.engine):
+                with self.assertRaises(SystemExit):
+                    audit(Path(folder))
+            summary=json.loads((Path(folder)/'summary.json').read_text())
+            self.assertEqual(summary['orphan_dimension_keys']['trail_key'],2)
+            status=json.loads((Path(folder)/'audit_status.json').read_text())
+            self.assertEqual(status['status'],'validation_failed')
+
+    def test_audit_records_failed_query(self):
+        from tempfile import TemporaryDirectory
+        from src.tools.validate_point_reporting import AuditProgress
+        with TemporaryDirectory() as folder:
+            progress=AuditProgress(Path(folder),self.c)
+            with self.assertRaises(Exception):
+                progress.run('broken query',lambda: self.c.exec_driver_sql('SELECT * FROM missing_table'))
+            status=json.loads((Path(folder)/'audit_status.json').read_text())
+            self.assertEqual(status['status'],'failed')
+            self.assertEqual(status['steps'][0]['status'],'failed')
 
 if __name__=='__main__': unittest.main()
