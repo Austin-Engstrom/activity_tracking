@@ -1,4 +1,4 @@
-expression ExportFolder = "C:\activity_tracking\exports\power_bi\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+expression ExportFolder = "C:\Users\AustinEngstrom\Documents\GitHub\activity_tracking\exports\power_bi\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	kind: m
 
 	annotation PBI_ResultType = Text
