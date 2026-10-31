@@ -121,32 +121,19 @@ def prepare_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
     for column in dataframe.columns:
         column_lower = column.lower()
 
-        # Date-only columns.
+        # Strava calls timestamps start_date: handle them before date suffixes.
         if (
-            column_lower == "date"
-            or column_lower.endswith("_date")
-        ):
-            dataframe[column] = pd.to_datetime(
-                dataframe[column],
-                errors="coerce",
-            ).dt.date
-
-        # Timestamp columns.
-        elif (
             column_lower.endswith("_at")
             or column_lower == "recorded_at_utc"
-            or column_lower in {
-                "start_date",
-                "start_date_local",
-                "first_ridden_at",
-                "last_ridden_at",
-            }
+            or column_lower in {"start_date", "start_date_local"}
         ):
             dataframe[column] = pd.to_datetime(
-                dataframe[column],
-                errors="coerce",
-                utc=True,
+                dataframe[column], errors="coerce", utc=True,
             )
+        elif column_lower == "date" or column_lower.endswith("_date"):
+            dataframe[column] = pd.to_datetime(
+                dataframe[column], errors="coerce",
+            ).dt.date
 
     return dataframe
 

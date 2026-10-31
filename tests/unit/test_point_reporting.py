@@ -196,4 +196,25 @@ class PointReportingTests(unittest.TestCase):
         after=self.c.exec_driver_sql('SELECT * FROM activity_points ORDER BY point_index').all()
         self.assertEqual(before,after)
 
+    def test_populated_activity_and_segment_exports_preserve_types(self):
+        from tempfile import TemporaryDirectory
+        import pyarrow.parquet as pq
+        from src.tools.export_power_bi import export_view
+        self.streams([(0,0,0,41),(1,10,100,41)])
+        self.c.exec_driver_sql("UPDATE activities SET start_date='2026-01-02 13:14:15' WHERE activity_id=1")
+        self.c.exec_driver_sql("INSERT INTO segments(segment_id,name,climb_category,created_at,updated_at) VALUES (1,'climb',2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        rebuild_points(self.c);self.views()
+        with TemporaryDirectory() as folder:
+            for view in ['view_activity','view_segment']:
+                result=export_view(self.c,view,Path(folder))
+                self.assertTrue(result.success,result.error)
+            activity=pq.read_table(Path(folder)/'view_activity.parquet')
+            timestamp=activity['start_date'][0].as_py()
+            self.assertEqual((timestamp.hour,timestamp.minute,timestamp.second),(13,14,15))
+            self.assertEqual(str(activity.schema.field('start_date').type),'timestamp[us, tz=UTC]')
+            self.assertEqual(str(activity.schema.field('activity_date').type),'date32[day]')
+            segment=pq.read_table(Path(folder)/'view_segment.parquet')
+            self.assertEqual(segment['climb_category'][0].as_py(),2)
+            self.assertEqual(str(segment.schema.field('climb_category').type),'int64')
+
 if __name__=='__main__': unittest.main()

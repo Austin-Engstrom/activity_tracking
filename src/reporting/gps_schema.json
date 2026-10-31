@@ -109,7 +109,7 @@
     "activity_type": "string",
     "average_grade": "double",
     "city": "string",
-    "climb_category": "string",
+    "climb_category": "int64",
     "country": "string",
     "distance_miles": "double",
     "elevation_high_feet": "double",

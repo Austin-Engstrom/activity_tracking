@@ -66,7 +66,7 @@ table segments
 		sourceColumn: end_longitude
 
 	column climb_category
-		dataType: string
+		dataType: int64
 		summarizeBy: none
 		sourceColumn: climb_category
 
@@ -90,6 +90,6 @@ table segments
 		source =
 			let
 			    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"segment_id", Int64.Type}, {"segment_name", type text}, {"activity_type", type text}, {"distance_miles", type number}, {"average_grade", type number}, {"maximum_grade", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"start_latitude", type number}, {"start_longitude", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"climb_category", type text}, {"city", type text}, {"state", type text}, {"country", type text}})
+			    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"segment_id", Int64.Type}, {"segment_name", type text}, {"activity_type", type text}, {"distance_miles", type number}, {"average_grade", type number}, {"maximum_grade", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"start_latitude", type number}, {"start_longitude", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"climb_category", Int64.Type}, {"city", type text}, {"state", type text}, {"country", type text}})
 			in
 			    Typed
