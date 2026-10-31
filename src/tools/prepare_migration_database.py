@@ -4,6 +4,7 @@ Stop ETL jobs and close database connections before running this command.
 Run locally to work with your local data; cloud files are separate.
 """
 import argparse
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 import os
@@ -16,8 +17,8 @@ TARGET = ROOT / 'database' / 'strava_analytics.db'
 
 def snapshot(source: Path, destination: Path) -> None:
     """Use SQLite backup so committed WAL contents are included."""
-    with sqlite3.connect(source.resolve().as_uri() + '?mode=ro', uri=True) as src:
-        with sqlite3.connect(destination) as dst:
+    with closing(sqlite3.connect(source.resolve().as_uri() + '?mode=ro', uri=True)) as src:
+        with closing(sqlite3.connect(destination)) as dst:
             src.backup(dst)
             if dst.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
                 raise RuntimeError(f'Integrity check failed: {destination}')
@@ -47,7 +48,7 @@ def prepare(source: Path, target: Path = TARGET) -> Path:
         temporary.unlink(missing_ok=True)
     print(f'Backup: {backup}')
     print(f'Working database: {target}')
-    with sqlite3.connect(target.as_uri() + '?mode=ro', uri=True) as conn:
+    with closing(sqlite3.connect(target.as_uri() + '?mode=ro', uri=True)) as conn:
         tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         for table in ['activities', 'activity_streams']:
             count = conn.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0] if table in tables else 0
