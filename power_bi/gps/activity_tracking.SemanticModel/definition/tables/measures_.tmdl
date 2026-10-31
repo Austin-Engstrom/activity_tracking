@@ -223,6 +223,26 @@ table measures_
 		displayFolder: Validation
 		lineageTag: deb0f498-e18e-4295-b80e-9039902ff32e
 
+	/// Observed segment/trail/system combinations across all verified history; activity and date filters do not restrict this catalog.
+	measure 'Segment Association Count' = COUNTROWS(segment_trail_associations)
+		formatString: #,0
+		displayFolder: Segments\Associations
+
+	/// Trails associated with the selected segments and dimension context. Blank trail keys are excluded.
+	measure 'Associated Trails' = DISTINCTCOUNTNOBLANK(segment_trail_associations[trail_key])
+		formatString: #,0
+		displayFolder: Segments\Associations
+
+	/// Systems associated with selected segments across verified history, excluding blanks.
+	measure 'Associated Trail Systems' = DISTINCTCOUNTNOBLANK(segment_trail_associations[trail_system_key])
+		formatString: #,0
+		displayFolder: Segments\Associations
+
+	/// Sum observed interval miles per segment effort. Repeated and overlapping segment efforts are additive, not unique route length.
+	measure 'Observed Segment Association Miles' = SUM(segment_trail_associations[observed_distance_miles])
+		formatString: #,0.00
+		displayFolder: Segments\Associations
+
 	column Placeholder
 		dataType: int64
 		isHidden

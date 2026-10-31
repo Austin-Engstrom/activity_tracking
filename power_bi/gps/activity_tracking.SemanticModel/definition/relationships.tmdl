@@ -30,3 +30,18 @@ relationship 9f296454-32a7-4d67-8a87-de0ed3192338
 	fromColumn: activity_point_segments.segment_effort_key
 	toColumn: segment_efforts.segment_effort_key
 
+
+relationship b057551a-b50c-43eb-ab52-2e7289b289d1
+	fromColumn: segment_trail_associations.segment_key
+	toColumn: segments.segment_key
+	crossFilteringBehavior: oneDirection
+
+relationship 5fe9cfde-67b3-43d0-974f-258b7730180e
+	fromColumn: segment_trail_associations.trail_key
+	toColumn: trails.trail_key
+	crossFilteringBehavior: oneDirection
+
+relationship f16df384-6157-4c2f-a3a4-1c6587f12fda
+	fromColumn: segment_trail_associations.trail_system_key
+	toColumn: trail_systems.trail_system_key
+	crossFilteringBehavior: oneDirection

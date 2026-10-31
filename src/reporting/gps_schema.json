@@ -124,6 +124,20 @@
     "start_longitude": "double",
     "state": "string"
   },
+  "view_segment_trail_association": {
+    "association_basis": "string",
+    "evidence_status": "string",
+    "first_observed_at": "dateTime",
+    "last_observed_at": "dateTime",
+    "observed_distance_miles": "double",
+    "observed_distance_share": "double",
+    "point_memberships": "int64",
+    "segment_key": "int64",
+    "supporting_activities": "int64",
+    "supporting_efforts": "int64",
+    "trail_key": "int64",
+    "trail_system_key": "int64"
+  },
   "view_trail": {
     "bicycle_access": "string",
     "length_miles": "double",

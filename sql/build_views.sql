@@ -90,3 +90,5 @@ order by name;
 .read sql/views/points/view_trail.sql
 .read sql/views/points/view_point_segment_effort.sql
 .read sql/views/points/view_activity_point_segments.sql
+
+.read sql/views/points/view_segment_trail_association.sql

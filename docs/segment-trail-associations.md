@@ -1,0 +1,96 @@
+# Observed segment / trail / system associations
+
+`view_segment_trail_association` supplies the `segment_trail_associations` Power BI
+bridge. Its grain is one `(segment_key, trail_key, trail_system_key)` combination
+observed in verified segment-effort memberships. A system-only row has a NULL
+trail key. Points unmatched to both are not association rows.
+
+```mermaid
+erDiagram
+    segments ||--o{ segment_trail_associations : segment_key
+    trails ||--o{ segment_trail_associations : trail_key
+    trail_systems ||--o{ segment_trail_associations : trail_system_key
+```
+
+The existing GPS-point star and segment-effort membership bridge are unchanged.
+All three new relationships filter from dimensions to the association bridge in
+one direction. There is no relationship to `activity_points`, no dimension-to-
+dimension relationship, and no bidirectional filter path.
+
+## Evidence and distance
+
+Only `stream_index_alignment.verified=1` memberships contribute. We reuse GPS
+point assignments rather than spatially matching segment endpoints. Rows include:
+
+- Supporting effort count and distinct activity count.
+- Point membership count (sample/effort pairs, not unique physical GPS points).
+- Observed interval miles, first/last observed UTC timestamps.
+- Observed distance share and an evidence status.
+
+The interval ending at the segment's start index is excluded from its distance:
+that interval began outside the effort. Subsequent intervals retain the existing
+GPS reporting quality exclusions. Repeated efforts add traversal distance and
+support counts, not unique geographic coverage. Counts of supporting activities
+or efforts must not be summed across associations: one effort may span trails.
+
+`observed_distance_share` divides the row's eligible distance by all eligible
+interval distance observed for that segment, including unmatched intervals.
+Consequently exported shares may sum to less than 100%. It is a mileage-weighted
+historical share, not a confidence score or fraction of the segment's unique
+geometry. Zero/unknown denominators remain NULL.
+
+A row with point overlap but no positive eligible distance is `point_only`.
+Other rows are `distance_supported`. `association_basis` is always
+`verified_point_assignments`: these are inferred observations, not manually
+confirmed ownership. Ambiguous trail matches contribute system-only evidence when
+the system is known. Confidence scoring and manual overrides are not introduced.
+
+## Apply locally
+
+Close Power BI and pull the branch. From the checkout root:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.build_segment_associations
+.\.venv\Scripts\python.exe -m src.tools.export_power_bi
+```
+
+The first command installs and checks the view without rebuilding any spatial
+matches or changing source data. The regular point-reporting pipeline also builds
+it through `sql/build_views.sql`. The default exporter now writes **11** files,
+with an explicit type contract for the new view, including empty/all-null exports.
+The view reflects subsequent verified memberships immediately; re-export to bring
+updated association evidence into Power BI. No physical source-table migration,
+new secrets, or Strava requests are needed to create this bridge.
+
+## Use in Power BI
+
+After export, open `power_bi/gps/activity_tracking.pbip` and refresh. In a new table
+or matrix put `trails[trail_name]` and `trail_systems[trail_system_name]` on rows,
+and `Segment Association Count` in values. Select a segment or add a segment-name
+slicer. Hide rows without associations (visual filter: association count greater
+than zero). For positive-distance evidence only, additionally filter
+`segment_trail_associations[evidence_status]` to `distance_supported`.
+
+Measures live in `measures_`, in the **Segments / Associations** display folder:
+
+- **Segment Association Count**: number of observed combinations.
+- **Associated Trails**: distinct nonblank associated trails.
+- **Associated Trail Systems**: distinct nonblank associated systems.
+- **Observed Segment Association Miles**: additive observed distance per effort.
+
+These catalog measures describe **all verified history**. Date/activity/gear
+filters do not reduce them because there is deliberately no route through the
+point fact. Use existing `Miles in Selected Segments` for associations represented
+by the currently selected activity/date/route. Ordinary `Miles` is intentionally
+not segment-aware. Segment names alone will not filter the separate trail dimension;
+the association measure suppresses nonexistent trail/system combinations.
+
+Expected local checks: a known Swope segment should show plausible Swope trail
+associations, segments spanning multiple trails should retain multiple rows,
+unknown trails may appear as blank under a known system, and unverified history
+should not create evidence. Neither matching names nor high repeated-mileage
+counts establish geographic certainty. Desktop interactions require local validation.
+
+Existing Quanta Check visuals and local layout edits are preserved. Add the
+association matrix where appropriate rather than changing ordinary mileage visuals
+into history-wide catalog measures.

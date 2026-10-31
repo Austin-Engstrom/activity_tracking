@@ -1,0 +1,80 @@
+table segment_trail_associations
+	lineageTag: 495be822-4aca-4e19-bb49-919457277519
+
+	column segment_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: trail_key
+
+		annotation SummarizationSetBy = User
+
+	column trail_system_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		annotation SummarizationSetBy = User
+
+	column supporting_efforts
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: supporting_efforts
+
+	column supporting_activities
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: supporting_activities
+
+	column point_memberships
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: point_memberships
+
+	column observed_distance_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: observed_distance_miles
+
+	column observed_distance_share
+		dataType: double
+		summarizeBy: none
+		sourceColumn: observed_distance_share
+
+	column first_observed_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_observed_at
+
+	column last_observed_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: last_observed_at
+
+	column association_basis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: association_basis
+
+	column evidence_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: evidence_status
+
+	partition segment_trail_associations = m
+		mode: import
+		source =
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment_trail_association.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"trail_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"supporting_efforts", Int64.Type}, {"supporting_activities", Int64.Type}, {"point_memberships", Int64.Type}, {"observed_distance_miles", type number}, {"observed_distance_share", type number}, {"first_observed_at", type datetime}, {"last_observed_at", type datetime}, {"association_basis", type text}, {"evidence_status", type text}})
+			in
+			    Typed

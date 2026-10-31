@@ -51,8 +51,8 @@ class ReportingTypeTests(unittest.TestCase):
     def test_measures_are_centralized_and_organized(self):
         base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition'
         measures=(base/'tables/measures_.tmdl').read_text()
-        names=re.findall(r"\n\tmeasure '([^']+)'",measures)
-        self.assertTrue({'Miles Ridden','Point Moving Hours','Activity Moving Hours','Activities Ridden',
+        names=[a or b for a,b in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*))",measures)]
+        self.assertTrue({'Miles','Point Moving Hours','Activity Moving Hours','Activities',
                                     'Miles in Selected Segments','Whole Activity Miles'}.issubset(set(names)))
         self.assertEqual(len(names),len(set(names)))
         self.assertEqual(measures.count('displayFolder:'),len(names))
@@ -72,7 +72,7 @@ class ReportingTypeTests(unittest.TestCase):
                 if name.endswith(('_key','_id')):
                     self.assertIn('summarizeBy: none',body,(path.stem,name))
                     self.assertIn('annotation SummarizationSetBy = User',body,(path.stem,name))
-                    if path.stem in {'activity_points','activity_point_segments'} or (path.stem=='segment_efforts' and name in {'activity_key','segment_key'}):
+                    if path.stem in {'activity_points','activity_point_segments','segment_trail_associations'} or (path.stem=='segment_efforts' and name in {'activity_key','segment_key'}):
                         self.assertIn('isHidden',body,(path.stem,name))
                     else:
                         self.assertNotIn('isHidden',body,(path.stem,name))

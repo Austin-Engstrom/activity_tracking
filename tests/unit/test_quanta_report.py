@@ -22,7 +22,7 @@ class QuantaReportTests(unittest.TestCase):
     def test_visual_bindings_and_bounds(self):
         model=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition/tables'
         columns={p.stem:set(re.findall(r'\n\tcolumn (\w+)',p.read_text())) for p in model.glob('*.tmdl')}
-        measures=set(re.findall(r"\n\tmeasure '([^']+)'",(model/'measures_.tmdl').read_text()))
+        measures={a or b for a,b in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*))",(model/'measures_.tmdl').read_text())}
         page=BASE/'activity_tracking.Report/definition/pages/quanta_check'
         size=json.loads((page/'page.json').read_text())
         visuals=[json.loads(p.read_text()) for p in (page/'visuals').glob('*/visual.json')]
