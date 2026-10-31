@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "dc0b762e110e59b0e21b",
+  "position": {
+    "x": 1068,
+    "y": 64,
+    "z": 6,
+    "height": 112,
+    "width": 204,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "UTC Fallback Points"
+                }
+              },
+              "queryRef": "measures_.UTC Fallback Points",
+              "nativeQueryRef": "UTC Fallback Points"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'UTC fallback points'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

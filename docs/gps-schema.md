@@ -101,8 +101,8 @@ Canonical activity/date/segment/trail-system views now follow the new model, so 
 relationships and date columns require migration. The original Power BI project
 is retained as a reference; use the new model under `power_bi/gps` for cutover.
 Set its `ExportFolder` M parameter to the local Parquet directory (trailing slash).
-Open `power_bi/gps/activity_tracking.pbip` in Power BI Desktop. The starter report
-has a blank canvas; the model and initial measures are ready for new visuals.
+Open `power_bi/gps/activity_tracking.pbip` in Power BI Desktop. The report has one Quanta Check page for validating the shared dataset; see
+`docs/quanta-check.md` for the validation layout and measures.
 Desktop rendering and refresh must be verified on a supported Windows machine.
 
 The new model uses single-direction dimension-to-point relationships. It avoids

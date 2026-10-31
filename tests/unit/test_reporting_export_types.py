@@ -52,8 +52,9 @@ class ReportingTypeTests(unittest.TestCase):
         base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition'
         measures=(base/'tables/measures_.tmdl').read_text()
         names=re.findall(r"\n\tmeasure '([^']+)'",measures)
-        self.assertEqual(set(names),{'Miles Ridden','Point Moving Hours','Activity Moving Hours','Activities Ridden',
-                                    'Miles in Selected Segments','Whole Activity Miles'})
+        self.assertTrue({'Miles Ridden','Point Moving Hours','Activity Moving Hours','Activities Ridden',
+                                    'Miles in Selected Segments','Whole Activity Miles'}.issubset(set(names)))
+        self.assertEqual(len(names),len(set(names)))
         self.assertEqual(measures.count('displayFolder:'),len(names))
         self.assertEqual(re.findall(r'\n\tcolumn (\w+)',measures),['Placeholder'])
         self.assertIn('\t\tisHidden',measures)

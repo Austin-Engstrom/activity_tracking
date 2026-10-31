@@ -1,0 +1,165 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "de0bccb56502aa2b8c29",
+  "position": {
+    "x": 536,
+    "y": 1000,
+    "z": 14,
+    "height": 432,
+    "width": 736,
+    "tabOrder": 14
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "activities"
+                    }
+                  },
+                  "Property": "activity_id"
+                }
+              },
+              "queryRef": "activities.activity_id",
+              "nativeQueryRef": "activity_id",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "activities"
+                    }
+                  },
+                  "Property": "activity_name"
+                }
+              },
+              "queryRef": "activities.activity_name",
+              "nativeQueryRef": "activity_name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Miles Ridden"
+                }
+              },
+              "queryRef": "measures_.Miles Ridden",
+              "nativeQueryRef": "Miles Ridden"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Whole Activity Miles"
+                }
+              },
+              "queryRef": "measures_.Whole Activity Miles",
+              "nativeQueryRef": "Whole Activity Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Point Minus Activity Miles"
+                }
+              },
+              "queryRef": "measures_.Point Minus Activity Miles",
+              "nativeQueryRef": "Point Minus Activity Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Point Moving Hours"
+                }
+              },
+              "queryRef": "measures_.Point Moving Hours",
+              "nativeQueryRef": "Point Moving Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Activity Moving Hours"
+                }
+              },
+              "queryRef": "measures_.Activity Moving Hours",
+              "nativeQueryRef": "Activity Moving Hours"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Activities | select a row to inspect the page'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

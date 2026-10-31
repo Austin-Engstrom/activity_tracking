@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "22cfd8f1b22d9adc8395",
+  "position": {
+    "x": 644,
+    "y": 64,
+    "z": 4,
+    "height": 112,
+    "width": 204,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Whole Activity Miles"
+                }
+              },
+              "queryRef": "measures_.Whole Activity Miles",
+              "nativeQueryRef": "Whole Activity Miles"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Activity miles'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

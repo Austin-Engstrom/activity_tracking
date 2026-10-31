@@ -1,0 +1,131 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "7573a637ebafa66dc90b",
+  "position": {
+    "x": 824,
+    "y": 392,
+    "z": 10,
+    "height": 200,
+    "width": 448,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Recording Gap Intervals"
+                }
+              },
+              "queryRef": "measures_.Recording Gap Intervals",
+              "nativeQueryRef": "Recording Gap Intervals"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Unmatched System Miles"
+                }
+              },
+              "queryRef": "measures_.Unmatched System Miles",
+              "nativeQueryRef": "Unmatched System Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Unmatched Trail Miles"
+                }
+              },
+              "queryRef": "measures_.Unmatched Trail Miles",
+              "nativeQueryRef": "Unmatched Trail Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Segment Linked Points"
+                }
+              },
+              "queryRef": "measures_.Segment Linked Points",
+              "nativeQueryRef": "Segment Linked Points"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Point Minus Activity Moving Hours"
+                }
+              },
+              "queryRef": "measures_.Point Minus Activity Moving Hours",
+              "nativeQueryRef": "Point Minus Activity Moving Hours"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Coverage and interval quality'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outline'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
