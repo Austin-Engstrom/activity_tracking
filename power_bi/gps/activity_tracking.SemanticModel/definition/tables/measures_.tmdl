@@ -1,130 +1,159 @@
 table measures_
+	lineageTag: c3bfe11a-d703-43a5-a420-2e52533331e3
 
-	measure 'Miles Ridden' = SUM(activity_points[incremental_distance_miles])
+	measure Miles = SUM(activity_points[incremental_distance_miles])
 		formatString: #,0.00
 		displayFolder: Distance
+		lineageTag: 96853276-ecd4-4ab7-8c99-b9fb0abb8de3
 
 	measure 'Point Moving Hours' = DIVIDE(SUM(activity_points[moving_time_seconds]),3600)
 		formatString: #,0.00
 		displayFolder: Time
+		lineageTag: b51f347f-a612-4bde-bfb9-5f766d1ba76b
 
-	measure 'Activities Ridden' = DISTINCTCOUNT(activity_points[activity_key])
+	measure Activities = DISTINCTCOUNT(activity_points[activity_key])
 		formatString: #,0
 		displayFolder: Activities
+		lineageTag: 133fd6ca-f400-47cf-bf30-e61acb817db0
 
-	measure 'Miles in Selected Segments' = CALCULATE([Miles Ridden], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
+	measure 'Miles in Selected Segments' = CALCULATE([Miles], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
 		formatString: #,0.00
 		displayFolder: Segments
+		lineageTag: 7da09358-43ce-41ef-8696-be28d71bc2c6
 
 	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance_miles]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Activities
+		lineageTag: 74879486-609b-4cf6-81fa-f291974c87fb
 
 	measure 'Activity Moving Hours' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Time
+		lineageTag: 9ea5c44c-e78c-4764-ad42-56d18f4de9f3
 
 	measure 'GPS Points' = COUNTROWS(activity_points)
 		formatString: #,0
 		displayFolder: Validation
+		lineageTag: d721abd9-3672-42bb-9d3f-3b132e729fe1
 
-	measure 'Point Minus Activity Miles' = [Miles Ridden] - [Whole Activity Miles]
+	measure 'Point Minus Activity Miles' = [Miles] - [Whole Activity Miles]
 		formatString: #,0.00;−#,0.00;0.00
 		displayFolder: Validation
+		lineageTag: 601202d3-6b48-449d-9bbd-1771de34ef3c
 
 	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Activity Moving Hours]
 		formatString: #,0.00;−#,0.00;0.00
 		displayFolder: Validation
+		lineageTag: 14159157-6f5f-4738-a08e-7c480b67eb90
 
 	measure 'UTC Fallback Points' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[date_basis] = "utc_fallback")), 0)
 		formatString: #,0
 		displayFolder: Validation
+		lineageTag: 0118fe69-a225-4c0a-828d-7327c993b540
 
 	measure 'Recording Gap Intervals' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[quality_status] = "recording_gap")), 0)
 		formatString: #,0
 		displayFolder: Validation
+		lineageTag: f4c59bd9-331e-4544-8d42-59eef14771cb
 
-	measure 'Unmatched System Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(ISBLANK(activity_points[trail_system_key])))
+	measure 'Unmatched System Miles' = CALCULATE([Miles], KEEPFILTERS(ISBLANK(activity_points[trail_system_key])))
 		formatString: #,0.00
 		displayFolder: Validation
+		lineageTag: ddf8bd22-b20f-45fa-bf15-529b0e285646
 
-	measure 'Unmatched Trail Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(ISBLANK(activity_points[trail_key])))
+	measure 'Unmatched Trail Miles' = CALCULATE([Miles], KEEPFILTERS(ISBLANK(activity_points[trail_key])))
 		formatString: #,0.00
 		displayFolder: Validation
+		lineageTag: 67c078ab-defc-459e-b126-ee57b389c8de
 
 	measure 'Segment Linked Points' = CALCULATE([GPS Points], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
 		formatString: #,0
 		displayFolder: Validation
+		lineageTag: b7681d52-0b2c-40bc-a9c6-a7115f872d85
 
 	/// Whole-activity elapsed time for activities represented by the selected GPS points.
 	measure 'Activity Elapsed Hours' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0.00
 		displayFolder: Time
+		lineageTag: df8d2f65-a36f-497e-8511-701a937878d9
 
 	/// Strava elevation gain, counted once per point-selected activity. Partial routes select whole activities.
 	measure 'Activity Elevation Gain Feet' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Elevation
+		lineageTag: d40e4943-13a7-4472-8165-0d0ec6e8fc17
 
 	/// Strava activity calories for point-selected activities. Missing calories remain blank.
 	measure 'Activity Calories' = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Activities
+		lineageTag: d2bb17ff-742e-4f3f-b889-fbac10abdb16
 
 	/// Mean full-activity distance across point-selected activities; not average point distance.
-	measure 'Average Activity Miles' = DIVIDE([Whole Activity Miles], [Activities Ridden])
+	measure 'Average Activity Miles' = DIVIDE([Whole Activity Miles], [Activities])
 		formatString: #,0.00
 		displayFolder: Activities
+		lineageTag: 4a4b871e-409d-45cb-b10a-bc04ef82d8da
 
 	/// Mean Strava moving hours per point-selected activity.
-	measure 'Average Activity Moving Hours' = DIVIDE([Activity Moving Hours], [Activities Ridden])
+	measure 'Average Activity Moving Hours' = DIVIDE([Activity Moving Hours], [Activities])
 		formatString: #,0.00
 		displayFolder: Time
+		lineageTag: 0cb12919-ee77-4195-98d5-537fc060e038
 
 	/// Mean full-activity elevation gain per point-selected activity.
-	measure 'Average Activity Elevation Gain Feet' = DIVIDE([Activity Elevation Gain Feet], [Activities Ridden])
+	measure 'Average Activity Elevation Gain Feet' = DIVIDE([Activity Elevation Gain Feet], [Activities])
 		formatString: #,0
 		displayFolder: Elevation
+		lineageTag: 686da812-e711-46a2-bc1a-4cb99a777cb4
 
 	/// Aggregate speed: full activity miles divided by full activity moving hours, not a mean of average speeds.
 	measure 'Activity Average Speed mph' = DIVIDE([Whole Activity Miles], [Activity Moving Hours])
 		formatString: #,0.00
 		displayFolder: Performance
+		lineageTag: 45f70cc2-5619-4edb-916e-2851b47aafdf
 
 	/// Whole-activity elevation gain divided by whole-activity miles; both operands use the same activity grain.
 	measure 'Activity Elevation Feet per Mile' = DIVIDE([Activity Elevation Gain Feet], [Whole Activity Miles])
 		formatString: #,0.00
 		displayFolder: Performance
+		lineageTag: 490d17a6-3dfc-4aac-bd88-c5daa240478c
 
 	/// Distinct local calendar dates containing selected GPS points. A ride spanning local midnight contributes to both days.
 	measure 'Activity Days' = DISTINCTCOUNTNOBLANK(activity_points[date_key])
 		formatString: #,0
 		displayFolder: Activities
+		lineageTag: 0ffc69eb-3210-4435-bbad-bb3edf8ebfce
 
 	/// Selected point mileage divided by distinct selected activities; partial trail selections count only their matched mileage.
-	measure 'Point Miles per Activity' = DIVIDE([Miles Ridden], [Activities Ridden])
+	measure 'Point Miles per Activity' = DIVIDE([Miles], [Activities])
 		formatString: #,0.00
 		displayFolder: Distance
+		lineageTag: 95c2e11c-b793-4bb6-a185-95f2c247d0fe
 
 	/// Count all Strava efforts in point-selected activities, including unverified historical streams. Segment filters apply; partial route filters select whole activities.
 	measure 'Segment Effort Count' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0
 		displayFolder: Segments
+		lineageTag: 762c0c38-d606-4f55-9bd7-c0c9b3aec3ab
 
 	/// Sum Strava effort distances in point-selected activities. Repeated and overlapping efforts are additive, unlike Miles in Selected Segments.
 	measure 'Segment Effort Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
+		lineageTag: ec577024-1235-476c-a7b2-ce9609d9b6b4
 
 	/// Sum whole-effort moving hours in point-selected activities. Overlapping efforts may count the same time repeatedly.
 	measure 'Segment Effort Moving Hours' = CALCULATE(DIVIDE(SUM(segment_efforts[moving_time_seconds]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
+		lineageTag: f65e01aa-7de0-4a8a-ae0d-ec60ff78fc5c
 
 	/// Distinct Strava segments with efforts in point-selected activities; includes efforts without verified GPS membership.
 	measure 'Segments Ridden' = CALCULATE(DISTINCTCOUNTNOBLANK(segment_efforts[segment_key]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0
 		displayFolder: Segments
+		lineageTag: a79d397e-b1ff-4b46-90a7-a4f9bcc8a008
 
 	/// Distinct verified efforts touching the selected GPS points. Honors partial trail/date selections and current segment filters; incomplete until historical verification finishes.
 	measure 'Linked Segment Effort Count' =
@@ -140,21 +169,25 @@ table measures_
 			    )
 		formatString: #,0
 		displayFolder: Segments
+		lineageTag: 4ca6dbc8-9c35-40d9-8aee-0c96c6a45da8
 
 	/// Distinct activities with at least one selected point confidently assigned to a trail.
-	measure 'Matched Trail Activities' = CALCULATE([Activities Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
+	measure 'Matched Trail Activities' = CALCULATE([Activities], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
 		formatString: #,0
 		displayFolder: Trails
+		lineageTag: 0f43d24f-ecb6-4b2f-a592-daca26cba48a
 
 	/// Selected interval mileage assigned to named trails; excludes unmatched and ambiguous trail points.
-	measure 'Matched Trail Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
+	measure 'Matched Trail Miles' = CALCULATE([Miles], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
 		formatString: #,0.00
 		displayFolder: Trails
+		lineageTag: 3636ec7f-c477-4602-96dc-3a46128fac58
 
 	/// Distinct mapped trails represented by selected points. Includes GPS activities of all sport types.
 	measure 'Trails Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_key])
 		formatString: #,0
 		displayFolder: Trails
+		lineageTag: 04f55b57-ee39-46ae-a58f-edbf69c49d4a
 
 	/// Full mapped lengths of distinct trails touched by selected points. This is not unique distance covered or a completion measure.
 	measure 'Visited Trail Length Miles' =
@@ -164,33 +197,40 @@ table measures_
 			)
 		formatString: #,0.00
 		displayFolder: Trails
+		lineageTag: e5fcba50-8c96-4f48-bbc7-f86af300a870
 
 	/// Selected interval mileage inside confirmed mapped system boundaries.
-	measure 'Matched System Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_system_key])))
+	measure 'Matched System Miles' = CALCULATE([Miles], KEEPFILTERS(NOT ISBLANK(activity_points[trail_system_key])))
 		formatString: #,0.00
 		displayFolder: Trail Systems
+		lineageTag: 38429a49-2a56-491d-959c-cfa9be296fe1
 
 	/// Distinct systems represented by selected GPS points, excluding unmatched blank keys.
 	measure 'Trail Systems Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_system_key])
 		formatString: #,0
 		displayFolder: Trail Systems
+		lineageTag: 69a0a607-a365-4d55-8e63-b3778dc5ba5b
 
 	/// Share of selected point mileage confidently assigned to trails. Assignment coverage only, not geographic trail completion.
-	measure 'Trail Match %' = DIVIDE([Matched Trail Miles], [Miles Ridden])
+	measure 'Trail Match %' = DIVIDE([Matched Trail Miles], [Miles])
 		formatString: 0.0%
 		displayFolder: Validation
+		lineageTag: 5c5e361e-3be9-4e07-a4f9-9c3af14e95e0
 
 	/// Share of selected point mileage assigned to mapped systems. Blank when selected mileage is zero.
-	measure 'System Match %' = DIVIDE([Matched System Miles], [Miles Ridden])
+	measure 'System Match %' = DIVIDE([Matched System Miles], [Miles])
 		formatString: 0.0%
 		displayFolder: Validation
+		lineageTag: deb0f498-e18e-4295-b80e-9039902ff32e
 
 	column Placeholder
 		dataType: int64
 		isHidden
+		lineageTag: 546e1186-1433-4314-8d22-3e4c4c7d194e
 		summarizeBy: none
 		sourceColumn: [Placeholder]
 
 	partition measures_ = calculated
 		mode: import
 		source = ROW("Placeholder", 0)
+

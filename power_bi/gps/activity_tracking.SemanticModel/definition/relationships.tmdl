@@ -29,3 +29,4 @@ relationship 3a926e9e-6015-47fd-8021-1ebbe487a24e
 relationship 9f296454-32a7-4d67-8a87-de0ed3192338
 	fromColumn: activity_point_segments.segment_effort_key
 	toColumn: segment_efforts.segment_effort_key
+

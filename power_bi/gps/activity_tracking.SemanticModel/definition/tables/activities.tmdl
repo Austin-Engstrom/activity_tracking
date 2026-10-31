@@ -1,7 +1,9 @@
 table activities
+	lineageTag: 9e69bded-f4c6-4d66-a26d-f6a243693c1a
 
 	column activity_id
 		dataType: int64
+		lineageTag: a23fd7a8-e881-4837-81f9-95de0710a3b4
 		summarizeBy: none
 		sourceColumn: activity_id
 
@@ -9,6 +11,7 @@ table activities
 
 	column activity_date_key
 		dataType: int64
+		lineageTag: 8c34d0b9-956b-4f18-90d4-6693503a3bd2
 		summarizeBy: none
 		sourceColumn: activity_date_key
 
@@ -16,6 +19,7 @@ table activities
 
 	column activity_type_key
 		dataType: string
+		lineageTag: 7603d5e6-e6da-49d2-806c-237cacb83ac7
 		summarizeBy: none
 		sourceColumn: activity_type_key
 
@@ -23,6 +27,7 @@ table activities
 
 	column gear_key
 		dataType: string
+		lineageTag: 896886c6-01f8-439d-bb06-5febd8876ca7
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -30,111 +35,170 @@ table activities
 
 	column activity_name
 		dataType: string
+		lineageTag: c9864ecd-b2fe-495a-bed3-7094a43ee8b1
 		summarizeBy: none
 		sourceColumn: activity_name
 
 	column sport_type
 		dataType: string
+		lineageTag: 27235482-7588-4aa1-a04f-5856a08792d0
 		summarizeBy: none
 		sourceColumn: sport_type
 
 	column start_date
 		dataType: dateTime
+		lineageTag: 015fa143-aa58-4f49-a77d-1e4c38a4ee67
 		summarizeBy: none
 		sourceColumn: start_date
 
 	column activity_date
 		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 72a1dd8f-32fc-4a2f-92ac-ea1bb1fe8670
 		summarizeBy: none
 		sourceColumn: activity_date
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column distance_miles
 		dataType: double
-		summarizeBy: none
+		lineageTag: f7bf3dfe-f9e8-457e-ab6e-ac921e4ed6e5
+		summarizeBy: sum
 		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
 
 	column moving_time_minutes
 		dataType: double
-		summarizeBy: none
+		lineageTag: 179253e9-4e81-4f73-8abe-a2913f52af9a
+		summarizeBy: sum
 		sourceColumn: moving_time_minutes
+
+		annotation SummarizationSetBy = Automatic
 
 	column elapsed_time_minutes
 		dataType: double
-		summarizeBy: none
+		lineageTag: 8c998762-4d8c-4f11-8cf7-39f919f52a79
+		summarizeBy: sum
 		sourceColumn: elapsed_time_minutes
+
+		annotation SummarizationSetBy = Automatic
 
 	column total_elevation_gain_feet
 		dataType: double
-		summarizeBy: none
+		lineageTag: bf29f522-c4ab-4d8f-b50e-fda682c12199
+		summarizeBy: sum
 		sourceColumn: total_elevation_gain_feet
+
+		annotation SummarizationSetBy = Automatic
 
 	column average_speed_mph
 		dataType: double
-		summarizeBy: none
+		lineageTag: 58dd82cb-c6ee-48cc-bb04-02d86a9cd20e
+		summarizeBy: sum
 		sourceColumn: average_speed_mph
+
+		annotation SummarizationSetBy = Automatic
 
 	column max_speed_mph
 		dataType: double
-		summarizeBy: none
+		lineageTag: 289fcd25-d52e-4e56-81bc-a380939c540f
+		summarizeBy: sum
 		sourceColumn: max_speed_mph
+
+		annotation SummarizationSetBy = Automatic
 
 	column average_heartrate
 		dataType: double
-		summarizeBy: none
+		lineageTag: 600626c6-eae9-498a-849c-a6276c9d7f26
+		summarizeBy: sum
 		sourceColumn: average_heartrate
+
+		annotation SummarizationSetBy = Automatic
 
 	column max_heartrate
 		dataType: double
-		summarizeBy: none
+		lineageTag: 8ca19d04-3ee0-44b0-b509-666b0269ff71
+		summarizeBy: sum
 		sourceColumn: max_heartrate
+
+		annotation SummarizationSetBy = Automatic
 
 	column average_cadence
 		dataType: double
-		summarizeBy: none
+		lineageTag: 6a99a7fd-82d6-46c6-9c96-63453762a748
+		summarizeBy: sum
 		sourceColumn: average_cadence
+
+		annotation SummarizationSetBy = Automatic
 
 	column average_watts
 		dataType: double
-		summarizeBy: none
+		lineageTag: 833ff557-f09c-4e85-a3be-47394f2e7f2e
+		summarizeBy: sum
 		sourceColumn: average_watts
+
+		annotation SummarizationSetBy = Automatic
 
 	column kilojoules
 		dataType: double
-		summarizeBy: none
+		lineageTag: 083f1c7e-45e2-41cf-8d99-0c185389085b
+		summarizeBy: sum
 		sourceColumn: kilojoules
+
+		annotation SummarizationSetBy = Automatic
 
 	column calories
 		dataType: double
-		summarizeBy: none
+		lineageTag: 5952123a-21b4-4e41-8aed-11295391f79a
+		summarizeBy: sum
 		sourceColumn: calories
+
+		annotation SummarizationSetBy = Automatic
 
 	column suffer_score
 		dataType: double
-		summarizeBy: none
+		lineageTag: 6a6e09d8-9383-41b4-bdfb-36118ee78765
+		summarizeBy: sum
 		sourceColumn: suffer_score
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_commute
 		dataType: int64
-		summarizeBy: none
+		lineageTag: f51464cd-b02b-418d-b8d1-734bc0fb2151
+		summarizeBy: sum
 		sourceColumn: is_commute
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_trainer
 		dataType: int64
-		summarizeBy: none
+		lineageTag: 47d174ec-d32d-43b9-a92b-d7c7ac789401
+		summarizeBy: sum
 		sourceColumn: is_trainer
+
+		annotation SummarizationSetBy = Automatic
 
 	column stream_point_count
 		dataType: int64
-		summarizeBy: none
+		lineageTag: b563060c-ef22-4871-b83c-1fd931f3c7c5
+		summarizeBy: sum
 		sourceColumn: stream_point_count
+
+		annotation SummarizationSetBy = Automatic
 
 	column segment_effort_count
 		dataType: int64
-		summarizeBy: none
+		lineageTag: 46eab15f-0181-440e-8ab5-12efc74ad5ce
+		summarizeBy: sum
 		sourceColumn: segment_effort_count
+
+		annotation SummarizationSetBy = Automatic
 
 	column activity_key
 		dataType: int64
+		lineageTag: 1e4d9c76-bf1c-4529-8df8-d3f9d1507b84
 		summarizeBy: none
 		sourceColumn: activity_key
 
@@ -142,24 +206,30 @@ table activities
 
 	column description
 		dataType: string
+		lineageTag: 17300eed-9703-47c1-adc0-06651e900eaa
 		summarizeBy: none
 		sourceColumn: description
 
 	column device_name
 		dataType: string
+		lineageTag: 21fdf7aa-9007-4212-986a-f6bfcbcfa671
 		summarizeBy: none
 		sourceColumn: device_name
 
 	column workout_type
 		dataType: int64
-		summarizeBy: none
+		lineageTag: c88eebfd-2841-40f0-8d7f-2e6ac55696a4
+		summarizeBy: sum
 		sourceColumn: workout_type
+
+		annotation SummarizationSetBy = Automatic
 
 	partition activities = m
 		mode: import
 		source =
-			let
-			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity.parquet")),
-			    Typed = Table.TransformColumnTypes(Source, {{"activity_id", Int64.Type}, {"activity_date_key", Int64.Type}, {"activity_type_key", type text}, {"gear_key", type text}, {"activity_name", type text}, {"sport_type", type text}, {"start_date", type datetime}, {"activity_date", type date}, {"distance_miles", type number}, {"moving_time_minutes", type number}, {"elapsed_time_minutes", type number}, {"total_elevation_gain_feet", type number}, {"average_speed_mph", type number}, {"max_speed_mph", type number}, {"average_heartrate", type number}, {"max_heartrate", type number}, {"average_cadence", type number}, {"average_watts", type number}, {"kilojoules", type number}, {"calories", type number}, {"suffer_score", type number}, {"is_commute", Int64.Type}, {"is_trainer", Int64.Type}, {"stream_point_count", Int64.Type}, {"segment_effort_count", Int64.Type}, {"activity_key", Int64.Type}, {"description", type text}, {"device_name", type text}, {"workout_type", Int64.Type}})
-			in
-			    Typed
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_id", Int64.Type}, {"activity_date_key", Int64.Type}, {"activity_type_key", type text}, {"gear_key", type text}, {"activity_name", type text}, {"sport_type", type text}, {"start_date", type datetime}, {"activity_date", type date}, {"distance_miles", type number}, {"moving_time_minutes", type number}, {"elapsed_time_minutes", type number}, {"total_elevation_gain_feet", type number}, {"average_speed_mph", type number}, {"max_speed_mph", type number}, {"average_heartrate", type number}, {"max_heartrate", type number}, {"average_cadence", type number}, {"average_watts", type number}, {"kilojoules", type number}, {"calories", type number}, {"suffer_score", type number}, {"is_commute", Int64.Type}, {"is_trainer", Int64.Type}, {"stream_point_count", Int64.Type}, {"segment_effort_count", Int64.Type}, {"activity_key", Int64.Type}, {"description", type text}, {"device_name", type text}, {"workout_type", Int64.Type}})
+				in
+				    Typed
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "activity_tracking"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "28402953-6383-451c-bab1-ce368cad0093"
+  }
+}

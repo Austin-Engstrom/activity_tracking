@@ -2,6 +2,15 @@ model Model
 	culture: en-US
 	defaultPowerBIDataSourceVersion: powerBI_V3
 	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["activity_points","activities","gear","activity_types","dates","trails","trail_systems","segments","segment_efforts","activity_point_segments","ExportFolder"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
 
 ref table activity_points
 ref table measures_
@@ -15,4 +24,3 @@ ref table segments
 ref table segment_efforts
 ref table activity_point_segments
 
-ref expression ExportFolder
