@@ -94,3 +94,24 @@ counts establish geographic certainty. Desktop interactions require local valida
 Existing Quanta Check visuals and local layout edits are preserved. Add the
 association matrix where appropriate rather than changing ordinary mileage visuals
 into history-wide catalog measures.
+
+## GPS-only dataset scope
+
+The exported activity and effort views already require at least one derived valid
+GPS point. The activity-type, gear and segment dimension views now also require
+use by one of those activities, preventing excluded activities from leaving unused
+members in those dimensions. Coordinates determine eligibility, not sport names or
+an indoor/trainer flag. One valid GPS point qualifies under the existing rule, even
+when there is no usable distance interval.
+
+No report-level filter is required. Original activities, gear and segment records
+are retained in source storage. Trail and system geometry catalogs remain available
+for mapping and catalog analysis; they do not introduce non-GPS activity records.
+Gear lifetime distance remains the source Strava attribute, not a newly calculated
+GPS-only usage total; use dataset mileage measures for scoped usage.
+
+`build_segment_associations` refreshes these GPS-scoped dimension views as well as
+the association view, so the same two local install/export commands above apply.
+A full point/spatial rebuild is unnecessary for this scope change. Refresh Power BI
+after all 11 exports succeed. Eligible activity and point totals should stay the
+same; activity-type, gear or segment member counts can decrease.

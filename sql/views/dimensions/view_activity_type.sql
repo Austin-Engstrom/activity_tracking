@@ -32,5 +32,6 @@ from activities a
 left join activity_type_categories atc
     on a.sport_type = atc.activity_type
 where a.sport_type is not null
+    and exists (select 1 from activity_points p where p.activity_id = a.activity_id)
 order by
     a.sport_type;

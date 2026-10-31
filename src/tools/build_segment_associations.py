@@ -9,12 +9,17 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def run():
     started = time.perf_counter()
-    print('[START] Refresh segment association view', flush=True)
-    sql = (ROOT/'sql/views/points/view_segment_trail_association.sql').read_text()
+    print('[START] Refresh GPS-scoped dimensions and segment associations', flush=True)
+    files = ['sql/views/dimensions/view_activity_type.sql',
+             'sql/views/dimensions/view_gear.sql',
+             'sql/views/dimensions/view_segment.sql',
+             'sql/views/points/view_segment_trail_association.sql']
     with engine.begin() as conn:
-        for statement in sql.split(';'):
-            if statement.strip():
-                conn.exec_driver_sql(statement)
+        for filename in files:
+            sql = (ROOT/filename).read_text()
+            for statement in sql.split(';'):
+                if statement.strip():
+                    conn.exec_driver_sql(statement)
         # Query once to check dependencies and report the actual observed scope.
         row = conn.execute(text('''SELECT count(*) AS associations,
             count(DISTINCT segment_key) AS segments,
