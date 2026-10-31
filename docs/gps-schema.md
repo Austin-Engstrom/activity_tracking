@@ -123,3 +123,18 @@ to also export the six retained legacy views; legacy maintenance exports require
 the existing maintenance-table initializer. Geometry and source data are not
 removed by the cutover. Rebuild thresholds are exposed as `--max-gap-seconds`,
 `--tolerance-feet`, and `--ambiguity-feet`.
+
+### Prepare a local working database before migration
+
+Close ETL jobs and database connections. In your local Fork checkout, run:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.prepare_migration_database
+```
+
+This backs up the current database under `database/backups/` and replaces
+`database/strava_analytics.db` with a verified SQLite working copy. To use a
+populated database stored elsewhere, add `--source "C:\path\existing.db"`.
+The previous destination is backed up before replacement, and the source remains
+unchanged. Both databases and backups are Git-ignored; pulling the branch brings
+the helper, not cloud data. Then run the reporting rebuild and export commands.
