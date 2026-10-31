@@ -25,3 +25,7 @@ Power BI
 
 See [schema, measurement rules, and migration steps](docs/gps-schema.md).
 The new point-grain Power BI semantic model is in `power_bi/gps`.
+
+See the [dataset measure library](docs/measure-library.md) for adapted measures,
+filter behavior and Power BI validation steps, and [Quanta Check](docs/quanta-check.md)
+for the dataset's single-page validation report.

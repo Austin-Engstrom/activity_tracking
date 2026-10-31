@@ -56,6 +56,135 @@ table measures_
 		formatString: #,0
 		displayFolder: Validation
 
+	/// Whole-activity elapsed time for activities represented by the selected GPS points.
+	measure 'Activity Elapsed Hours' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+		formatString: #,0.00
+		displayFolder: Time
+
+	/// Strava elevation gain, counted once per point-selected activity. Partial routes select whole activities.
+	measure 'Activity Elevation Gain Feet' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+		formatString: #,0
+		displayFolder: Elevation
+
+	/// Strava activity calories for point-selected activities. Missing calories remain blank.
+	measure 'Activity Calories' = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+		formatString: #,0
+		displayFolder: Activities
+
+	/// Mean full-activity distance across point-selected activities; not average point distance.
+	measure 'Average Activity Miles' = DIVIDE([Whole Activity Miles], [Activities Ridden])
+		formatString: #,0.00
+		displayFolder: Activities
+
+	/// Mean Strava moving hours per point-selected activity.
+	measure 'Average Activity Moving Hours' = DIVIDE([Activity Moving Hours], [Activities Ridden])
+		formatString: #,0.00
+		displayFolder: Time
+
+	/// Mean full-activity elevation gain per point-selected activity.
+	measure 'Average Activity Elevation Gain Feet' = DIVIDE([Activity Elevation Gain Feet], [Activities Ridden])
+		formatString: #,0
+		displayFolder: Elevation
+
+	/// Aggregate speed: full activity miles divided by full activity moving hours, not a mean of average speeds.
+	measure 'Activity Average Speed mph' = DIVIDE([Whole Activity Miles], [Activity Moving Hours])
+		formatString: #,0.00
+		displayFolder: Performance
+
+	/// Whole-activity elevation gain divided by whole-activity miles; both operands use the same activity grain.
+	measure 'Activity Elevation Feet per Mile' = DIVIDE([Activity Elevation Gain Feet], [Whole Activity Miles])
+		formatString: #,0.00
+		displayFolder: Performance
+
+	/// Distinct local calendar dates containing selected GPS points. A ride spanning local midnight contributes to both days.
+	measure 'Activity Days' = DISTINCTCOUNTNOBLANK(activity_points[date_key])
+		formatString: #,0
+		displayFolder: Activities
+
+	/// Selected point mileage divided by distinct selected activities; partial trail selections count only their matched mileage.
+	measure 'Point Miles per Activity' = DIVIDE([Miles Ridden], [Activities Ridden])
+		formatString: #,0.00
+		displayFolder: Distance
+
+	/// Count all Strava efforts in point-selected activities, including unverified historical streams. Segment filters apply; partial route filters select whole activities.
+	measure 'Segment Effort Count' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+		formatString: #,0
+		displayFolder: Segments
+
+	/// Sum Strava effort distances in point-selected activities. Repeated and overlapping efforts are additive, unlike Miles in Selected Segments.
+	measure 'Segment Effort Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+		formatString: #,0.00
+		displayFolder: Segments
+
+	/// Sum whole-effort moving hours in point-selected activities. Overlapping efforts may count the same time repeatedly.
+	measure 'Segment Effort Moving Hours' = CALCULATE(DIVIDE(SUM(segment_efforts[moving_time_seconds]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+		formatString: #,0.00
+		displayFolder: Segments
+
+	/// Distinct Strava segments with efforts in point-selected activities; includes efforts without verified GPS membership.
+	measure 'Segments Ridden' = CALCULATE(DISTINCTCOUNTNOBLANK(segment_efforts[segment_key]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+		formatString: #,0
+		displayFolder: Segments
+
+	/// Distinct verified efforts touching the selected GPS points. Honors partial trail/date selections and current segment filters; incomplete until historical verification finishes.
+	measure 'Linked Segment Effort Count' =
+			VAR SelectedEfforts =
+			    CALCULATETABLE(
+			        VALUES(activity_point_segments[segment_effort_key]),
+			        KEEPFILTERS(TREATAS(VALUES(activity_points[activity_point_key]), activity_point_segments[activity_point_key]))
+			    )
+			RETURN
+			    CALCULATE(
+			        COUNTROWS(segment_efforts),
+			        KEEPFILTERS(TREATAS(SelectedEfforts, segment_efforts[segment_effort_key]))
+			    )
+		formatString: #,0
+		displayFolder: Segments
+
+	/// Distinct activities with at least one selected point confidently assigned to a trail.
+	measure 'Matched Trail Activities' = CALCULATE([Activities Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
+		formatString: #,0
+		displayFolder: Trails
+
+	/// Selected interval mileage assigned to named trails; excludes unmatched and ambiguous trail points.
+	measure 'Matched Trail Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
+		formatString: #,0.00
+		displayFolder: Trails
+
+	/// Distinct mapped trails represented by selected points. Includes GPS activities of all sport types.
+	measure 'Trails Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_key])
+		formatString: #,0
+		displayFolder: Trails
+
+	/// Full mapped lengths of distinct trails touched by selected points. This is not unique distance covered or a completion measure.
+	measure 'Visited Trail Length Miles' =
+			CALCULATE(
+			    SUM(trails[length_miles]),
+			    KEEPFILTERS(TREATAS(VALUES(activity_points[trail_key]), trails[trail_key]))
+			)
+		formatString: #,0.00
+		displayFolder: Trails
+
+	/// Selected interval mileage inside confirmed mapped system boundaries.
+	measure 'Matched System Miles' = CALCULATE([Miles Ridden], KEEPFILTERS(NOT ISBLANK(activity_points[trail_system_key])))
+		formatString: #,0.00
+		displayFolder: Trail Systems
+
+	/// Distinct systems represented by selected GPS points, excluding unmatched blank keys.
+	measure 'Trail Systems Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_system_key])
+		formatString: #,0
+		displayFolder: Trail Systems
+
+	/// Share of selected point mileage confidently assigned to trails. Assignment coverage only, not geographic trail completion.
+	measure 'Trail Match %' = DIVIDE([Matched Trail Miles], [Miles Ridden])
+		formatString: 0.0%
+		displayFolder: Validation
+
+	/// Share of selected point mileage assigned to mapped systems. Blank when selected mileage is zero.
+	measure 'System Match %' = DIVIDE([Matched System Miles], [Miles Ridden])
+		formatString: 0.0%
+		displayFolder: Validation
+
 	column Placeholder
 		dataType: int64
 		isHidden
