@@ -217,4 +217,41 @@ class PointReportingTests(unittest.TestCase):
             self.assertEqual(segment['climb_category'][0].as_py(),2)
             self.assertEqual(str(segment.schema.field('climb_category').type),'int64')
 
+    def test_timezone_backfill_updates_dates_only_and_is_repeatable(self):
+        from src.tools.backfill_activity_timezones import apply_timezones
+        self.streams([(0,0,0,41),(1,10,100,41)])
+        self.c.exec_driver_sql('DELETE FROM point_reporting_metadata')
+        rebuild_points(self.c)
+        before=self.c.exec_driver_sql('SELECT point_index,trail_key,trail_system_key,incremental_distance_meters,recorded_at_utc FROM activity_points ORDER BY point_index').all()
+        self.assertEqual(self.c.exec_driver_sql('SELECT min(date_key) FROM activity_points').scalar(),20260102)
+        payload=[{'id':1,'timezone':'(GMT-06:00) America/Chicago'}]
+        self.assertEqual(apply_timezones(self.c,payload),1)
+        self.assertEqual(self.c.exec_driver_sql('SELECT min(date_key) FROM activity_points').scalar(),20260101)
+        after=self.c.exec_driver_sql('SELECT point_index,trail_key,trail_system_key,incremental_distance_meters,recorded_at_utc FROM activity_points ORDER BY point_index').all()
+        self.assertEqual(before,after)
+        self.assertEqual(apply_timezones(self.c,payload),0)
+        self.assertEqual(apply_timezones(self.c,[{'id':1,'timezone':'Invalid/Zone'}]),0)
+
+    def test_timezone_backfill_resumes_pagination(self):
+        from unittest.mock import Mock, patch
+        from src.tools.backfill_activity_timezones import run
+        self.streams([(0,0,0,41)])
+        self.c.exec_driver_sql('DELETE FROM point_reporting_metadata')
+        rebuild_points(self.c)
+        self.c.commit()
+        client=Mock()
+        client.has_read_capacity.return_value=True
+        client.get_activities_page.side_effect=[
+            [{'id':1,'timezone':'America/Chicago'}]*200,
+            [{'id':2,'timezone':'America/Chicago'}]]
+        with patch('src.tools.backfill_activity_timezones.engine',self.engine):
+            run(max_pages=1,client=client)
+            run(max_pages=1,client=client)
+            run(max_pages=1,client=client)
+        calls=client.get_activities_page.call_args_list
+        self.assertEqual([call.kwargs['page'] for call in calls],[1,2])
+        self.assertEqual(calls[0].kwargs['before'],calls[1].kwargs['before'])
+        self.assertEqual(self.c.exec_driver_sql('SELECT exhausted FROM timezone_backfill_progress').scalar(),1)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM point_reporting_metadata').scalar(),2)
+
 if __name__=='__main__': unittest.main()

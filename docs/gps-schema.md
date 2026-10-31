@@ -249,3 +249,45 @@ it needs no SQL view, export or relationship. Keep future measures in this file
 and assign a display folder. Current folders are Activities, Distance, Time and
 Segments. Measure names and calculations are retained when moving home tables;
 Activities Ridden uses an integer format.
+
+### Historical local dates and moving-time measures
+
+Use the resumable summary-page backfill (local Strava credentials required):
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m src.tools.backfill_activity_timezones --max-pages 2
+```
+
+Each page reads up to 200 Strava activity summaries. Reruns resume using a fixed
+upper-time bound and saved page number; already matching timezone metadata is
+skipped. The command stops when history is exhausted or read capacity is low.
+Unknown/missing timezone names are not guessed. The final count shows GPS activities
+still using UTC fallback; investigate any remaining after traversal finishes.
+`--restart` restarts discovery without deleting existing timezone metadata.
+Run this without concurrent imports or point rebuilds. Deletions/edits to remote
+history during pagination can change page contents; restart if coverage is incomplete.
+
+The command uses the activity's IANA timezone (including daylight-saving rules) to
+update `activity_points.date_key` from its existing UTC point timestamp. It commits
+metadata, date changes and pagination progress together per page. It does not
+change coordinates, timestamps, mileage or spatial matching. The explicit `tzdata`
+dependency supplies IANA rules on Windows. No full spatial rebuild is needed.
+`view_date` reads updated point dates dynamically. Activity `start_date` and
+`activity_date` attributes remain UTC source attributes; use the `dates` dimension
+for local point-date filtering.
+
+After completing backfill, rerun the offline audit, regenerate Parquet and refresh
+Power BI. Aim for zero `utc_fallback_points` or explicitly account for unresolved
+activities before claiming local-date coverage is complete.
+
+All moving-time measures remain in `measures_.tmdl`, under the Time display folder:
+
+- **Point Moving Hours** (formerly Moving Hours): sums eligible point intervals
+  marked moving; responds to point/trail filters and can differ from Strava totals.
+- **Activity Moving Hours**: sums the stored Strava moving-time summaries once per
+  selected activity, including the whole activity when only part of its route is
+  selected. Like Whole Activity Miles, it uses point-selected activity keys.
+
+Replace existing visuals referencing Moving Hours with Point Moving Hours after
+reopening the updated project. These measures intentionally express different grains.
