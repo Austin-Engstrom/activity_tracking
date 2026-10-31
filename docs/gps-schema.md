@@ -196,3 +196,30 @@ correlated date-reference query, whose plan could regenerate the recursive calen
 and scan point date bounds for each point. Point mileage/key groups are calculated
 once and reused across the reference checks and CSV summaries. The grouping retains
 point counts so an orphan shared by many points is counted correctly.
+
+### Investigate activity mileage differences
+
+Run the read-only diagnostic for the five migration outliers:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.diagnose_activity_mileage
+```
+
+Or choose activities with `--activity-ids 3783144977 3014709305`. No network access
+or GPS rebuild is needed. Output goes to
+`exports/validation/mileage_diagnostics/summary.json` and one interval CSV per
+activity. It reports original stream indexes, elapsed-time and cumulative-distance
+changes, observed stored increments, missing coordinate endpoints, gap durations,
+distance resets, first/last GPS coverage, and activity-total versus stream-end
+differences. The CSVs omit coordinates but contain activity identifiers; the summary
+also includes activity names.
+
+Excluded distance is signed: distance resets can make it negative. Missing distance
+values remain unknown, not zero. A single GPS point has no measurable interval and
+keeps its point mileage NULL. The first sample's cumulative distance and the source
+minus stream-end difference are exposed separately, rather than attributed to a
+trail without evidence. Hypothetical 60/120/300-second and unlimited-gap totals show
+sensitivity to gap rules while still requiring valid endpoint coordinates, positive
+time, and nonnegative distance. These are diagnostic comparisons, not recommended
+reporting totals. `--gap-seconds` changes reason labels only; stored mileage and
+schema are never changed by this command.

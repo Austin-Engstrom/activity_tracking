@@ -177,4 +177,23 @@ class PointReportingTests(unittest.TestCase):
             self.assertEqual(status['status'],'failed')
             self.assertEqual(status['steps'][0]['status'],'failed')
 
+    def test_mileage_diagnostic_writes_files_without_changing_data(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from src.tools.diagnose_activity_mileage import run
+        self.streams([(0,0,0,41),(1,10,50,41),(2,200,100,41)])
+        rebuild_points(self.c)
+        self.c.commit()
+        before=self.c.exec_driver_sql('SELECT * FROM activity_points ORDER BY point_index').all()
+        self.c.commit()
+        with TemporaryDirectory() as folder:
+            with patch('src.tools.diagnose_activity_mileage.engine',self.engine):
+                run([1],Path(folder))
+            summary=json.loads((Path(folder)/'summary.json').read_text())[0]
+            self.assertEqual(summary['diagnostic_reason_counts']['recording_gap'],1)
+            self.assertAlmostEqual(summary['stored_point_miles'],50/1609.344)
+            self.assertTrue((Path(folder)/'1_intervals.csv').exists())
+        after=self.c.exec_driver_sql('SELECT * FROM activity_points ORDER BY point_index').all()
+        self.assertEqual(before,after)
+
 if __name__=='__main__': unittest.main()
