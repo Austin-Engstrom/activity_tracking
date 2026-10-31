@@ -73,4 +73,8 @@ table gear
 	partition gear = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_gear.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_gear.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"gear_key", type text}, {"gear_id", type text}, {"athlete_id", Int64.Type}, {"gear_name", type text}, {"brand_name", type text}, {"model_name", type text}, {"description", type text}, {"distance_miles", type number}, {"is_primary", Int64.Type}, {"is_retired", Int64.Type}, {"frame_type", Int64.Type}, {"detail_loaded_at", type datetime}, {"created_at", type datetime}, {"updated_at", type datetime}})
+			in
+			    Typed

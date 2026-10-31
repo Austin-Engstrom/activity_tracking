@@ -43,4 +43,8 @@ table trails
 	partition trails = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_trail.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"trail_key", Int64.Type}, {"trail_name", type text}, {"normalized_name", type text}, {"length_miles", type number}, {"primary_surface", type text}, {"bicycle_access", type text}, {"mtb_scale", type text}, {"mtb_type", type text}})
+			in
+			    Typed

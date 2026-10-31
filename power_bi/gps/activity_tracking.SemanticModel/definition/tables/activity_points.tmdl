@@ -158,4 +158,8 @@ table activity_points
 	partition activity_points = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"activity_key", Int64.Type}, {"activity_id", Int64.Type}, {"point_index", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"date_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_key", Int64.Type}, {"recorded_at_utc", type datetime}, {"latitude", type number}, {"longitude", type number}, {"elapsed_time_seconds", type number}, {"cumulative_distance_miles", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"moving_time_seconds", type number}, {"elevation_feet", type number}, {"speed_mph", type number}, {"temperature_f", type number}, {"heartrate", type number}, {"cadence", type number}, {"watts", type number}, {"is_moving", Int64.Type}, {"grade_percent", type number}, {"quality_status", type text}, {"match_method", type text}, {"date_basis", type text}})
+			in
+			    Typed

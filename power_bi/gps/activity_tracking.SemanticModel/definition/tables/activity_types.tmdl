@@ -18,4 +18,8 @@ table activity_types
 	partition activity_types = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_activity_type.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_type.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_type_key", type text}, {"activity_type", type text}, {"activity_category", type text}})
+			in
+			    Typed

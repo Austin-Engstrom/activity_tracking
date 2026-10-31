@@ -43,4 +43,8 @@ table segment_efforts
 	partition segment_efforts = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"activity_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}, {"end_index", Int64.Type}, {"elapsed_time_seconds", type number}, {"moving_time_seconds", type number}, {"distance_miles", type number}})
+			in
+			    Typed

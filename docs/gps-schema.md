@@ -223,3 +223,19 @@ sensitivity to gap rules while still requiring valid endpoint coordinates, posit
 time, and nonnegative distance. These are diagnostic comparisons, not recommended
 reporting totals. `--gap-seconds` changes reason labels only; stored mileage and
 schema are never changed by this command.
+
+### Power BI null-type refresh errors
+
+GPS exports use the explicit contract in `src/reporting/gps_schema.json` so empty
+or entirely null columns retain a concrete Arrow/Parquet type. Power Query also
+applies explicit column types matching the semantic model. Keep this contract,
+SQL views and TMDL columns synchronized; tests check their model correspondence.
+Legacy/ad-hoc exports still use inference.
+
+If Desktop reports `'dataType' argument cannot be null`, cancel the failed apply,
+close the project without saving failed local model edits, pull the latest branch,
+and regenerate Parquet using `python -m src.tools.export_power_bi`. Reopen the GPS
+PBIP, set the `ExportFolder` text parameter, and apply/refresh again. No database
+rebuild is needed. If the error persists, collect Desktop's Copy details text;
+Parquet typing is validated offline, but Desktop refresh itself requires Windows
+validation and this message can have other causes.

@@ -63,4 +63,8 @@ table trail_systems
 	partition trail_systems = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"latitude", type number}, {"longitude", type number}, {"description", type text}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}})
+			in
+			    Typed

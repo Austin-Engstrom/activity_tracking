@@ -38,4 +38,8 @@ table dates
 	partition dates = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_date.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_date.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"date_key", Int64.Type}, {"date", type date}, {"year", Int64.Type}, {"month_number", Int64.Type}, {"quarter_number", Int64.Type}, {"week_number", Int64.Type}, {"day_of_week", Int64.Type}})
+			in
+			    Typed

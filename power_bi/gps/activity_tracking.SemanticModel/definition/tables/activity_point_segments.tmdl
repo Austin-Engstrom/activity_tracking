@@ -18,4 +18,8 @@ table activity_point_segments
 	partition activity_point_segments = m
 		mode: import
 		source =
-			Parquet.Document(File.Contents(ExportFolder & "view_activity_point_segments.parquet"))
+			let
+			    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_point_segments.parquet")),
+			    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}})
+			in
+			    Typed

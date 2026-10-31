@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -178,12 +179,24 @@ def export_view(
 
         # Write to a temporary file first so an interrupted export does not
         # leave Power BI with a partially written Parquet file.
-        dataframe.to_parquet(
-            temporary_path,
-            engine="pyarrow",
-            compression=PARQUET_COMPRESSION,
-            index=False,
-        )
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+        contract = json.loads((PROJECT_ROOT / 'src/reporting/gps_schema.json').read_text())
+        columns = contract.get(view_name)
+        if columns is not None:
+            if set(columns) != set(dataframe.columns):
+                raise ValueError(f'Reporting schema mismatch for {view_name}; update the explicit export contract')
+            arrow_types = {'string': pa.string(), 'int64': pa.int64(),
+                           'double': pa.float64(), 'dateTime': pa.timestamp('us', tz='UTC')}
+            schema = pa.schema([
+                pa.field(name, pa.date32() if name in {'date','activity_date'} else arrow_types[columns[name]])
+                for name in dataframe.columns
+            ])
+            table = pa.Table.from_pandas(dataframe, schema=schema, preserve_index=False, safe=True)
+        else:
+            # Legacy/ad-hoc exports retain inference; the new GPS model is explicit.
+            table = pa.Table.from_pandas(dataframe, preserve_index=False)
+        pq.write_table(table, temporary_path, compression=PARQUET_COMPRESSION)
 
         temporary_path.replace(output_path)
 
