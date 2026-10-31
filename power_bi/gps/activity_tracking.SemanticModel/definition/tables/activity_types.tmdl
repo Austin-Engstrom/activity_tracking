@@ -5,6 +5,8 @@ table activity_types
 		summarizeBy: none
 		sourceColumn: activity_type_key
 
+		annotation SummarizationSetBy = User
+
 	column activity_type
 		dataType: string
 		summarizeBy: none

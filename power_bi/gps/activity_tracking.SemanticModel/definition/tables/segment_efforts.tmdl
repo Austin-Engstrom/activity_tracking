@@ -5,15 +5,23 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: segment_effort_key
 
+		annotation SummarizationSetBy = User
+
 	column activity_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_key
 
+		annotation SummarizationSetBy = User
+
 	column segment_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
 
 	column start_index
 		dataType: int64

@@ -291,3 +291,12 @@ All moving-time measures remain in `measures_.tmdl`, under the Time display fold
 
 Replace existing visuals referencing Moving Hours with Point Moving Hours after
 reopening the updated project. These measures intentionally express different grains.
+
+### Identifier visibility
+
+Hide identifiers on `activity_points` and the point/segment bridge, and hide the
+activity/segment foreign keys on `segment_efforts`. Use dimension identifiers for
+report filters. Dimension keys/IDs remain visible. All `_key` and `_id` columns
+explicitly use `summarizeBy: none` with a user summarization annotation, including
+`activities[activity_id]`. Existing visuals may retain their prior aggregation;
+replace Sum of activity_id with the dimension field using Don't summarize.

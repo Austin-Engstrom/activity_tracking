@@ -2,18 +2,27 @@ table activity_point_segments
 
 	column activity_point_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_point_key
 
+		annotation SummarizationSetBy = User
+
 	column segment_effort_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: segment_effort_key
 
+		annotation SummarizationSetBy = User
+
 	column segment_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
 
 	partition activity_point_segments = m
 		mode: import

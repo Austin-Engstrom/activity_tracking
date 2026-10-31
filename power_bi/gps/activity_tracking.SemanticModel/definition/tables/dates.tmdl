@@ -5,6 +5,8 @@ table dates
 		summarizeBy: none
 		sourceColumn: date_key
 
+		annotation SummarizationSetBy = User
+
 	column date
 		dataType: dateTime
 		summarizeBy: none

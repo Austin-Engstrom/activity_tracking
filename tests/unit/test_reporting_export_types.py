@@ -62,3 +62,16 @@ class ReportingTypeTests(unittest.TestCase):
         for path in (base/'tables').glob('*.tmdl'):
             if path.stem != 'measures_':
                 self.assertNotRegex(path.read_text(),r'\n\tmeasure ')
+
+    def test_fact_keys_hidden_and_identifiers_never_summed(self):
+        base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition/tables'
+        for path in base.glob('*.tmdl'):
+            columns=re.findall(r'\n\tcolumn (\w+)(.*?)(?=\n\t(?:column |measure |partition )|\Z)',path.read_text(),re.S)
+            for name,body in columns:
+                if name.endswith(('_key','_id')):
+                    self.assertIn('summarizeBy: none',body,(path.stem,name))
+                    self.assertIn('annotation SummarizationSetBy = User',body,(path.stem,name))
+                    if path.stem in {'activity_points','activity_point_segments'} or (path.stem=='segment_efforts' and name in {'activity_key','segment_key'}):
+                        self.assertIn('isHidden',body,(path.stem,name))
+                    else:
+                        self.assertNotIn('isHidden',body,(path.stem,name))

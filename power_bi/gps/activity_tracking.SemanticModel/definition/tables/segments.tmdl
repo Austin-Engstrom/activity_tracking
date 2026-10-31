@@ -5,10 +5,14 @@ table segments
 		summarizeBy: none
 		sourceColumn: segment_key
 
+		annotation SummarizationSetBy = User
+
 	column segment_id
 		dataType: int64
 		summarizeBy: none
 		sourceColumn: segment_id
+
+		annotation SummarizationSetBy = User
 
 	column segment_name
 		dataType: string

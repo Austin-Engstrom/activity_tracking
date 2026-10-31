@@ -2,18 +2,27 @@ table activity_points
 
 	column activity_point_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_point_key
 
+		annotation SummarizationSetBy = User
+
 	column activity_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_key
 
+		annotation SummarizationSetBy = User
+
 	column activity_id
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_id
+
+		annotation SummarizationSetBy = User
 
 	column point_index
 		dataType: int64
@@ -22,28 +31,43 @@ table activity_points
 
 	column gear_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: gear_key
 
+		annotation SummarizationSetBy = User
+
 	column activity_type_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: activity_type_key
 
+		annotation SummarizationSetBy = User
+
 	column date_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: date_key
 
+		annotation SummarizationSetBy = User
+
 	column trail_system_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: trail_system_key
 
+		annotation SummarizationSetBy = User
+
 	column trail_key
 		dataType: int64
+		isHidden
 		summarizeBy: none
 		sourceColumn: trail_key
+
+		annotation SummarizationSetBy = User
 
 	column recorded_at_utc
 		dataType: dateTime

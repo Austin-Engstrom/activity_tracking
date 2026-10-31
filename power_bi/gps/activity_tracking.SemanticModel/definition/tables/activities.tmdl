@@ -5,20 +5,28 @@ table activities
 		summarizeBy: none
 		sourceColumn: activity_id
 
+		annotation SummarizationSetBy = User
+
 	column activity_date_key
 		dataType: int64
 		summarizeBy: none
 		sourceColumn: activity_date_key
+
+		annotation SummarizationSetBy = User
 
 	column activity_type_key
 		dataType: string
 		summarizeBy: none
 		sourceColumn: activity_type_key
 
+		annotation SummarizationSetBy = User
+
 	column gear_key
 		dataType: string
 		summarizeBy: none
 		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
 
 	column activity_name
 		dataType: string
@@ -129,6 +137,8 @@ table activities
 		dataType: int64
 		summarizeBy: none
 		sourceColumn: activity_key
+
+		annotation SummarizationSetBy = User
 
 	column description
 		dataType: string

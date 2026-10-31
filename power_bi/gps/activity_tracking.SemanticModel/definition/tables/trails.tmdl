@@ -5,6 +5,8 @@ table trails
 		summarizeBy: none
 		sourceColumn: trail_key
 
+		annotation SummarizationSetBy = User
+
 	column trail_name
 		dataType: string
 		summarizeBy: none
