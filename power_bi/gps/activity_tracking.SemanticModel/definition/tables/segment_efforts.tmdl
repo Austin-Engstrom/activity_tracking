@@ -1,6 +1,7 @@
 table segment_efforts
 	lineageTag: 16b83d8a-a726-4867-8319-da2acac3d6c4
 
+	/// Segment effort key; source identifier or relationship key, not a measure.
 	column segment_effort_key
 		dataType: int64
 		formatString: 0
@@ -10,6 +11,7 @@ table segment_efforts
 
 		annotation SummarizationSetBy = User
 
+	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
 		formatString: 0
@@ -20,6 +22,7 @@ table segment_efforts
 
 		annotation SummarizationSetBy = User
 
+	/// Segment key; source identifier or relationship key, not a measure.
 	column segment_key
 		dataType: int64
 		formatString: 0
@@ -30,6 +33,7 @@ table segment_efforts
 
 		annotation SummarizationSetBy = User
 
+	/// Inclusive original stream start index for effort membership.
 	column start_index
 		dataType: int64
 		formatString: 0
@@ -37,6 +41,7 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: start_index
 
+	/// Inclusive original stream end index for effort membership.
 	column end_index
 		dataType: int64
 		formatString: 0
@@ -44,6 +49,7 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: end_index
 
+	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
 	column elapsed_time_seconds
 		dataType: double
 		formatString: #,0.0
@@ -51,6 +57,7 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: elapsed_time_seconds
 
+	/// Point table: eligible interval seconds when moving, zero when stopped, otherwise NULL. Effort table: stored whole-effort moving seconds.
 	column moving_time_seconds
 		dataType: double
 		formatString: #,0.0
@@ -58,6 +65,7 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: moving_time_seconds
 
+	/// Stored full-effort distance converted to miles; repeated/overlapping efforts can double-count route distance.
 	column distance_miles
 		dataType: double
 		formatString: #,0.00

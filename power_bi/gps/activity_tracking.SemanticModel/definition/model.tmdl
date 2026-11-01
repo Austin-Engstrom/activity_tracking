@@ -30,3 +30,5 @@ ref table select_dimensions
 ref table gear_components
 ref table component_services
 ref table component_service_status
+
+ref table data_dictionary

@@ -1,6 +1,7 @@
 table activity_points
 	lineageTag: 5c8ac6cc-0446-4b14-9211-4885df110fc6
 
+	/// Stable activity/sample composite identifier; do not aggregate.
 	column activity_point_key
 		dataType: string
 		isHidden
@@ -10,6 +11,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
 		formatString: 0
@@ -20,6 +22,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Activity id; source identifier or relationship key, not a measure.
 	column activity_id
 		dataType: int64
 		formatString: 0
@@ -30,6 +33,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Original zero-based stream sample index; not a dense GPS-only row number.
 	column point_index
 		dataType: int64
 		formatString: 0
@@ -39,6 +43,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Gear key; source identifier or relationship key, not a measure.
 	column gear_key
 		dataType: string
 		isHidden
@@ -48,6 +53,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Activity type key; source identifier or relationship key, not a measure.
 	column activity_type_key
 		dataType: string
 		isHidden
@@ -57,6 +63,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// YYYYMMDD point-local calendar key (UTC when timezone metadata is missing).
 	column date_key
 		dataType: int64
 		formatString: 0
@@ -67,6 +74,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Trail system key; source identifier or relationship key, not a measure.
 	column trail_system_key
 		dataType: int64
 		formatString: 0
@@ -77,6 +85,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Trail key; source identifier or relationship key, not a measure.
 	column trail_key
 		dataType: int64
 		formatString: 0
@@ -87,6 +96,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// UTC activity start plus stream elapsed seconds.
 	column recorded_at_utc
 		dataType: dateTime
 		formatString: yyyy-mm-dd hh:mm:ss
@@ -94,6 +104,7 @@ table activity_points
 		summarizeBy: none
 		sourceColumn: recorded_at_utc
 
+	/// WGS84 latitude in decimal degrees.
 	column latitude
 		dataType: double
 		formatString: 0.000000
@@ -103,6 +114,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// WGS84 longitude in decimal degrees.
 	column longitude
 		dataType: double
 		formatString: 0.000000
@@ -112,6 +124,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
 	column elapsed_time_seconds
 		dataType: double
 		formatString: #,0.0
@@ -121,6 +134,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source cumulative stream distance converted to miles; do not sum.
 	column cumulative_distance_miles
 		dataType: double
 		formatString: #,0.00
@@ -130,6 +144,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Eligible preceding interval distance in miles; first/invalid intervals NULL.
 	column incremental_distance_miles
 		dataType: double
 		formatString: #,0.00
@@ -139,6 +154,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Eligible preceding interval duration in seconds; first/invalid intervals NULL.
 	column incremental_time_seconds
 		dataType: double
 		formatString: #,0.0
@@ -148,6 +164,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Point table: eligible interval seconds when moving, zero when stopped, otherwise NULL. Effort table: stored whole-effort moving seconds.
 	column moving_time_seconds
 		dataType: double
 		formatString: #,0.0
@@ -157,6 +174,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Point altitude in feet; not elevation gain.
 	column elevation_feet
 		dataType: double
 		formatString: #,0
@@ -166,6 +184,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source instantaneous stream speed converted to mph; NULL when not recorded.
 	column speed_mph
 		dataType: double
 		formatString: #,0.00
@@ -175,6 +194,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source sample temperature converted from Celsius to Fahrenheit; NULL when absent.
 	column temperature_f
 		dataType: double
 		formatString: #,0.00
@@ -184,6 +204,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Sample heart rate in bpm.
 	column heartrate
 		dataType: double
 		formatString: #,0
@@ -193,6 +214,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source sample cadence in rpm.
 	column cadence
 		dataType: double
 		formatString: #,0
@@ -202,6 +224,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Sample power in watts.
 	column watts
 		dataType: double
 		formatString: #,0
@@ -211,6 +234,7 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source moving flag: 1 moving, 0 stopped; NULL unknown.
 	column is_moving
 		dataType: int64
 		formatString: 0
@@ -220,6 +244,7 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
+	/// Sample grade in percent.
 	column grade_percent
 		dataType: double
 		formatString: 0.0\%
@@ -229,18 +254,21 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Interval quality: valid, first_point, invalid_interval or recording_gap. Only valid intervals have eligible increments; NULL increments are not zero.
 	column quality_status
 		dataType: string
 		lineageTag: 1bfe220d-b4e7-4679-ad8c-8eacc309aeae
 		summarizeBy: none
 		sourceColumn: quality_status
 
+	/// Spatial outcome: boundary, boundary_overlap_lowest_id or unmatched, optionally suffixed :nearest_trail or :ambiguous_trail. Unknown system/trail assignments retain NULL keys.
 	column match_method
 		dataType: string
 		lineageTag: aaea348d-5dbe-429b-afcc-40c27b1757f5
 		summarizeBy: none
 		sourceColumn: match_method
 
+	/// activity_timezone or utc_fallback; indicates point calendar basis.
 	column date_basis
 		dataType: string
 		lineageTag: c9442510-aad0-443d-8b7f-8e2c65005ae4

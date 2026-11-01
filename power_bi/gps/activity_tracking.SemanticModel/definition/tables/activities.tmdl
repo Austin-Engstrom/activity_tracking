@@ -1,6 +1,7 @@
 table activities
 	lineageTag: 9e69bded-f4c6-4d66-a26d-f6a243693c1a
 
+	/// Activity id; source identifier or relationship key, not a measure.
 	column activity_id
 		dataType: int64
 		formatString: 0
@@ -10,6 +11,7 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// UTC activity-start date as YYYYMMDD; use dates dimension for local reporting.
 	column activity_date_key
 		dataType: int64
 		formatString: 0
@@ -20,6 +22,7 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Activity type key; source identifier or relationship key, not a measure.
 	column activity_type_key
 		dataType: string
 		isHidden
@@ -29,6 +32,7 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Gear key; source identifier or relationship key, not a measure.
 	column gear_key
 		dataType: string
 		isHidden
@@ -38,12 +42,14 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Source Strava activity title. Names need not be unique; use activity_key for identity.
 	column activity_name
 		dataType: string
 		lineageTag: c9864ecd-b2fe-495a-bed3-7094a43ee8b1
 		summarizeBy: none
 		sourceColumn: activity_name
 
+	/// Source Strava sport type for the activity; GPS eligibility does not restrict sports to cycling.
 	column sport_type
 		dataType: string
 		isHidden
@@ -51,6 +57,7 @@ table activities
 		summarizeBy: none
 		sourceColumn: sport_type
 
+	/// Stored activity start timestamp in UTC.
 	column start_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd hh:mm:ss
@@ -58,6 +65,7 @@ table activities
 		summarizeBy: none
 		sourceColumn: start_date
 
+	/// UTC activity-start calendar date.
 	column activity_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
@@ -67,6 +75,7 @@ table activities
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Converted source distance in miles at this table grain; gear is source lifetime distance, activities rounded to 2 decimals, efforts may overlap.
 	column distance_miles
 		dataType: double
 		formatString: #,0.00
@@ -76,6 +85,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Whole source activity moving duration converted to minutes and rounded to 2 decimals.
 	column moving_time_minutes
 		dataType: double
 		formatString: #,0.00
@@ -85,6 +95,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Whole source activity elapsed duration converted to minutes and rounded to 2 decimals, including stops.
 	column elapsed_time_minutes
 		dataType: double
 		formatString: #,0.00
@@ -94,6 +105,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Whole source activity elevation gain converted to feet and rounded to 2 decimals; not allocated to trails.
 	column total_elevation_gain_feet
 		dataType: double
 		formatString: #,0
@@ -103,6 +115,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity average speed converted to mph and rounded to 2 decimals; not route-selected speed.
 	column average_speed_mph
 		dataType: double
 		formatString: #,0.00
@@ -112,6 +125,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity maximum speed converted to mph and rounded to 2 decimals.
 	column max_speed_mph
 		dataType: double
 		formatString: #,0.00
@@ -121,6 +135,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity average heart rate in bpm; optional, not recomputed for selected route portions.
 	column average_heartrate
 		dataType: double
 		formatString: #,0
@@ -130,6 +145,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity maximum heart rate in bpm; optional.
 	column max_heartrate
 		dataType: double
 		formatString: #,0
@@ -139,6 +155,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity average cadence in rpm; optional, not an average of selected GPS samples.
 	column average_cadence
 		dataType: double
 		formatString: #,0
@@ -148,6 +165,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity average power in watts; optional, not recomputed for selected route portions.
 	column average_watts
 		dataType: double
 		formatString: #,0
@@ -157,6 +175,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity energy in kilojoules; optional whole-activity total.
 	column kilojoules
 		dataType: double
 		formatString: #,0.00
@@ -166,6 +185,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source activity calories; unknown remains NULL.
 	column calories
 		dataType: double
 		formatString: #,0
@@ -175,6 +195,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Source Strava suffer score; optional.
 	column suffer_score
 		dataType: double
 		formatString: #,0
@@ -184,6 +205,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Is commute flag: 1 yes, 0 no; NULL unknown.
 	column is_commute
 		dataType: int64
 		formatString: 0
@@ -193,6 +215,7 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Is trainer flag: 1 yes, 0 no; NULL unknown.
 	column is_trainer
 		dataType: int64
 		formatString: 0
@@ -202,6 +225,7 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// All stored source stream rows for activity, not just valid GPS samples.
 	column stream_point_count
 		dataType: int64
 		formatString: #,0
@@ -211,6 +235,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Stored segment effort count for activity.
 	column segment_effort_count
 		dataType: int64
 		formatString: #,0
@@ -220,6 +245,7 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
 		formatString: 0
@@ -229,18 +255,21 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Source free-text description for the row entity; may be missing.
 	column description
 		dataType: string
 		lineageTag: 17300eed-9703-47c1-adc0-06651e900eaa
 		summarizeBy: none
 		sourceColumn: description
 
+	/// Source activity recording device name; may be missing.
 	column device_name
 		dataType: string
 		lineageTag: 21fdf7aa-9007-4212-986a-f6bfcbcfa671
 		summarizeBy: none
 		sourceColumn: device_name
 
+	/// Strava workout-type code; meaning depends on sport.
 	column workout_type
 		dataType: int64
 		formatString: 0

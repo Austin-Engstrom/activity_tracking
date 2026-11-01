@@ -27,3 +27,5 @@ When adding or changing a measure, update its native description alongside its
 calculation. Describe point totals, full-activity totals, whole-effort totals, and
 historical association catalogs distinctly. Avoid describing every difference as
 an error or treating match percentages as accuracy/completion scores.
+
+For definitions inside report table visuals, use the [data dictionary](data-dictionary-pbi.md), which reads this native metadata on model refresh.

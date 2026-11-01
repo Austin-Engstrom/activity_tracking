@@ -1,6 +1,7 @@
 table gear_components
 	lineageTag: 870ffdbd-96f4-4f72-aa9e-60edf119e136
 
+	/// Stable component identifier linking gear_components, service events and current service status; do not sum.
 	column component_key
 		dataType: int64
 		formatString: 0
@@ -9,6 +10,7 @@ table gear_components
 
 		annotation SummarizationSetBy = User
 
+	/// Gear key; source identifier or relationship key, not a measure.
 	column gear_key
 		dataType: string
 		isHidden
@@ -17,44 +19,52 @@ table gear_components
 
 		annotation SummarizationSetBy = User
 
+	/// Tracked component category, such as fork or chain.
 	column component_type
 		dataType: string
 		summarizeBy: none
 		sourceColumn: component_type
 
+	/// Component manufacturer as entered in the maintenance catalog.
 	column manufacturer
 		dataType: string
 		summarizeBy: none
 		sourceColumn: manufacturer
 
+	/// Component model as entered in the maintenance catalog.
 	column model
 		dataType: string
 		summarizeBy: none
 		sourceColumn: model
 
+	/// Component installation timestamp; usage before installation is excluded.
 	column installed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: installed_at
 
+	/// Component removal timestamp; NULL means currently installed. Usage after removal is excluded.
 	column removed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: removed_at
 
+	/// Schedule unit: hours or miles. Determines which usage total drives status.
 	column service_interval_type
 		dataType: string
 		summarizeBy: none
 		sourceColumn: service_interval_type
 
+	/// Scheduled interval in service_interval_type units; NULL means no complete schedule.
 	column service_interval_value
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
+	/// User-entered notes for this component or service event at the table row grain.
 	column notes
 		dataType: string
 		summarizeBy: none

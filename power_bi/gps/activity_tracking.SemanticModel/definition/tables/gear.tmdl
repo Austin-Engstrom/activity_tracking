@@ -1,6 +1,7 @@
 table gear
 	lineageTag: fd459ba2-8ac3-4d14-9c18-4db5e0df26cf
 
+	/// Gear key; source identifier or relationship key, not a measure.
 	column gear_key
 		dataType: string
 		lineageTag: 335fd55f-6c42-484d-874e-b4457d043473
@@ -9,6 +10,7 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Gear id; source identifier or relationship key, not a measure.
 	column gear_id
 		dataType: string
 		lineageTag: 608b31ae-79a4-4043-86dd-d89c6b311f2a
@@ -17,6 +19,7 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Source equipment owner athlete identifier; categorical, never summed.
 	column athlete_id
 		dataType: int64
 		formatString: 0
@@ -27,30 +30,35 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Source equipment display name; use gear_key for identity.
 	column gear_name
 		dataType: string
 		lineageTag: 6445c1ef-ce77-474c-b484-0683d8fadced
 		summarizeBy: none
 		sourceColumn: gear_name
 
+	/// Source equipment brand; NULL when not provided.
 	column brand_name
 		dataType: string
 		lineageTag: b830d346-0144-4a31-92a9-d630273a3503
 		summarizeBy: none
 		sourceColumn: brand_name
 
+	/// Source equipment model; NULL when not provided.
 	column model_name
 		dataType: string
 		lineageTag: 61e1c9a5-d979-4311-b06d-4b368b4eb22a
 		summarizeBy: none
 		sourceColumn: model_name
 
+	/// Source free-text description for the row entity; may be missing.
 	column description
 		dataType: string
 		lineageTag: 4a287561-8476-4f30-a8c0-100ecf354cfa
 		summarizeBy: none
 		sourceColumn: description
 
+	/// Source Strava lifetime equipment miles, rounded to 2 decimals; not restricted to GPS dataset history or report slicers.
 	column distance_miles
 		dataType: double
 		formatString: #,0.00
@@ -60,6 +68,7 @@ table gear
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Is primary flag: 1 yes, 0 no; NULL unknown.
 	column is_primary
 		dataType: int64
 		formatString: 0
@@ -69,6 +78,7 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Is retired flag: 1 yes, 0 no; NULL unknown.
 	column is_retired
 		dataType: int64
 		formatString: 0
@@ -78,6 +88,7 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Strava frame-type code retained from source; consult source meaning before labeling.
 	column frame_type
 		dataType: int64
 		formatString: 0
@@ -87,6 +98,7 @@ table gear
 
 		annotation SummarizationSetBy = User
 
+	/// Timestamp of the last equipment-detail load; NULL when detail is unavailable.
 	column detail_loaded_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd hh:mm:ss
@@ -94,6 +106,7 @@ table gear
 		summarizeBy: none
 		sourceColumn: detail_loaded_at
 
+	/// Source equipment row creation timestamp.
 	column created_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd hh:mm:ss
@@ -101,6 +114,7 @@ table gear
 		summarizeBy: none
 		sourceColumn: created_at
 
+	/// Source equipment row last-update timestamp.
 	column updated_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd hh:mm:ss

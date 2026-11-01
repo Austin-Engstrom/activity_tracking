@@ -1,6 +1,7 @@
 table component_service_status
 	lineageTag: cb42df6d-e817-401a-ae20-a9a38c2c330e
 
+	/// Stable component identifier linking gear_components, service events and current service status; do not sum.
 	column component_key
 		dataType: int64
 		formatString: 0
@@ -10,6 +11,7 @@ table component_service_status
 
 		annotation SummarizationSetBy = User
 
+	/// Original component identifier; same value as component_key.
 	column component_id
 		dataType: int64
 		formatString: 0
@@ -19,6 +21,7 @@ table component_service_status
 
 		annotation SummarizationSetBy = User
 
+	/// Gear key; source identifier or relationship key, not a measure.
 	column gear_key
 		dataType: string
 		isHidden
@@ -27,35 +30,41 @@ table component_service_status
 
 		annotation SummarizationSetBy = User
 
+	/// Source equipment display name; use gear_key for identity.
 	column gear_name
 		dataType: string
 		isHidden
 		summarizeBy: none
 		sourceColumn: gear_name
 
+	/// Tracked component category, such as fork or chain.
 	column component_type
 		dataType: string
 		isHidden
 		summarizeBy: none
 		sourceColumn: component_type
 
+	/// Component manufacturer as entered in the maintenance catalog.
 	column manufacturer
 		dataType: string
 		isHidden
 		summarizeBy: none
 		sourceColumn: manufacturer
 
+	/// Component model as entered in the maintenance catalog.
 	column model
 		dataType: string
 		isHidden
 		summarizeBy: none
 		sourceColumn: model
 
+	/// Display name: manufacturer plus model, falling back to component type when model is absent.
 	column component_name
 		dataType: string
 		summarizeBy: none
 		sourceColumn: component_name
 
+	/// Component installation timestamp; usage before installation is excluded.
 	column installed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
@@ -63,6 +72,7 @@ table component_service_status
 		summarizeBy: none
 		sourceColumn: installed_at
 
+	/// Component removal timestamp; NULL means currently installed. Usage after removal is excluded.
 	column removed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
@@ -70,18 +80,21 @@ table component_service_status
 		summarizeBy: none
 		sourceColumn: removed_at
 
+	/// 1 when removed_at is NULL, otherwise 0; installed-component flag rather than recent riding activity.
 	column is_active
 		dataType: int64
 		formatString: 0
 		summarizeBy: none
 		sourceColumn: is_active
 
+	/// Schedule unit: hours or miles. Determines which usage total drives status.
 	column service_interval_type
 		dataType: string
 		isHidden
 		summarizeBy: none
 		sourceColumn: service_interval_type
 
+	/// Scheduled interval in service_interval_type units; NULL means no complete schedule.
 	column service_interval_value
 		dataType: double
 		formatString: #,0.00
@@ -89,6 +102,7 @@ table component_service_status
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
+	/// Most recent eligible service-event identifier, ordered by service timestamp then ID; NULL if none.
 	column latest_service_id
 		dataType: int64
 		formatString: 0
@@ -98,28 +112,33 @@ table component_service_status
 
 		annotation SummarizationSetBy = User
 
+	/// Most recent service within component installation/removal dates and no later than the SQL export date; NULL if none.
 	column latest_service_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: latest_service_date
 
+	/// Category of the most recent eligible service; NULL if no eligible service exists.
 	column latest_service_type
 		dataType: string
 		summarizeBy: none
 		sourceColumn: latest_service_type
 
+	/// Notes on the most recent eligible service; NULL if unavailable.
 	column latest_service_notes
 		dataType: string
 		summarizeBy: none
 		sourceColumn: latest_service_notes
 
+	/// Latest eligible service timestamp, or installation timestamp when no eligible service exists.
 	column service_baseline_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: service_baseline_date
 
+	/// YYYYMMDD calendar key derived from service_baseline_date; not a local GPS point date.
 	column service_baseline_date_key
 		dataType: int64
 		formatString: 0
@@ -129,71 +148,83 @@ table component_service_status
 
 		annotation SummarizationSetBy = User
 
+	/// Stored source activity moving hours for this gear since baseline, within component installation/removal bounds; rounded to 2 decimals.
 	column hours_since_service
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: hours_since_service
 
+	/// Stored source activity miles for this gear since baseline, within component installation/removal bounds; rounded to 2 decimals.
 	column miles_since_service
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: miles_since_service
 
+	/// Stored source activity moving hours for this gear during the installation window, through SQL now; rounded to 2 decimals.
 	column lifetime_component_hours
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: lifetime_component_hours
 
+	/// Stored source activity miles for this gear during the installation window, through SQL now; rounded to 2 decimals.
 	column lifetime_component_miles
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: lifetime_component_miles
 
+	/// Hours or miles since baseline according to schedule type; rounded to 2 decimals. Unknown type yields NULL.
 	column usage_since_service
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_since_service
 
+	/// Scheduled interval minus usage, rounded to 2 decimals; negative values indicate overdue usage.
 	column usage_remaining
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_remaining
 
+	/// Usage above scheduled interval, floored at zero and rounded to 2 decimals.
 	column usage_overdue
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_overdue
 
+	/// Consumed interval on a 0–100 scale: usage divided by interval times 100; can exceed 100. Zero interval yields NULL.
 	column service_interval_percent
 		dataType: double
 		formatString: 0.0\%
 		summarizeBy: none
 		sourceColumn: service_interval_percent
 
+	/// Remaining interval ratio, floored at zero: 1 = 100% remaining. Zero/unknown intervals yield NULL.
 	column service_interval_remaining_percent
 		dataType: double
 		formatString: 0.0%
 		summarizeBy: none
 		sourceColumn: service_interval_remaining_percent
 
+	/// Remaining hours or miles, rounded to 2 decimals and floored at zero.
 	column service_interval_remaining
 		dataType: double
 		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: service_interval_remaining
 
+	/// Inactive if removed; No Schedule if type/value missing; Due at 100% usage; Due Soon at 80%; otherwise Current.
 	column service_status
 		dataType: string
 		summarizeBy: none
 		sourceColumn: service_status
 
+	/// User-entered notes about the tracked component.
 	column component_notes
 		dataType: string
 		isHidden

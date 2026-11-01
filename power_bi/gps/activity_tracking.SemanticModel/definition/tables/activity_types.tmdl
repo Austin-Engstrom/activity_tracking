@@ -1,6 +1,7 @@
 table activity_types
 	lineageTag: 0485eec2-0f56-48e4-a082-2c82e67f113c
 
+	/// Activity type key; source identifier or relationship key, not a measure.
 	column activity_type_key
 		dataType: string
 		lineageTag: 2ea424fc-d5b8-4952-951c-a61a758c6cbf
@@ -9,12 +10,14 @@ table activity_types
 
 		annotation SummarizationSetBy = User
 
+	/// Source sport/type label for this dimension row.
 	column activity_type
 		dataType: string
 		lineageTag: ce819998-bd4f-4560-bede-f45aba57c624
 		summarizeBy: none
 		sourceColumn: activity_type
 
+	/// Locally mapped activity category; review unmapped source sport types before grouping.
 	column activity_category
 		dataType: string
 		lineageTag: 875f4e0c-528c-4d94-abd5-f7ed28414276

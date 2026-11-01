@@ -1,6 +1,7 @@
 table component_services
 	lineageTag: c90b7790-465c-4133-aac4-95a07b52b444
 
+	/// Unique maintenance service-event identifier; do not sum.
 	column service_id
 		dataType: int64
 		formatString: 0
@@ -9,6 +10,7 @@ table component_services
 
 		annotation SummarizationSetBy = User
 
+	/// Stable component identifier linking gear_components, service events and current service status; do not sum.
 	column component_key
 		dataType: int64
 		formatString: 0
@@ -18,17 +20,20 @@ table component_services
 
 		annotation SummarizationSetBy = User
 
+	/// Recorded date/timestamp of this maintenance event.
 	column service_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: service_date
 
+	/// User-entered maintenance service category.
 	column service_type
 		dataType: string
 		summarizeBy: none
 		sourceColumn: service_type
 
+	/// User-entered notes for this component or service event at the table row grain.
 	column notes
 		dataType: string
 		summarizeBy: none
