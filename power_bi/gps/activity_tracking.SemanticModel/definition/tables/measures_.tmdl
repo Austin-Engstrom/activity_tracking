@@ -44,7 +44,7 @@ table measures_
 	/// Full Strava activity-summary moving time, in hours.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Not allocated to individual points or trails. Compare with Point Moving Hours to understand the two calculation grains.
-	measure 'Activity Moving Hours' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+	measure 'Moving Time' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: 9ea5c44c-e78c-4764-ad42-56d18f4de9f3
@@ -68,7 +68,7 @@ table measures_
 	/// Point Moving Hours minus Activity Moving Hours.
 	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
 	/// Notes: Negative means point-derived hours are lower. Partial route filters and Strava processing can explain differences; this is not an automatic error flag.
-	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Activity Moving Hours]
+	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Moving Time]
 		formatString: #,0.00;−#,0.00;0.00
 		displayFolder: Validation
 		lineageTag: 14159157-6f5f-4738-a08e-7c480b67eb90
@@ -116,7 +116,7 @@ table measures_
 	/// Full Strava activity-summary elapsed time, in hours.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Includes elapsed time rather than only movement. Partial point selections still include full activity durations.
-	measure 'Activity Elapsed Hours' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	measure 'Activity Time' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: df8d2f65-a36f-497e-8511-701a937878d9
@@ -124,7 +124,7 @@ table measures_
 	/// Full Strava activity-summary elevation gain, in feet.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Uses ascent reported by Strava, not the sum of point elevations or elevation allocated to a trail.
-	measure 'Activity Elevation Gain Feet' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	measure 'Elevation Gain' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Elevation
 		lineageTag: d40e4943-13a7-4472-8165-0d0ec6e8fc17
@@ -132,7 +132,7 @@ table measures_
 	/// Sum of available Strava activity-summary calories.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Missing calories remain unknown. Totals may be incomplete when only some activities have calorie values.
-	measure 'Activity Calories' = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	measure Calories = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Activities
 		lineageTag: d2bb17ff-742e-4f3f-b889-fbac10abdb16
@@ -148,7 +148,7 @@ table measures_
 	/// Activity Moving Hours divided by the distinct selected activity count.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: This is the mean full-activity moving duration, in decimal hours.
-	measure 'Average Activity Moving Hours' = DIVIDE([Activity Moving Hours], [Activities])
+	measure 'Average Moving Time' = DIVIDE([Moving Time], [Activities])
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: 0cb12919-ee77-4195-98d5-537fc060e038
@@ -156,7 +156,7 @@ table measures_
 	/// Activity Elevation Gain Feet divided by the distinct selected activity count.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: This is mean full-activity ascent in feet, not mean point altitude.
-	measure 'Average Activity Elevation Gain Feet' = DIVIDE([Activity Elevation Gain Feet], [Activities])
+	measure 'Average Elevation Gain' = DIVIDE([Elevation Gain], [Activities])
 		formatString: #,0
 		displayFolder: Elevation
 		lineageTag: 686da812-e711-46a2-bc1a-4cb99a777cb4
@@ -164,7 +164,7 @@ table measures_
 	/// Whole Activity Miles divided by Activity Moving Hours.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Uses aggregated distance and time rather than averaging activity speeds. Blank when the moving-hours denominator is zero.
-	measure 'Activity Average Speed mph' = DIVIDE([Whole Activity Miles], [Activity Moving Hours])
+	measure 'Average Speed' = DIVIDE([Whole Activity Miles], [Moving Time])
 		formatString: #,0.00
 		displayFolder: Performance
 		lineageTag: 45f70cc2-5619-4edb-916e-2851b47aafdf
@@ -172,7 +172,7 @@ table measures_
 	/// Activity Elevation Gain Feet divided by Whole Activity Miles.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Both inputs use full activity summaries. Blank when the mileage denominator is zero.
-	measure 'Activity Elevation Feet per Mile' = DIVIDE([Activity Elevation Gain Feet], [Whole Activity Miles])
+	measure 'Elevation Feet per Mile' = DIVIDE([Elevation Gain], [Whole Activity Miles])
 		formatString: #,0.00
 		displayFolder: Performance
 		lineageTag: 490d17a6-3dfc-4aac-bd88-c5daa240478c
@@ -196,7 +196,7 @@ table measures_
 	/// Count of Strava segment effort records in the selected scope.
 	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
 	/// Notes: Repeated traversals count as separate efforts. Does not require verified GPS-point memberships.
-	measure 'Segment Effort Count' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	measure 'Segment Efforts' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0
 		displayFolder: Segments
 		lineageTag: 762c0c38-d606-4f55-9bd7-c0c9b3aec3ab
@@ -204,7 +204,7 @@ table measures_
 	/// Sum of Strava segment-effort distances, in miles.
 	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
 	/// Notes: Repeated and overlapping efforts are additive. This can exceed the activity distance; use Miles in Selected Segments for linked-point union mileage.
-	measure 'Segment Effort Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	measure 'Segment Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: ec577024-1235-476c-a7b2-ce9609d9b6b4
@@ -361,7 +361,6 @@ table measures_
 			        NOT ISBLANK(dates[week_start_date]) && CALCULATE([Activities]) > 0
 			    )
 			), 0)
-
 		formatString: #,0
 		displayFolder: Consistency\Weeks
 		lineageTag: cdfa32e0-a7c1-4e47-b695-d332573b9ad7
@@ -401,7 +400,7 @@ table measures_
 	/// Distinct selected activities divided by active weeks.
 	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
 	/// Notes: An activity spanning weeks counts once in the activity numerator. Blank when no active weeks qualify.
-	measure 'Activities per Active Week' = DIVIDE([Activities], [Active Weeks])
+	measure 'Activities per Week' = DIVIDE([Activities], [Active Weeks])
 		formatString: 0.00
 		displayFolder: Consistency\Weeks
 		lineageTag: 7dfe1985-85f3-4684-b7ad-799708aeb0a4
@@ -478,7 +477,7 @@ table measures_
 	/// Distinct selected activities divided by active reporting dates.
 	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
 	/// Notes: A multi-day activity contributes once to the activity numerator but may activate several dates. Blank when no active dates qualify.
-	measure 'Activities per Active Day' = DIVIDE([Activities], [Active Days])
+	measure 'Activities per Day' = DIVIDE([Activities], [Active Days])
 		formatString: 0.00
 		displayFolder: Consistency\Days
 		lineageTag: 6ade024e-7f92-49d6-b938-90d972c8ccdb

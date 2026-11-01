@@ -66,6 +66,7 @@ table dates
 		sourceColumn: week_start_date
 
 		annotation UnderlyingDateTimeDataType = Date
+
 		annotation SummarizationSetBy = User
 
 	column week_end_date
@@ -76,6 +77,7 @@ table dates
 		sourceColumn: week_end_date
 
 		annotation UnderlyingDateTimeDataType = Date
+
 		annotation SummarizationSetBy = User
 
 	partition dates = m
