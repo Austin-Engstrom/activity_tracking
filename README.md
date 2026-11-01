@@ -38,3 +38,6 @@ local active days and slicer-aware consecutive-week streaks.
 
 All dataset measures include [native Power BI descriptions](docs/measure-descriptions.md)
 with their meaning, filter behavior and interpretation notes.
+
+[Selection field parameters](docs/selection-parameters.md) provide dynamic measure
+and dimension choices for visuals without changing the star-schema relationships.

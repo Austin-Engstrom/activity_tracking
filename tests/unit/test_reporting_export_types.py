@@ -37,7 +37,7 @@ class ReportingTypeTests(unittest.TestCase):
         seen=set()
         for path in model.glob('*.tmdl'):
             content=path.read_text()
-            if path.stem == 'measures_':
+            if re.search(r'partition \w+ = calculated',content):
                 continue
             view=re.search(r'ExportFolder & "(view_\w+).parquet"',content)[1]
             seen.add(view)
@@ -52,7 +52,7 @@ class ReportingTypeTests(unittest.TestCase):
         base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition'
         measures=(base/'tables/measures_.tmdl').read_text()
         names=[a or b for a,b in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*))",measures)]
-        self.assertTrue({'Miles','Point Moving Hours','Activity Moving Hours','Activities',
+        self.assertTrue({'Miles','Point Moving Hours','Moving Time','Activities',
                                     'Miles in Selected Segments','Whole Activity Miles'}.issubset(set(names)))
         self.assertEqual(len(names),len(set(names)))
         self.assertEqual(measures.count('displayFolder:'),len(names))
