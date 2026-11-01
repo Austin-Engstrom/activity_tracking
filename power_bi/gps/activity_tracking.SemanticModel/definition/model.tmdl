@@ -31,3 +31,6 @@ ref table component_services
 ref table component_service_status
 ref table data_dictionary
 
+
+ref table segment_effort_achievements
+ref table segment_personal_bests

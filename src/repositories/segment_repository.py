@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from src.models.segment import Segment
 from src.models.segment_effort import SegmentEffort
+from src.models.segment_record_metadata import SegmentEffortRecordMetadata
 
 
 @dataclass
@@ -82,6 +83,8 @@ class SegmentRepository:
         )
 
         if stale_effort_ids:
+            self.session.execute(delete(SegmentEffortRecordMetadata).where(
+                SegmentEffortRecordMetadata.segment_effort_id.in_(stale_effort_ids)))
             self.session.execute(
                 delete(SegmentEffort).where(
                     SegmentEffort.segment_effort_id.in_(

@@ -21,6 +21,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXPORT_DIRECTORY = PROJECT_ROOT / "exports" / "power_bi"
 
 POWER_BI_VIEWS = [
+    "view_segment_effort_achievement",
+    "view_segment_personal_best",
     "view_gear_components",
     "view_component_services",
     "view_component_service_status",
