@@ -1,0 +1,103 @@
+/// Field parameter for choosing explicit measures in visuals. Each selection uses the original measure calculation and format.
+table select_measures
+	lineageTag: bb13c759-5aa4-4cad-9cd5-681f6e08c7d3
+
+	/// Slicer choices and dynamic visual field. Uses field-parameter metadata on the hidden fields column.
+	column select_measures
+		dataType: string
+		lineageTag: c5e8e473-0bf9-43a3-b5e8-666c55c1e14d
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: sort_order
+
+		relatedColumnDetails
+			groupByColumn: fields
+
+	/// Fully qualified model field reference used by Power BI to expand the parameter.
+	column fields
+		dataType: string
+		isHidden
+		lineageTag: ae861f97-b09d-442b-9842-fc28ae757088
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: sort_order
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	/// Stable display order for parameter choices.
+	column sort_order
+		dataType: int64
+		isHidden
+		lineageTag: 0c0a9949-7cd9-4401-ba5f-ed5030c00f14
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition select_measures = calculated
+		mode: import
+		source =
+				{
+				    ("Miles", NAMEOF('measures_'[Miles]), 0),
+				    ("Point Moving Hours", NAMEOF('measures_'[Point Moving Hours]), 1),
+				    ("Activities", NAMEOF('measures_'[Activities]), 2),
+				    ("Miles in Selected Segments", NAMEOF('measures_'[Miles in Selected Segments]), 3),
+				    ("Whole Activity Miles", NAMEOF('measures_'[Whole Activity Miles]), 4),
+				    ("Moving Time", NAMEOF('measures_'[Moving Time]), 5),
+				    ("GPS Points", NAMEOF('measures_'[GPS Points]), 6),
+				    ("Point Minus Activity Miles", NAMEOF('measures_'[Point Minus Activity Miles]), 7),
+				    ("Point Minus Activity Moving Hours", NAMEOF('measures_'[Point Minus Activity Moving Hours]), 8),
+				    ("UTC Fallback Points", NAMEOF('measures_'[UTC Fallback Points]), 9),
+				    ("Recording Gap Intervals", NAMEOF('measures_'[Recording Gap Intervals]), 10),
+				    ("Unmatched System Miles", NAMEOF('measures_'[Unmatched System Miles]), 11),
+				    ("Unmatched Trail Miles", NAMEOF('measures_'[Unmatched Trail Miles]), 12),
+				    ("Segment Linked Points", NAMEOF('measures_'[Segment Linked Points]), 13),
+				    ("Activity Time", NAMEOF('measures_'[Activity Time]), 14),
+				    ("Elevation Gain", NAMEOF('measures_'[Elevation Gain]), 15),
+				    ("Calories", NAMEOF('measures_'[Calories]), 16),
+				    ("Average Activity Miles", NAMEOF('measures_'[Average Activity Miles]), 17),
+				    ("Average Moving Time", NAMEOF('measures_'[Average Moving Time]), 18),
+				    ("Average Elevation Gain", NAMEOF('measures_'[Average Elevation Gain]), 19),
+				    ("Average Speed", NAMEOF('measures_'[Average Speed]), 20),
+				    ("Elevation Feet per Mile", NAMEOF('measures_'[Elevation Feet per Mile]), 21),
+				    ("Activity Days", NAMEOF('measures_'[Activity Days]), 22),
+				    ("Point Miles per Activity", NAMEOF('measures_'[Point Miles per Activity]), 23),
+				    ("Segment Efforts", NAMEOF('measures_'[Segment Efforts]), 24),
+				    ("Segment Miles", NAMEOF('measures_'[Segment Miles]), 25),
+				    ("Segment Effort Moving Hours", NAMEOF('measures_'[Segment Effort Moving Hours]), 26),
+				    ("Segments Ridden", NAMEOF('measures_'[Segments Ridden]), 27),
+				    ("Linked Segment Effort Count", NAMEOF('measures_'[Linked Segment Effort Count]), 28),
+				    ("Matched Trail Activities", NAMEOF('measures_'[Matched Trail Activities]), 29),
+				    ("Matched Trail Miles", NAMEOF('measures_'[Matched Trail Miles]), 30),
+				    ("Trails Visited", NAMEOF('measures_'[Trails Visited]), 31),
+				    ("Visited Trail Length Miles", NAMEOF('measures_'[Visited Trail Length Miles]), 32),
+				    ("Matched System Miles", NAMEOF('measures_'[Matched System Miles]), 33),
+				    ("Trail Systems Visited", NAMEOF('measures_'[Trail Systems Visited]), 34),
+				    ("Trail Match %", NAMEOF('measures_'[Trail Match %]), 35),
+				    ("System Match %", NAMEOF('measures_'[System Match %]), 36),
+				    ("Segments Associated", NAMEOF('measures_'[Segments Associated]), 37),
+				    ("Associated Trails", NAMEOF('measures_'[Associated Trails]), 38),
+				    ("Associated Trail Systems", NAMEOF('measures_'[Associated Trail Systems]), 39),
+				    ("Observed Segment Association Miles", NAMEOF('measures_'[Observed Segment Association Miles]), 40),
+				    ("Weeks in Selection", NAMEOF('measures_'[Weeks in Selection]), 41),
+				    ("Active Weeks", NAMEOF('measures_'[Active Weeks]), 42),
+				    ("Inactive Weeks", NAMEOF('measures_'[Inactive Weeks]), 43),
+				    ("Active Week %", NAMEOF('measures_'[Active Week %]), 44),
+				    ("Active Days per Week", NAMEOF('measures_'[Active Days per Week]), 45),
+				    ("Active Days per Active Week", NAMEOF('measures_'[Active Days per Active Week]), 46),
+				    ("Activities per Week", NAMEOF('measures_'[Activities per Week]), 47),
+				    ("Longest Active Week Streak", NAMEOF('measures_'[Longest Active Week Streak]), 48),
+				    ("Longest Active Week Streak All Dates", NAMEOF('measures_'[Longest Active Week Streak All Dates]), 49),
+				    ("Active Days", NAMEOF('measures_'[Active Days]), 50),
+				    ("Days in Selection", NAMEOF('measures_'[Days in Selection]), 51),
+				    ("Inactive Days", NAMEOF('measures_'[Inactive Days]), 52),
+				    ("Active Day %", NAMEOF('measures_'[Active Day %]), 53),
+				    ("Activities per Day", NAMEOF('measures_'[Activities per Day]), 54),
+				    ("Point Miles per Active Day", NAMEOF('measures_'[Point Miles per Active Day]), 55),
+				    ("Point Moving Hours per Active Day", NAMEOF('measures_'[Point Moving Hours per Active Day]), 56),
+				    ("Longest Active Day Streak", NAMEOF('measures_'[Longest Active Day Streak]), 57),
+				    ("Longest Active Day Streak All Dates", NAMEOF('measures_'[Longest Active Day Streak All Dates]), 58)
+				}
+
