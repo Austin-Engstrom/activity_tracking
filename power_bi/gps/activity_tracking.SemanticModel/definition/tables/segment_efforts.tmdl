@@ -14,8 +14,8 @@ table segment_efforts
 	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: cee43e0b-fd17-43b2-801b-16a20a553c87
 		summarizeBy: none
 		sourceColumn: activity_key
@@ -25,8 +25,8 @@ table segment_efforts
 	/// Segment key; source identifier or relationship key, not a measure.
 	column segment_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 147cbc47-925d-4e1c-9996-49f904d20a96
 		summarizeBy: none
 		sourceColumn: segment_key

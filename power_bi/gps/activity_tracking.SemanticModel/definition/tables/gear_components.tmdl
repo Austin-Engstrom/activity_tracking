@@ -5,6 +5,7 @@ table gear_components
 	column component_key
 		dataType: int64
 		formatString: 0
+		lineageTag: e67f17ea-2d4b-4852-af3f-22a2501874d3
 		summarizeBy: none
 		sourceColumn: component_key
 
@@ -14,6 +15,7 @@ table gear_components
 	column gear_key
 		dataType: string
 		isHidden
+		lineageTag: fc03b202-29c7-43bf-8910-a7cd0e8c2106
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -22,18 +24,21 @@ table gear_components
 	/// Tracked component category, such as fork or chain.
 	column component_type
 		dataType: string
+		lineageTag: f9628507-d979-49e7-940e-76779a25d0f8
 		summarizeBy: none
 		sourceColumn: component_type
 
 	/// Component manufacturer as entered in the maintenance catalog.
 	column manufacturer
 		dataType: string
+		lineageTag: 55f8c00e-1b99-41fc-b751-f073d9fcc35d
 		summarizeBy: none
 		sourceColumn: manufacturer
 
 	/// Component model as entered in the maintenance catalog.
 	column model
 		dataType: string
+		lineageTag: 987c2af2-0680-4b3d-8a7d-c2707a512d1a
 		summarizeBy: none
 		sourceColumn: model
 
@@ -41,6 +46,7 @@ table gear_components
 	column installed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
+		lineageTag: 2208f000-70e5-482b-92e5-0f1a122c6944
 		summarizeBy: none
 		sourceColumn: installed_at
 
@@ -48,12 +54,14 @@ table gear_components
 	column removed_at
 		dataType: dateTime
 		formatString: yyyy-mm-dd
+		lineageTag: 43be7bd8-8bab-4c46-972c-cb563854d11c
 		summarizeBy: none
 		sourceColumn: removed_at
 
 	/// Schedule unit: hours or miles. Determines which usage total drives status.
 	column service_interval_type
 		dataType: string
+		lineageTag: d4312b22-9c05-4e31-8cb8-648ef251545a
 		summarizeBy: none
 		sourceColumn: service_interval_type
 
@@ -61,12 +69,14 @@ table gear_components
 	column service_interval_value
 		dataType: double
 		formatString: #,0.00
+		lineageTag: bab65cdc-fc57-49b4-be45-2ad384b12257
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
 	/// User-entered notes for this component or service event at the table row grain.
 	column notes
 		dataType: string
+		lineageTag: 417a6cf8-0018-4d59-8471-7dbec71feb20
 		summarizeBy: none
 		sourceColumn: notes
 
@@ -78,3 +88,4 @@ table gear_components
 				    Typed = Table.TransformColumnTypes(Source, {{"component_key", Int64.Type}, {"gear_key", type text}, {"component_type", type text}, {"manufacturer", type text}, {"model", type text}, {"installed_at", type datetime}, {"removed_at", type datetime}, {"service_interval_type", type text}, {"service_interval_value", type number}, {"notes", type text}})
 				in
 				    Typed
+

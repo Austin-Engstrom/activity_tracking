@@ -4,8 +4,9 @@ table component_service_status
 	/// Stable component identifier linking gear_components, service events and current service status; do not sum.
 	column component_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: 0693ad24-0f82-4a26-aced-f740325bede1
 		summarizeBy: none
 		sourceColumn: component_key
 
@@ -14,8 +15,9 @@ table component_service_status
 	/// Original component identifier; same value as component_key.
 	column component_id
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: d88ae3f0-d323-4473-b09c-f45a2b033528
 		summarizeBy: none
 		sourceColumn: component_id
 
@@ -25,6 +27,7 @@ table component_service_status
 	column gear_key
 		dataType: string
 		isHidden
+		lineageTag: 0d4b6617-83bc-461c-bf64-6990d59fea92
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -34,6 +37,7 @@ table component_service_status
 	column gear_name
 		dataType: string
 		isHidden
+		lineageTag: 9189c1f8-65e0-4944-9779-17a978a4d049
 		summarizeBy: none
 		sourceColumn: gear_name
 
@@ -41,6 +45,7 @@ table component_service_status
 	column component_type
 		dataType: string
 		isHidden
+		lineageTag: 3861b52d-edf3-4567-b465-faa18bc311b5
 		summarizeBy: none
 		sourceColumn: component_type
 
@@ -48,6 +53,7 @@ table component_service_status
 	column manufacturer
 		dataType: string
 		isHidden
+		lineageTag: 4391f09a-49e7-469f-8513-590f41ffc2d0
 		summarizeBy: none
 		sourceColumn: manufacturer
 
@@ -55,28 +61,32 @@ table component_service_status
 	column model
 		dataType: string
 		isHidden
+		lineageTag: 56ad1c8b-15d6-4c2e-b5c2-ffe4bde5da9f
 		summarizeBy: none
 		sourceColumn: model
 
 	/// Display name: manufacturer plus model, falling back to component type when model is absent.
 	column component_name
 		dataType: string
+		lineageTag: 69f8c54e-bd76-41d0-a704-81ec47ebe12a
 		summarizeBy: none
 		sourceColumn: component_name
 
 	/// Component installation timestamp; usage before installation is excluded.
 	column installed_at
 		dataType: dateTime
-		formatString: yyyy-mm-dd
 		isHidden
+		formatString: yyyy-mm-dd
+		lineageTag: d434931a-6f0f-4368-b2c9-fda5c5fe65eb
 		summarizeBy: none
 		sourceColumn: installed_at
 
 	/// Component removal timestamp; NULL means currently installed. Usage after removal is excluded.
 	column removed_at
 		dataType: dateTime
-		formatString: yyyy-mm-dd
 		isHidden
+		formatString: yyyy-mm-dd
+		lineageTag: 875403ae-27af-4aac-8f25-80d3c10f1b77
 		summarizeBy: none
 		sourceColumn: removed_at
 
@@ -84,6 +94,7 @@ table component_service_status
 	column is_active
 		dataType: int64
 		formatString: 0
+		lineageTag: 4dcf9774-cec3-4e20-8e07-b8d2090813d9
 		summarizeBy: none
 		sourceColumn: is_active
 
@@ -91,22 +102,25 @@ table component_service_status
 	column service_interval_type
 		dataType: string
 		isHidden
+		lineageTag: 93d5c2eb-ab78-4fcc-bdf0-b84474f465d9
 		summarizeBy: none
 		sourceColumn: service_interval_type
 
 	/// Scheduled interval in service_interval_type units; NULL means no complete schedule.
 	column service_interval_value
 		dataType: double
-		formatString: #,0.00
 		isHidden
+		formatString: #,0.00
+		lineageTag: f7c38c2c-8597-4a29-949e-4493eed14936
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
 	/// Most recent eligible service-event identifier, ordered by service timestamp then ID; NULL if none.
 	column latest_service_id
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: 711bd7e8-45c7-4f35-9099-ce1eab7f9c14
 		summarizeBy: none
 		sourceColumn: latest_service_id
 
@@ -116,18 +130,21 @@ table component_service_status
 	column latest_service_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
+		lineageTag: 828152f8-3da3-4dbe-bf38-5e94ac7975f6
 		summarizeBy: none
 		sourceColumn: latest_service_date
 
 	/// Category of the most recent eligible service; NULL if no eligible service exists.
 	column latest_service_type
 		dataType: string
+		lineageTag: eab2336e-ec7c-4856-8777-7d053e5d8c04
 		summarizeBy: none
 		sourceColumn: latest_service_type
 
 	/// Notes on the most recent eligible service; NULL if unavailable.
 	column latest_service_notes
 		dataType: string
+		lineageTag: dcd3f061-ad55-41a8-8a98-f23dc8b1802a
 		summarizeBy: none
 		sourceColumn: latest_service_notes
 
@@ -135,14 +152,16 @@ table component_service_status
 	column service_baseline_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
+		lineageTag: a7ff8032-09dc-44c9-8251-9b498f94b37d
 		summarizeBy: none
 		sourceColumn: service_baseline_date
 
 	/// YYYYMMDD calendar key derived from service_baseline_date; not a local GPS point date.
 	column service_baseline_date_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
+		lineageTag: 3a44d649-9cf2-4402-bdb7-20c5f300d50b
 		summarizeBy: none
 		sourceColumn: service_baseline_date_key
 
@@ -152,6 +171,7 @@ table component_service_status
 	column hours_since_service
 		dataType: double
 		formatString: #,0.00
+		lineageTag: dbab9c2b-d07b-4a9f-a0d2-7e1ac23f2198
 		summarizeBy: none
 		sourceColumn: hours_since_service
 
@@ -159,6 +179,7 @@ table component_service_status
 	column miles_since_service
 		dataType: double
 		formatString: #,0.00
+		lineageTag: fbd54ac4-4c69-41ba-9a4e-4fbdecebf83b
 		summarizeBy: none
 		sourceColumn: miles_since_service
 
@@ -166,6 +187,7 @@ table component_service_status
 	column lifetime_component_hours
 		dataType: double
 		formatString: #,0.00
+		lineageTag: b97a4e3f-989f-4eae-b820-4bbc86a1cb02
 		summarizeBy: none
 		sourceColumn: lifetime_component_hours
 
@@ -173,6 +195,7 @@ table component_service_status
 	column lifetime_component_miles
 		dataType: double
 		formatString: #,0.00
+		lineageTag: 89b75738-94fb-4dfb-a2c8-bf26088f00a1
 		summarizeBy: none
 		sourceColumn: lifetime_component_miles
 
@@ -180,6 +203,7 @@ table component_service_status
 	column usage_since_service
 		dataType: double
 		formatString: #,0.00
+		lineageTag: f5ede8fe-0e1e-4ce9-9433-1ef82901a3bf
 		summarizeBy: none
 		sourceColumn: usage_since_service
 
@@ -187,6 +211,7 @@ table component_service_status
 	column usage_remaining
 		dataType: double
 		formatString: #,0.00
+		lineageTag: 6ed82476-7956-4ede-85c8-15fe5872e225
 		summarizeBy: none
 		sourceColumn: usage_remaining
 
@@ -194,6 +219,7 @@ table component_service_status
 	column usage_overdue
 		dataType: double
 		formatString: #,0.00
+		lineageTag: 7a92ff88-c8bf-46e9-a590-b0ff15c3631b
 		summarizeBy: none
 		sourceColumn: usage_overdue
 
@@ -201,6 +227,7 @@ table component_service_status
 	column service_interval_percent
 		dataType: double
 		formatString: 0.0\%
+		lineageTag: 197e011c-55a0-4921-9046-b683d34385dc
 		summarizeBy: none
 		sourceColumn: service_interval_percent
 
@@ -208,6 +235,7 @@ table component_service_status
 	column service_interval_remaining_percent
 		dataType: double
 		formatString: 0.0%
+		lineageTag: abea0bab-b5a5-4036-ba2d-9b32920f9289
 		summarizeBy: none
 		sourceColumn: service_interval_remaining_percent
 
@@ -215,12 +243,14 @@ table component_service_status
 	column service_interval_remaining
 		dataType: double
 		formatString: #,0.00
+		lineageTag: ee5a1c8f-5cb1-429b-982b-d6dfb357edbc
 		summarizeBy: none
 		sourceColumn: service_interval_remaining
 
 	/// Inactive if removed; No Schedule if type/value missing; Due at 100% usage; Due Soon at 80%; otherwise Current.
 	column service_status
 		dataType: string
+		lineageTag: fb007134-8e6d-4a36-95b6-f9f2aa76092d
 		summarizeBy: none
 		sourceColumn: service_status
 
@@ -228,6 +258,7 @@ table component_service_status
 	column component_notes
 		dataType: string
 		isHidden
+		lineageTag: fc1aedef-422c-4073-8cf5-09a05869d7be
 		summarizeBy: none
 		sourceColumn: component_notes
 
@@ -239,3 +270,4 @@ table component_service_status
 				    Typed = Table.TransformColumnTypes(Source, {{"component_key", Int64.Type}, {"component_id", Int64.Type}, {"gear_key", type text}, {"gear_name", type text}, {"component_type", type text}, {"manufacturer", type text}, {"model", type text}, {"component_name", type text}, {"installed_at", type datetime}, {"removed_at", type datetime}, {"is_active", Int64.Type}, {"service_interval_type", type text}, {"service_interval_value", type number}, {"latest_service_id", Int64.Type}, {"latest_service_date", type datetime}, {"latest_service_type", type text}, {"latest_service_notes", type text}, {"service_baseline_date", type datetime}, {"service_baseline_date_key", Int64.Type}, {"hours_since_service", type number}, {"miles_since_service", type number}, {"lifetime_component_hours", type number}, {"lifetime_component_miles", type number}, {"usage_since_service", type number}, {"usage_remaining", type number}, {"usage_overdue", type number}, {"service_interval_percent", type number}, {"service_interval_remaining_percent", type number}, {"service_interval_remaining", type number}, {"service_status", type text}, {"component_notes", type text}})
 				in
 				    Typed
+

@@ -22,14 +22,17 @@ table select_measures
 		sourceColumn: [Value2]
 		sortByColumn: sort_order
 
-		extendedProperty ParameterMetadata = {"version":3,"kind":2}
-			type: json
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
 
 	/// Stable display order for parameter choices.
 	column sort_order
 		dataType: int64
-		formatString: #,0
 		isHidden
+		formatString: #,0
 		lineageTag: 0c0a9949-7cd9-4401-ba5f-ed5030c00f14
 		summarizeBy: none
 		sourceColumn: [Value3]
@@ -103,3 +106,4 @@ table select_measures
 				    ("Next Service Remaining", NAMEOF('measures_'[Next Service Remaining]), 62),
 				    ("Activity URL", NAMEOF('measures_'[Activity URL]), 63)
 				}
+

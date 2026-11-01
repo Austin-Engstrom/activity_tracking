@@ -20,7 +20,7 @@ table data_dictionary
 		summarizeBy: none
 		sourceColumn: Object Name
 
-	column 'Description'
+	column Description
 		dataType: string
 		lineageTag: d3a5ec5c-1dcd-4b1a-89a9-0f6c89ce8213
 		summarizeBy: none
@@ -319,3 +319,4 @@ table data_dictionary
 				)
 
 	annotation PBI_ResultType = Table
+

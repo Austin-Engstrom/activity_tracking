@@ -14,8 +14,8 @@ table activity_points
 	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 146543e1-fcad-4d73-8b40-3b1060b4f905
 		summarizeBy: none
 		sourceColumn: activity_key
@@ -25,8 +25,8 @@ table activity_points
 	/// Activity id; source identifier or relationship key, not a measure.
 	column activity_id
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 18ce8da3-eb12-4084-a722-88ccf7f265bc
 		summarizeBy: none
 		sourceColumn: activity_id
@@ -66,8 +66,8 @@ table activity_points
 	/// YYYYMMDD point-local calendar key (UTC when timezone metadata is missing).
 	column date_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 9dac86ec-6ebc-4f2c-918c-b2393518d987
 		summarizeBy: none
 		sourceColumn: date_key
@@ -77,8 +77,8 @@ table activity_points
 	/// Trail system key; source identifier or relationship key, not a measure.
 	column trail_system_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: a7cddc92-50cc-44d3-9187-aace73ac03fa
 		summarizeBy: none
 		sourceColumn: trail_system_key
@@ -88,8 +88,8 @@ table activity_points
 	/// Trail key; source identifier or relationship key, not a measure.
 	column trail_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 4286c468-0dd8-4ba5-8ef4-c7803d58ca51
 		summarizeBy: none
 		sourceColumn: trail_key

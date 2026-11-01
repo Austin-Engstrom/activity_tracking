@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json",
+  "version": "4.0",
+  "datasetReference": {
+    "byConnection": {
+      "connectionString": "Data Source=pbiazure://api.powerbi.com;initial catalog=e0ce806e-87fe-4ae2-88e2-d6bb38c7f29d;identity provider=\"https://login.microsoftonline.com/common, https://analysis.windows.net/powerbi/api, 7f67af8a-fedc-4b08-8b4e-37c4d127b6cf\";integrated security=ClaimsToken;semanticmodelid=e0ce806e-87fe-4ae2-88e2-d6bb38c7f29d;modelid=1234098"
+    }
+  }
+}
