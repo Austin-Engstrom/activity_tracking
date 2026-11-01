@@ -122,6 +122,8 @@ class CyclingReportTests(unittest.TestCase):
                 self.assertEqual([p['field']['Column']['Property'] for p in category],['year','month_name','week_start_date','date'])
                 self.assertEqual([p['active'] for p in category],[True,True,False,False])
                 self.assertEqual(q['sortDefinition']['sort'][0]['direction'],'Descending')
+                self.assertEqual(q['sortDefinition']['sort'][1]['field']['Column']['Property'],'month_name')
+                self.assertEqual(q['sortDefinition']['sort'][1]['direction'],'Ascending')
             if d['name']=='date_filter':
                 props=v['objects']['data'][0]['properties']
                 self.assertEqual(props['start']['expr']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")

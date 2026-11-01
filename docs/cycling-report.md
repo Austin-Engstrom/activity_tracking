@@ -91,3 +91,5 @@ The drill order is Year → Month name → Week (Monday start) → Day (full dat
 Year and Month are initially active to keep years distinct when displaying months.
 Weeks crossing month boundaries appear under both months with only that month's
 selected dates; the weekly start date can fall in the prior month.
+
+Month-name chart axes display January through December, using the model month_number sort; years remain newest first. This overrides descending date order at the month level.
