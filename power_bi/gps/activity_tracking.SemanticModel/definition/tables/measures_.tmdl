@@ -247,6 +247,88 @@ table measures_
 		displayFolder: Segments\Associations
 		lineageTag: d9ca6283-4e21-46d0-87c2-de88fcdb3e56
 
+	/// Calendar weeks touched by the selected modeled dates, including inactive and partial weeks.
+	measure 'Weeks in Selection' = COALESCE(COUNTROWS(FILTER(VALUES(dates[week_start_date]), NOT ISBLANK(dates[week_start_date]))), 0)
+		formatString: #,0
+		displayFolder: Consistency
+		lineageTag: 2205c7e0-9deb-4f4a-ac52-f19da36b5d09
+
+	/// Monday-Sunday local weeks containing at least one selected GPS activity point. Respects the date slicer and other point filters.
+	measure 'Active Weeks' =
+			COALESCE(COUNTROWS(
+			    FILTER(
+			        VALUES(dates[week_start_date]),
+			        NOT ISBLANK(dates[week_start_date]) && CALCULATE([Activities]) > 0
+			    )
+			), 0)
+
+		formatString: #,0
+		displayFolder: Consistency
+		lineageTag: cdfa32e0-a7c1-4e47-b695-d332573b9ad7
+
+	/// Selected calendar weeks with no qualifying GPS activity points.
+	measure 'Inactive Weeks' = [Weeks in Selection] - [Active Weeks]
+		formatString: #,0
+		displayFolder: Consistency
+		lineageTag: af44923a-6260-4cad-8a7e-e8eaa8e625ef
+
+	/// Share of selected modeled calendar weeks with activity. Partial boundary weeks count as weeks.
+	measure 'Active Week %' = DIVIDE([Active Weeks], [Weeks in Selection])
+		formatString: 0.0%
+		displayFolder: Consistency
+		lineageTag: 4c55f24f-f67e-449b-9f66-4464a551ff76
+
+	/// Average selected active days per selected calendar week, including inactive weeks. On week rows this is the active-day count.
+	measure 'Active Days per Week' = DIVIDE(COALESCE([Activity Days], 0), [Weeks in Selection])
+		formatString: 0.00
+		displayFolder: Consistency
+		lineageTag: a17d12a2-e1bd-4b1c-80cb-df580f4e4dff
+
+	/// Average selected active days across weeks that contain activity; inactive weeks are excluded.
+	measure 'Active Days per Active Week' = DIVIDE([Activity Days], [Active Weeks])
+		formatString: 0.00
+		displayFolder: Consistency
+		lineageTag: 5c913f17-5f97-4686-8e1e-ee421c130283
+
+	/// Distinct selected activities divided by active weeks. Activities spanning week boundaries are counted once in the numerator.
+	measure 'Activities per Active Week' = DIVIDE([Activities], [Active Weeks])
+		formatString: 0.00
+		displayFolder: Consistency
+		lineageTag: 7dfe1985-85f3-4684-b7ad-799708aeb0a4
+
+	/// Longest consecutive Monday-Sunday active-week run within the date selection. Missing weeks break the streak, including omitted weeks in disjoint selections.
+	measure 'Longest Active Week Streak' =
+			VAR ActiveWeeks =
+			    FILTER(
+			        VALUES(dates[week_start_date]),
+			        NOT ISBLANK(dates[week_start_date]) && CALCULATE([Activities]) > 0
+			    )
+			VAR WeekGroups =
+			    ADDCOLUMNS(
+			        ActiveWeeks,
+			        "__WeekGroup",
+			            INT(DIVIDE(dates[week_start_date] - DATE(1900, 1, 1), 7))
+			                - RANKX(ActiveWeeks, dates[week_start_date], , ASC, DENSE)
+			    )
+			RETURN
+			    COALESCE(
+			        MAXX(
+			            WeekGroups,
+			            VAR CurrentGroup = [__WeekGroup]
+			            RETURN COUNTROWS(FILTER(WeekGroups, [__WeekGroup] = CurrentGroup))
+			        ),
+			        0
+			    )
+		formatString: #,0
+		displayFolder: Consistency
+		lineageTag: 63eb40ad-350b-49de-afaf-e35f0d1b5b89
+
+	/// Longest active-week streak ignoring date-dimension filters while preserving other filters such as gear and activity type.
+	measure 'Longest Active Week Streak All Dates' = CALCULATE([Longest Active Week Streak], REMOVEFILTERS(dates))
+		formatString: #,0
+		displayFolder: Consistency
+		lineageTag: 76f74359-cab6-481b-90d1-5e28298cfb43
+
 	column Placeholder
 		dataType: int64
 		isHidden

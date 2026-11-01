@@ -177,7 +177,7 @@ def export_view(
             arrow_types = {'string': pa.string(), 'int64': pa.int64(),
                            'double': pa.float64(), 'dateTime': pa.timestamp('us', tz='UTC')}
             schema = pa.schema([
-                pa.field(name, pa.date32() if name in {'date','activity_date'} else arrow_types[columns[name]])
+                pa.field(name, pa.date32() if (name == 'date' or (name.endswith('_date') and name != 'start_date')) else arrow_types[columns[name]])
                 for name in dataframe.columns
             ])
             table = pa.Table.from_pandas(dataframe, schema=schema, preserve_index=False, safe=True)
@@ -207,7 +207,7 @@ def export_view(
     return result
 
 
-def print_header() -> None:
+def print_header(view_count: int | None = None) -> None:
     """Print the Power BI export header."""
 
     print()
@@ -217,7 +217,7 @@ def print_header() -> None:
     print()
     print(f"Output directory: {EXPORT_DIRECTORY}")
     print(f"Compression:      {PARQUET_COMPRESSION}")
-    print(f"Views selected:   {len(POWER_BI_VIEWS)}")
+    print(f"Views selected:   {len(POWER_BI_VIEWS) if view_count is None else view_count}")
     print()
 
 
@@ -297,6 +297,7 @@ def print_summary(
 def run(
     exit_on_failure: bool = True,
     include_legacy: bool = False,
+    views: list[str] | None = None,
 ) -> list[ExportResult]:
     """Export all approved Power BI reporting views."""
 
@@ -307,14 +308,17 @@ def run(
         exist_ok=True,
     )
 
-    print_header()
+    allowed_views = POWER_BI_VIEWS + (LEGACY_VIEWS if include_legacy else [])
+    selected_views = list(dict.fromkeys(views)) if views is not None else allowed_views
+    if not selected_views or any(view not in allowed_views for view in selected_views):
+        raise ValueError('Select known reporting views; use include_legacy for legacy exports')
+    print_header(len(selected_views))
 
     results: list[ExportResult] = []
 
     with SessionLocal() as session:
         connection = session.connection()
 
-        selected_views = POWER_BI_VIEWS + (LEGACY_VIEWS if include_legacy else [])
         for view_name in selected_views:
             result = export_view(
                 connection=connection,
@@ -343,4 +347,10 @@ def run(
     return results
 
 if __name__ == "__main__":
-    run()
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--include-legacy',action='store_true')
+    parser.add_argument('--views',nargs='+',choices=POWER_BI_VIEWS+LEGACY_VIEWS,
+                        help='Export only selected views; omit for the full dataset')
+    args=parser.parse_args()
+    run(include_legacy=args.include_legacy,views=args.views)
