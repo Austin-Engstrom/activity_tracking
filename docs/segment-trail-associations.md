@@ -149,3 +149,26 @@ Do not treat catalog segment coverage as spatial matching accuracy. Complete
 verification where useful, inspect missing geometry, and review ambiguous routes
 before widening trail tolerances. Wider tolerances can incorrectly assign parallel
 trails. SQL work tables are connection-local TEMP tables and source data is unchanged.
+
+### Verify in coverage-priority order
+
+Use the locally generated candidate CSV to choose higher-value verification reads:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.validate_point_reporting --verify-streams --limit 50 --candidate-file exports\validation\segment_coverage\verification_candidates.csv
+.\.venv\Scripts\python.exe -m src.tools.audit_segment_coverage
+```
+
+The verifier reads the candidate IDs in audit priority order, skips activities
+already verified, and puts never-attempted candidates ahead of previously failed
+attempts. Unknown IDs and activities without GPS points/segment efforts are skipped.
+Re-running the same command resumes eligible candidates; refresh the coverage audit
+periodically to update rankings. Without `--candidate-file`, the existing selection
+behavior is retained. Verification still requires exact original-array comparison;
+this option never relaxes alignment requirements or changes spatial tolerances.
+
+Every selected activity uses a Strava stream read. Respect the reported read
+capacity/rate-limit stop messages; the configured limit is a maximum batch size,
+not permission to exceed Strava quotas. Candidate counts overlap between rides and
+do not guarantee newly associated segments. Geometry missing from a system must
+be imported/normalized separately before named-trail assignments can improve there.
