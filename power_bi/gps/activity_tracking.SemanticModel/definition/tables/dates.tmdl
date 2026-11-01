@@ -95,6 +95,13 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// English calendar month name for the local reporting date, sorted chronologically by month_number. Use year above this level to distinguish history across years.
+	column month_name = FORMAT(dates[date], "MMMM", "en-US")
+		dataType: string
+		lineageTag: 50b64e07-8a64-40b6-8ba8-f03632fabe57
+		summarizeBy: none
+		sortByColumn: month_number
+
 	partition dates = m
 		mode: import
 		source =
