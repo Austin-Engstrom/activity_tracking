@@ -555,6 +555,21 @@ table measures_
 		displayFolder: Consistency\Days
 		lineageTag: 4b85d017-3208-4eb8-af98-99d51b7c7c45
 
+	/// Strava activity page URL for the single activity represented by the selected GPS points.
+	/// Filters: Follows activity rows and current GPS point filters, including date, sport, gear, trail and system. Segment-only selection does not filter ordinary points.
+	/// Notes: Blank when no activity or multiple activities qualify. Use the activity dimension ID in detail rows to distinguish duplicate names. Opening the link uses the viewer's Strava access and privacy permissions.
+	measure 'Activity URL' =
+			VAR ActivityId = SELECTEDVALUE(activity_points[activity_key])
+			RETURN
+			    IF(
+			        NOT ISBLANK(ActivityId),
+			        "https://www.strava.com/activities/" & FORMAT(ActivityId, "0"),
+			        BLANK()
+			    )
+		dataCategory: WebUrl
+		displayFolder: Activities
+		lineageTag: d085542a-b104-4a6f-b6f8-7250abb769d8
+
 	column Placeholder
 		dataType: int64
 		formatString: #,0

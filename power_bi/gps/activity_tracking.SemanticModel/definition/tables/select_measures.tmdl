@@ -100,5 +100,6 @@ table select_measures
 				    ("Service Interval Remaining %", NAMEOF('measures_'[Service Interval Remaining %]), 59),
 				    ("Service Interval Remaining", NAMEOF('measures_'[Service Interval Remaining]), 60),
 				    ("Service Interval Unit", NAMEOF('measures_'[Service Interval Unit]), 61),
-				    ("Next Service Remaining", NAMEOF('measures_'[Next Service Remaining]), 62)
+				    ("Next Service Remaining", NAMEOF('measures_'[Next Service Remaining]), 62),
+				    ("Activity URL", NAMEOF('measures_'[Activity URL]), 63)
 				}
