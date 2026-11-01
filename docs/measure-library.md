@@ -97,3 +97,30 @@ model metadata. No new Parquet export or database rebuild is required.
 Automated checks validate names, field/dependency references, cycles, display
 folders and existing exports/report bindings. DAX parsing, rendering and filter
 semantics still require these Desktop checks; Python tests are not a DAX engine.
+
+## Activity links to Strava
+
+`Activity URL` (Activities folder) returns
+`https://www.strava.com/activities/<activity_id>` when the current selected GPS
+points represent exactly one activity. For activity `20796076161`, the expected
+result is `https://www.strava.com/activities/20796076161`. FORMAT with `0` keeps
+identifiers free of grouping separators, decimals or scientific notation.
+
+The measure is categorized as Web URL. Add it to an activity-detail table beside
+`activities[activity_id]` and the activity name; enable URL icons in the table's
+format settings if desired. Alternatively use it as the Web URL conditional
+formatting field for the activity-name column. Duplicate names require the ID in
+the row context. Totals/multi-activity contexts and empty selections return blank;
+a total filtered to exactly one activity intentionally retains its link.
+
+The ID comes from selected points so local-date, sport, gear and route filters
+follow the reporting model. A segment slicer alone does not restrict ordinary point
+context. The URL opens the source page using the viewer's Strava permissions; it
+does not grant access to private activities or restore deleted activities.
+
+Reopen and refresh the GPS model, then republish the shared semantic model to expose
+the measure to connected reports. No ETL or Parquet re-export is required. The
+embedded dictionary includes its definition. In Desktop verify an individual
+activity link, a multi-activity total, an empty selection and duplicate-name rows;
+click a known link and confirm the activity ID matches. Repository tests do not
+execute DAX or verify browser navigation.
