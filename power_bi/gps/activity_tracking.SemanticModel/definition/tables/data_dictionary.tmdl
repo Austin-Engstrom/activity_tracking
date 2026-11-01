@@ -1,0 +1,92 @@
+/// Refresh-time catalog of native measure and analytical-column metadata. Disconnected from analytical tables.
+table data_dictionary
+	lineageTag: fc7aa662-9b3b-4c39-bc3b-c73066ad3d38
+
+	column 'Object Type'
+		dataType: string
+		lineageTag: 966f1f8a-cc4d-4135-a13e-c833cebda4a3
+		summarizeBy: none
+		sourceColumn: [Object Type]
+
+	column 'Table Name'
+		dataType: string
+		lineageTag: 36239002-219e-4d61-b42a-26935e9d67e8
+		summarizeBy: none
+		sourceColumn: [Table Name]
+
+	column 'Object Name'
+		dataType: string
+		lineageTag: 9fbd4990-0740-444d-8241-11ca0348f966
+		summarizeBy: none
+		sourceColumn: [Object Name]
+
+	column 'Description'
+		dataType: string
+		lineageTag: d3a5ec5c-1dcd-4b1a-89a9-0f6c89ce8213
+		summarizeBy: none
+		sourceColumn: [Description]
+
+	column 'Display Folder'
+		dataType: string
+		lineageTag: 17ae4e74-105b-4b57-8394-ac2db3529bb0
+		summarizeBy: none
+		sourceColumn: [Display Folder]
+
+	column 'Data Type'
+		dataType: string
+		lineageTag: 187cffe7-3d9e-4f58-8ab9-17bc500abca0
+		summarizeBy: none
+		sourceColumn: [Data Type]
+
+	column 'Format String'
+		dataType: string
+		lineageTag: f3b715d1-00fe-4ea5-89dc-5c20a310c7fc
+		summarizeBy: none
+		sourceColumn: [Format String]
+
+	column 'DAX Expression'
+		dataType: string
+		lineageTag: e3859563-2e7e-4283-bca6-9913a1d7765f
+		summarizeBy: none
+		sourceColumn: [DAX Expression]
+
+	column 'Is Hidden'
+		dataType: boolean
+		lineageTag: 979b165d-49d0-49f4-afe5-05cc3af4d9af
+		summarizeBy: none
+		sourceColumn: [Is Hidden]
+
+	partition data_dictionary = calculated
+		mode: import
+		source =
+				UNION (
+				    SELECTCOLUMNS (
+				        INFO.VIEW.MEASURES (),
+				        "Object Type", "Measure",
+				        "Table Name", [Table],
+				        "Object Name", [Name],
+				        "Description", [Description],
+				        "Display Folder", [DisplayFolder],
+				        "Data Type", [DataType],
+				        "Format String", [FormatString],
+				        "DAX Expression", [Expression],
+				        "Is Hidden", [IsHidden]
+				    ),
+				    SELECTCOLUMNS (
+				        FILTER (
+				            INFO.VIEW.COLUMNS (),
+				            [Table] IN { "activities", "activity_point_segments", "activity_points", "activity_types", "component_service_status", "component_services", "dates", "gear", "gear_components", "segment_efforts", "segment_trail_associations", "segments", "trail_systems", "trails" }
+				        ),
+				        "Object Type", "Column",
+				        "Table Name", [Table],
+				        "Object Name", [Name],
+				        "Description", [Description],
+				        "Display Folder", [DisplayFolder],
+				        "Data Type", [DataType],
+				        "Format String", [FormatString],
+				        "DAX Expression", [Expression],
+				        "Is Hidden", [IsHidden]
+				    )
+				)
+
+	annotation PBI_ResultType = Table

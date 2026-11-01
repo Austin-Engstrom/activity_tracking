@@ -1,6 +1,7 @@
 table trail_systems
 	lineageTag: 33d0a9dc-3da0-46f9-bb5a-fbed68669540
 
+	/// Trail system key; source identifier or relationship key, not a measure.
 	column trail_system_key
 		dataType: int64
 		formatString: 0
@@ -10,30 +11,35 @@ table trail_systems
 
 		annotation SummarizationSetBy = User
 
+	/// Catalog trail-system display name; use trail_system_key for identity.
 	column trail_system_name
 		dataType: string
 		lineageTag: 5735c9d2-63c1-41d7-bfec-cad612d27f7a
 		summarizeBy: none
 		sourceColumn: trail_system_name
 
+	/// Catalog/source city label for this entity; not inferred from selected points.
 	column city
 		dataType: string
 		lineageTag: c5a5e6d6-7e87-4835-9ef1-6c936195c330
 		summarizeBy: none
 		sourceColumn: city
 
+	/// Source segment state/region label.
 	column state
 		dataType: string
 		lineageTag: 0d8572bf-f7fa-4d5a-bcc1-fe7268fa43a1
 		summarizeBy: none
 		sourceColumn: state
 
+	/// Catalog/source country label for this entity.
 	column country
 		dataType: string
 		lineageTag: 144cc85d-1af0-48e1-b3d1-4a3d557c796d
 		summarizeBy: none
 		sourceColumn: country
 
+	/// Catalog system representative latitude in WGS84 decimal degrees; not a GPS fact sample.
 	column latitude
 		dataType: double
 		formatString: 0.000000
@@ -41,6 +47,7 @@ table trail_systems
 		summarizeBy: none
 		sourceColumn: latitude
 
+	/// Catalog system representative longitude in WGS84 decimal degrees; not a GPS fact sample.
 	column longitude
 		dataType: double
 		formatString: 0.000000
@@ -48,18 +55,21 @@ table trail_systems
 		summarizeBy: none
 		sourceColumn: longitude
 
+	/// Source free-text description for the row entity; may be missing.
 	column description
 		dataType: string
 		lineageTag: 93a5803c-20b4-4df9-b946-c9e356001262
 		summarizeBy: none
 		sourceColumn: description
 
+	/// Provenance label for the stored trail-system boundary.
 	column boundary_source
 		dataType: string
 		lineageTag: e4f17c28-1a9f-486c-9f93-2789fb549445
 		summarizeBy: none
 		sourceColumn: boundary_source
 
+	/// 1 confirmed boundary, 0 unconfirmed; only confirmed polygons assign points.
 	column boundary_confirmed
 		dataType: int64
 		formatString: 0
@@ -67,12 +77,14 @@ table trail_systems
 		summarizeBy: none
 		sourceColumn: boundary_confirmed
 
+	/// OpenStreetMap source element type associated with osm_element_id.
 	column osm_element_type
 		dataType: string
 		lineageTag: 2571dff4-5df1-4621-9cc6-b9490fac7b1f
 		summarizeBy: none
 		sourceColumn: osm_element_type
 
+	/// Source OpenStreetMap element identifier; interpret with osm_element_type.
 	column osm_element_id
 		dataType: int64
 		formatString: 0

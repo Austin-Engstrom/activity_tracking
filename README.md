@@ -42,6 +42,8 @@ with their meaning, filter behavior and interpretation notes.
 [Selection field parameters](docs/selection-parameters.md) provide dynamic measure
 and dimension choices for visuals without changing the star-schema relationships.
 
+[Data dictionary](docs/data-dictionary-pbi.md) exposes native measure and analytical column definitions, folders and DAX as reportable rows in the GPS model.
+
 ## Publishing and report building
 
 Start with the [publishing handoff and manual refresh runbook](docs/publishing-handoff.md),

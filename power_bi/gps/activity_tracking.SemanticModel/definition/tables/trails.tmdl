@@ -1,6 +1,7 @@
 table trails
 	lineageTag: 75bb23b1-212a-4a6b-aa2a-24f294fd4f44
 
+	/// Trail key; source identifier or relationship key, not a measure.
 	column trail_key
 		dataType: int64
 		formatString: 0
@@ -10,18 +11,21 @@ table trails
 
 		annotation SummarizationSetBy = User
 
+	/// Normalized trail display name; use trail_key for identity.
 	column trail_name
 		dataType: string
 		lineageTag: cf659fbf-50ae-49f2-8b89-3f122b25c716
 		summarizeBy: none
 		sourceColumn: trail_name
 
+	/// Trail name normalized for catalog matching/grouping.
 	column normalized_name
 		dataType: string
 		lineageTag: 4269dea8-6a7a-432c-b712-f81702949832
 		summarizeBy: none
 		sourceColumn: normalized_name
 
+	/// Full mapped trail catalog length in miles; not ridden distance.
 	column length_miles
 		dataType: double
 		formatString: #,0.00
@@ -29,24 +33,28 @@ table trails
 		summarizeBy: none
 		sourceColumn: length_miles
 
+	/// Catalog primary trail surface tag; source text, may be missing.
 	column primary_surface
 		dataType: string
 		lineageTag: 23db8e4e-cc2a-4a91-8972-bee3c15df056
 		summarizeBy: none
 		sourceColumn: primary_surface
 
+	/// Catalog bicycle-access tag; source text, not an access guarantee.
 	column bicycle_access
 		dataType: string
 		lineageTag: 42329d42-ef12-411b-aa46-5cccf90907f9
 		summarizeBy: none
 		sourceColumn: bicycle_access
 
+	/// Catalog mountain-bike difficulty tag; source classification, may be missing.
 	column mtb_scale
 		dataType: string
 		lineageTag: 1158ffd2-c3be-4096-8428-81e6217c89b1
 		summarizeBy: none
 		sourceColumn: mtb_scale
 
+	/// Catalog mountain-bike trail type tag; source classification, may be missing.
 	column mtb_type
 		dataType: string
 		lineageTag: b447443e-cfe8-4528-b58e-6f5eb8a77734

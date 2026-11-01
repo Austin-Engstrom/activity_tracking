@@ -1,6 +1,7 @@
 table dates
 	lineageTag: dd921200-6387-4dbe-9a46-9535174b3112
 
+	/// YYYYMMDD point-local calendar key (UTC when timezone metadata is missing).
 	column date_key
 		dataType: int64
 		formatString: 0
@@ -10,6 +11,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// Modeled calendar date spanning earliest through latest point date, including inactive dates.
 	column date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
@@ -19,6 +21,7 @@ table dates
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Calendar year of the modeled point date.
 	column year
 		dataType: int64
 		formatString: 0
@@ -28,6 +31,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// Calendar month number, January=1 through December=12.
 	column month_number
 		dataType: int64
 		formatString: 0
@@ -37,6 +41,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// Calendar quarter number, 1 through 4.
 	column quarter_number
 		dataType: int64
 		formatString: 0
@@ -46,6 +51,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// SQLite %W: Monday-based week 00–53; use week_start_date across years.
 	column week_number
 		dataType: int64
 		formatString: 0
@@ -55,6 +61,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// SQLite numbering: Sunday=0 through Saturday=6.
 	column day_of_week
 		dataType: int64
 		formatString: 0
@@ -64,6 +71,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// Monday of the containing local calendar week.
 	column week_start_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd
@@ -75,6 +83,7 @@ table dates
 
 		annotation SummarizationSetBy = User
 
+	/// Sunday of the containing local calendar week.
 	column week_end_date
 		dataType: dateTime
 		formatString: yyyy-mm-dd

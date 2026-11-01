@@ -1,6 +1,7 @@
 table activity_point_segments
 	lineageTag: 0c0faf44-ce50-464e-ba42-63835c3212d7
 
+	/// Stable activity/sample composite identifier; do not aggregate.
 	column activity_point_key
 		dataType: string
 		isHidden
@@ -10,6 +11,7 @@ table activity_point_segments
 
 		annotation SummarizationSetBy = User
 
+	/// Segment effort key; source identifier or relationship key, not a measure.
 	column segment_effort_key
 		dataType: int64
 		formatString: 0
@@ -20,6 +22,7 @@ table activity_point_segments
 
 		annotation SummarizationSetBy = User
 
+	/// Segment key; source identifier or relationship key, not a measure.
 	column segment_key
 		dataType: int64
 		formatString: 0
