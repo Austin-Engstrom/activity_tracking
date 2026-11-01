@@ -31,6 +31,7 @@ POWER_BI_VIEWS = [
     "view_trail_system",
     "view_point_segment_effort",
     "view_activity_point_segments",
+    "view_segment_trail_association",
 ]
 
 LEGACY_VIEWS = [

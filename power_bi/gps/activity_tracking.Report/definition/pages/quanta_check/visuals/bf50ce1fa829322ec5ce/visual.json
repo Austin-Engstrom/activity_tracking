@@ -61,6 +61,20 @@
               },
               "queryRef": "measures_.Miles Ridden",
               "nativeQueryRef": "Miles"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Segments Associated"
+                }
+              },
+              "queryRef": "measures_.Segment Association Count",
+              "nativeQueryRef": "Segments Associated"
             }
           ]
         }

@@ -14,7 +14,7 @@ class MeasureLibraryTests(unittest.TestCase):
     def setUp(self):
         self.columns={p.stem:set(re.findall(r'\n\tcolumn (\w+)',p.read_text())) for p in MODEL.glob('*.tmdl')}
         source=(MODEL/'measures_.tmdl').read_text()
-        self.measures=dict(re.findall(r"\n\tmeasure '([^']+)' =(.*?)(?=\n\tmeasure |\n\tcolumn |\Z)",source,re.S))
+        self.measures={quoted or plain: body for quoted,plain,body in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*)) =(.*?)(?=\n\tmeasure |\n\tcolumn |\Z)",source,re.S)}
 
     def test_all_measure_and_column_dependencies_exist(self):
         for name,body in self.measures.items():

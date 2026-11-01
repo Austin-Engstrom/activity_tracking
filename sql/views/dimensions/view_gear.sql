@@ -39,4 +39,9 @@ select
     , g.detail_loaded_at
     , g.created_at
     , g.updated_at
-from gear g;
+from gear g
+where exists (
+    select 1 from activities a
+    where a.gear_id = g.gear_id
+      and exists (select 1 from activity_points p where p.activity_id = a.activity_id)
+);

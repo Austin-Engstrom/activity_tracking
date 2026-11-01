@@ -203,6 +203,7 @@ class PointReportingTests(unittest.TestCase):
         self.streams([(0,0,0,41),(1,10,100,41)])
         self.c.exec_driver_sql("UPDATE activities SET start_date='2026-01-02 13:14:15' WHERE activity_id=1")
         self.c.exec_driver_sql("INSERT INTO segments(segment_id,name,climb_category,created_at,updated_at) VALUES (1,'climb',2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql("INSERT INTO segment_efforts(segment_effort_id,activity_id,segment_id,name,elapsed_time_seconds,moving_time_seconds,start_date,start_index,end_index,created_at,updated_at) VALUES (1,1,1,'effort',10,10,'2026-01-02',0,1,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
         rebuild_points(self.c);self.views()
         with TemporaryDirectory() as folder:
             for view in ['view_activity','view_segment']:
@@ -253,5 +254,65 @@ class PointReportingTests(unittest.TestCase):
         self.assertEqual(calls[0].kwargs['before'],calls[1].kwargs['before'])
         self.assertEqual(self.c.exec_driver_sql('SELECT exhausted FROM timezone_backfill_progress').scalar(),1)
         self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM point_reporting_metadata').scalar(),2)
+
+    def test_dimensions_and_efforts_exclude_non_gps_activity_members(self):
+        self.streams([(0,0,0,41),(1,10,100,41)])
+        self.c.exec_driver_sql("UPDATE activities SET gear_id='gps-bike' WHERE activity_id=1")
+        self.c.exec_driver_sql("UPDATE activities SET sport_type='WeightTraining',gear_id='indoor-bike' WHERE activity_id=2")
+        self.c.exec_driver_sql("INSERT INTO gear(gear_id,athlete_id,name,created_at,updated_at) VALUES ('gps-bike',1,'GPS bike',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),('indoor-bike',1,'Indoor bike',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),('unused',1,'Unused',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql("INSERT INTO segments(segment_id,name,created_at,updated_at) VALUES (1,'GPS segment',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(2,'No GPS segment',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(3,'Unused',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql("INSERT INTO segment_efforts(segment_effort_id,activity_id,segment_id,name,elapsed_time_seconds,moving_time_seconds,start_date,start_index,end_index,created_at,updated_at) VALUES (1,1,1,'gps',10,10,'2026-01-02',0,1,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),(2,2,2,'indoor',10,10,'2026-01-02',0,1,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        # A stream containing no coordinates does not make activity 2 eligible.
+        self.c.exec_driver_sql("INSERT INTO activity_streams(activity_id,point_index,time_seconds,distance_meters,created_at) VALUES (2,0,0,0,CURRENT_TIMESTAMP)")
+        rebuild_points(self.c);self.views()
+        for name in ['view_activity_type','view_gear']:
+            for statement in (ROOT/'sql/views/dimensions'/f'{name}.sql').read_text().split(';'):
+                if statement.strip():self.c.exec_driver_sql(statement)
+        self.assertEqual(self.c.exec_driver_sql('SELECT activity_id FROM view_activity').scalars().all(),[1])
+        self.assertEqual(self.c.exec_driver_sql('SELECT activity_type_key FROM view_activity_type').scalars().all(),['Ride'])
+        self.assertEqual(self.c.exec_driver_sql('SELECT gear_key FROM view_gear').scalars().all(),['gps-bike'])
+        self.assertEqual(self.c.exec_driver_sql('SELECT segment_key FROM view_segment').scalars().all(),[1])
+        self.assertEqual(self.c.exec_driver_sql('SELECT segment_effort_key FROM view_point_segment_effort').scalars().all(),[1])
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM activities').scalar(),2)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM gear').scalar(),3)
+        self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM segments').scalar(),3)
+        # Eligibility depends on GPS coordinates, not on a sport-type blacklist.
+        self.c.exec_driver_sql('UPDATE activity_streams SET latitude=41,longitude=-93 WHERE activity_id=2')
+        rebuild_points(self.c)
+        self.assertEqual(set(self.c.exec_driver_sql('SELECT activity_id FROM view_activity').scalars()),{1,2})
+        self.assertEqual(set(self.c.exec_driver_sql('SELECT activity_type_key FROM view_activity_type').scalars()),{'Ride','WeightTraining'})
+
+
+    def test_segment_coverage_distinguishes_verification_and_mapping_gaps(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from src.tools.audit_segment_coverage import run
+        self.streams([(i,i*10,i*25,41) for i in range(6)])
+        self.c.exec_driver_sql("INSERT INTO activity_streams(activity_id,point_index,time_seconds,distance_meters,latitude,longitude,created_at) VALUES (2,0,0,0,41,-93,CURRENT_TIMESTAMP)")
+        for key in range(1,6):
+            self.c.exec_driver_sql(f"INSERT INTO segments(segment_id,name,created_at,updated_at) VALUES ({key},'segment{key}',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        for key,activity,start,end in [(1,1,0,1),(2,1,2,3),(3,1,4,5),(4,1,999,1000),(5,2,0,0)]:
+            self.c.exec_driver_sql(f"INSERT INTO segment_efforts(segment_effort_id,activity_id,segment_id,name,elapsed_time_seconds,moving_time_seconds,start_date,start_index,end_index,created_at,updated_at) VALUES ({key},{activity},{key},'effort',10,10,'2026-01-02',{start},{end},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql('INSERT INTO stream_index_alignment VALUES (1,1)')
+        rebuild_points(self.c);self.views()
+        self.c.exec_driver_sql("UPDATE activity_points SET trail_key=NULL,match_method='boundary:ambiguous_trail' WHERE activity_id=1 AND point_index BETWEEN 2 AND 3")
+        self.c.exec_driver_sql("UPDATE activity_points SET trail_key=NULL,trail_system_key=NULL,match_method='unmatched' WHERE activity_id=1 AND point_index BETWEEN 4 AND 5")
+        self.c.commit()
+        with TemporaryDirectory() as folder:
+            with patch('src.tools.audit_segment_coverage.engine',self.engine):
+                summary=run(Path(folder),explain=True)
+            self.assertEqual(summary['segments'],5)
+            self.assertEqual(summary['coverage_status_counts'],{
+                'named_trail_observed':1,'system_only_observed':1,
+                'verified_points_outside_mapped_systems':1,
+                'verified_efforts_without_gps_memberships':1,
+                'awaiting_verification':1})
+            import csv
+            with (Path(folder)/'verification_candidates.csv').open(encoding='utf-8-sig') as f:
+                candidates=list(csv.DictReader(f))
+            self.assertEqual(len(candidates),1)
+            self.assertEqual(candidates[0]['activity_id'],'2')
+            self.assertEqual(candidates[0]['candidate_uncovered_segments'],'1')
+            self.assertEqual(summary['system_associated_segments'],2)
 
 if __name__=='__main__': unittest.main()
