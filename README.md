@@ -50,3 +50,8 @@ Start with the [publishing handoff and manual refresh runbook](docs/publishing-h
 [exported data dictionary](docs/data-dictionary.md) and [proposed report outline](docs/report-outline.md).
 The handoff includes a release validation record; Desktop and deployed-model checks
 remain manual.
+
+## Cycling report draft
+
+Open `power_bi/report/draft.pbip` for the five-page cycling report connected to the
+published semantic model. See the [layout and Desktop review notes](docs/cycling-report.md).
