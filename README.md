@@ -35,3 +35,6 @@ segment/trail/system bridge, local installation and Power BI usage.
 
 [Weekly consistency measures](docs/activity-consistency.md) cover active weeks,
 local active days and slicer-aware consecutive-week streaks.
+
+All dataset measures include [native Power BI descriptions](docs/measure-descriptions.md)
+with their meaning, filter behavior and interpretation notes.

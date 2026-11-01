@@ -1,161 +1,233 @@
 table measures_
 	lineageTag: c3bfe11a-d703-43a5-a420-2e52533331e3
 
+	/// Sum of eligible GPS interval distance, in miles.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Excludes recording gaps and invalid intervals under the current reporting rules. Can differ from Strava's activity total.
 	measure Miles = SUM(activity_points[incremental_distance_miles])
 		formatString: #,0.00
 		displayFolder: Distance
 		lineageTag: 96853276-ecd4-4ab7-8c99-b9fb0abb8de3
 
+	/// Hours from eligible GPS intervals whose ending sample is marked moving.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Excludes invalid/gap intervals. This is point-derived moving time, not Strava's activity-summary moving time.
 	measure 'Point Moving Hours' = DIVIDE(SUM(activity_points[moving_time_seconds]),3600)
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: b51f347f-a612-4bde-bfb9-5f766d1ba76b
 
+	/// Distinct activities represented by the selected GPS points.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: An activity counts once even with many points. Only GPS-eligible activities are included; no mileage minimum is required.
 	measure Activities = DISTINCTCOUNT(activity_points[activity_key])
 		formatString: #,0
 		displayFolder: Activities
 		lineageTag: 133fd6ca-f400-47cf-bf30-e61acb817db0
 
+	/// Miles from the union of GPS points linked to the selected segment efforts.
+	/// Filters: Follows segment selection and the current GPS point filters, including activity/date/trail selection.
+	/// Notes: Requires verified stream alignment. Overlapping segment rows may sum above the total because the total counts each linked point once. Interval mileage is assigned to its endpoint.
 	measure 'Miles in Selected Segments' = CALCULATE([Miles], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: 7da09358-43ce-41ef-8696-be28d71bc2c6
 
+	/// Sum of full Strava activity-summary distances, in miles.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Not mileage allocated to the selected trail or day. Source-view rounding and GPS exclusions can explain differences from Miles.
 	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance_miles]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Activities
 		lineageTag: 74879486-609b-4cf6-81fa-f291974c87fb
 
-	measure 'Activity Moving Hours' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+	/// Full Strava activity-summary moving time, in hours.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Not allocated to individual points or trails. Compare with Point Moving Hours to understand the two calculation grains.
+	measure 'Moving Time' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: 9ea5c44c-e78c-4764-ad42-56d18f4de9f3
 
+	/// Count of GPS sample rows in the current selection.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Counts samples, not miles, activities or segment memberships. Recording frequency varies between activities.
 	measure 'GPS Points' = COUNTROWS(activity_points)
 		formatString: #,0
 		displayFolder: Validation
 		lineageTag: d721abd9-3672-42bb-9d3f-3b132e729fe1
 
+	/// Miles minus Whole Activity Miles, in miles.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Negative means point mileage is lower. Partial route filters compare a route portion with full activity totals; a difference is not automatically an error.
 	measure 'Point Minus Activity Miles' = [Miles] - [Whole Activity Miles]
 		formatString: #,0.00;−#,0.00;0.00
 		displayFolder: Validation
 		lineageTag: 601202d3-6b48-449d-9bbd-1771de34ef3c
 
-	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Activity Moving Hours]
+	/// Point Moving Hours minus Activity Moving Hours.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Negative means point-derived hours are lower. Partial route filters and Strava processing can explain differences; this is not an automatic error flag.
+	measure 'Point Minus Activity Moving Hours' = [Point Moving Hours] - [Moving Time]
 		formatString: #,0.00;−#,0.00;0.00
 		displayFolder: Validation
 		lineageTag: 14159157-6f5f-4738-a08e-7c480b67eb90
 
+	/// Count of selected GPS points dated using UTC because activity timezone metadata is missing.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Zero means no selected points are flagged as UTC fallback. It does not independently verify that supplied timezone metadata is correct.
 	measure 'UTC Fallback Points' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[date_basis] = "utc_fallback")), 0)
 		formatString: #,0
 		displayFolder: Validation
 		lineageTag: 0118fe69-a225-4c0a-828d-7327c993b540
 
+	/// Count of selected GPS samples whose preceding interval is flagged as a recording gap.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: The rebuild threshold defaults to 60 seconds and can be configured. These interval distances/times are excluded from current point totals; missing data is not reconstructed.
 	measure 'Recording Gap Intervals' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(activity_points[quality_status] = "recording_gap")), 0)
 		formatString: #,0
 		displayFolder: Validation
 		lineageTag: f4c59bd9-331e-4544-8d42-59eef14771cb
 
+	/// Eligible selected point mileage with no assigned trail-system key.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Can legitimately include roads and places outside mapped boundaries. This measures unassigned mileage, not total distance missing from GPS.
 	measure 'Unmatched System Miles' = CALCULATE([Miles], KEEPFILTERS(ISBLANK(activity_points[trail_system_key])))
 		formatString: #,0.00
 		displayFolder: Validation
 		lineageTag: ddf8bd22-b20f-45fa-bf15-529b0e285646
 
+	/// Eligible selected point mileage with no confident trail assignment.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Includes ambiguous trails, points inside a system without a matched trail, and points outside mapped systems. Overlaps with Unmatched System Miles; do not add them together.
 	measure 'Unmatched Trail Miles' = CALCULATE([Miles], KEEPFILTERS(ISBLANK(activity_points[trail_key])))
 		formatString: #,0.00
 		displayFolder: Validation
 		lineageTag: 67c078ab-defc-459e-b126-ee57b389c8de
 
+	/// Distinct selected GPS points represented in verified segment-effort memberships.
+	/// Filters: Follows segment filters plus the current GPS point filters.
+	/// Notes: One point counts once even if linked to overlapping segments. Historical verification is partial; this count is not a percentage or an accuracy score.
 	measure 'Segment Linked Points' = CALCULATE([GPS Points], TREATAS(VALUES(activity_point_segments[activity_point_key]), activity_points[activity_point_key]))
 		formatString: #,0
 		displayFolder: Validation
 		lineageTag: b7681d52-0b2c-40bc-a9c6-a7115f872d85
 
-	/// Whole-activity elapsed time for activities represented by the selected GPS points.
-	measure 'Activity Elapsed Hours' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	/// Full Strava activity-summary elapsed time, in hours.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Includes elapsed time rather than only movement. Partial point selections still include full activity durations.
+	measure 'Activity Time' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: df8d2f65-a36f-497e-8511-701a937878d9
 
-	/// Strava elevation gain, counted once per point-selected activity. Partial routes select whole activities.
-	measure 'Activity Elevation Gain Feet' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	/// Full Strava activity-summary elevation gain, in feet.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Uses ascent reported by Strava, not the sum of point elevations or elevation allocated to a trail.
+	measure 'Elevation Gain' = CALCULATE(SUM(activities[total_elevation_gain_feet]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Elevation
 		lineageTag: d40e4943-13a7-4472-8165-0d0ec6e8fc17
 
-	/// Strava activity calories for point-selected activities. Missing calories remain blank.
-	measure 'Activity Calories' = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	/// Sum of available Strava activity-summary calories.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Missing calories remain unknown. Totals may be incomplete when only some activities have calorie values.
+	measure Calories = CALCULATE(SUM(activities[calories]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0
 		displayFolder: Activities
 		lineageTag: d2bb17ff-742e-4f3f-b889-fbac10abdb16
 
-	/// Mean full-activity distance across point-selected activities; not average point distance.
+	/// Whole Activity Miles divided by the distinct selected activity count.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: This averages full activities, not point distances or selected trail portions.
 	measure 'Average Activity Miles' = DIVIDE([Whole Activity Miles], [Activities])
 		formatString: #,0.00
 		displayFolder: Activities
 		lineageTag: 4a4b871e-409d-45cb-b10a-bc04ef82d8da
 
-	/// Mean Strava moving hours per point-selected activity.
-	measure 'Average Activity Moving Hours' = DIVIDE([Activity Moving Hours], [Activities])
+	/// Activity Moving Hours divided by the distinct selected activity count.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: This is the mean full-activity moving duration, in decimal hours.
+	measure 'Average Moving Time' = DIVIDE([Moving Time], [Activities])
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: 0cb12919-ee77-4195-98d5-537fc060e038
 
-	/// Mean full-activity elevation gain per point-selected activity.
-	measure 'Average Activity Elevation Gain Feet' = DIVIDE([Activity Elevation Gain Feet], [Activities])
+	/// Activity Elevation Gain Feet divided by the distinct selected activity count.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: This is mean full-activity ascent in feet, not mean point altitude.
+	measure 'Average Elevation Gain' = DIVIDE([Elevation Gain], [Activities])
 		formatString: #,0
 		displayFolder: Elevation
 		lineageTag: 686da812-e711-46a2-bc1a-4cb99a777cb4
 
-	/// Aggregate speed: full activity miles divided by full activity moving hours, not a mean of average speeds.
-	measure 'Activity Average Speed mph' = DIVIDE([Whole Activity Miles], [Activity Moving Hours])
+	/// Whole Activity Miles divided by Activity Moving Hours.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Uses aggregated distance and time rather than averaging activity speeds. Blank when the moving-hours denominator is zero.
+	measure 'Average Speed' = DIVIDE([Whole Activity Miles], [Moving Time])
 		formatString: #,0.00
 		displayFolder: Performance
 		lineageTag: 45f70cc2-5619-4edb-916e-2851b47aafdf
 
-	/// Whole-activity elevation gain divided by whole-activity miles; both operands use the same activity grain.
-	measure 'Activity Elevation Feet per Mile' = DIVIDE([Activity Elevation Gain Feet], [Whole Activity Miles])
+	/// Activity Elevation Gain Feet divided by Whole Activity Miles.
+	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
+	/// Notes: Both inputs use full activity summaries. Blank when the mileage denominator is zero.
+	measure 'Elevation Feet per Mile' = DIVIDE([Elevation Gain], [Whole Activity Miles])
 		formatString: #,0.00
 		displayFolder: Performance
 		lineageTag: 490d17a6-3dfc-4aac-bd88-c5daa240478c
 
-	/// Distinct local calendar dates containing selected GPS points. A ride spanning local midnight contributes to both days.
+	/// Distinct nonblank reporting dates containing selected GPS points.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Dates are local when timezone metadata is available, otherwise UTC fallback. An activity spanning midnight can contribute to multiple days; no qualifying rows can display blank.
 	measure 'Activity Days' = DISTINCTCOUNTNOBLANK(activity_points[date_key])
 		formatString: #,0
 		displayFolder: Activities
 		lineageTag: 0ffc69eb-3210-4435-bbad-bb3edf8ebfce
 
-	/// Selected point mileage divided by distinct selected activities; partial trail selections count only their matched mileage.
+	/// Selected point mileage divided by the distinct selected activity count.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: A partial trail selection uses only its point mileage. An activity counts once; a zero activity denominator returns blank.
 	measure 'Point Miles per Activity' = DIVIDE([Miles], [Activities])
 		formatString: #,0.00
 		displayFolder: Distance
 		lineageTag: 95c2e11c-b793-4bb6-a185-95f2c247d0fe
 
-	/// Count all Strava efforts in point-selected activities, including unverified historical streams. Segment filters apply; partial route filters select whole activities.
-	measure 'Segment Effort Count' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	/// Count of Strava segment effort records in the selected scope.
+	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
+	/// Notes: Repeated traversals count as separate efforts. Does not require verified GPS-point memberships.
+	measure 'Segment Efforts' = CALCULATE(COUNTROWS(segment_efforts), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0
 		displayFolder: Segments
 		lineageTag: 762c0c38-d606-4f55-9bd7-c0c9b3aec3ab
 
-	/// Sum Strava effort distances in point-selected activities. Repeated and overlapping efforts are additive, unlike Miles in Selected Segments.
-	measure 'Segment Effort Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	/// Sum of Strava segment-effort distances, in miles.
+	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
+	/// Notes: Repeated and overlapping efforts are additive. This can exceed the activity distance; use Miles in Selected Segments for linked-point union mileage.
+	measure 'Segment Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: ec577024-1235-476c-a7b2-ce9609d9b6b4
 
-	/// Sum whole-effort moving hours in point-selected activities. Overlapping efforts may count the same time repeatedly.
+	/// Sum of full Strava segment-effort moving times, in hours.
+	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
+	/// Notes: Repeated and overlapping efforts can count the same activity time more than once. Does not require verified point memberships.
 	measure 'Segment Effort Moving Hours' = CALCULATE(DIVIDE(SUM(segment_efforts[moving_time_seconds]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: f65e01aa-7de0-4a8a-ae0d-ec60ff78fc5c
 
-	/// Distinct Strava segments with efforts in point-selected activities; includes efforts without verified GPS membership.
+	/// Distinct Strava segment keys with efforts in the selected scope.
+	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
+	/// Notes: Repeated efforts on the same segment count once. Includes GPS activities of all sport types and does not require verified point memberships.
 	measure 'Segments Ridden' = CALCULATE(DISTINCTCOUNTNOBLANK(segment_efforts[segment_key]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0
 		displayFolder: Segments
 		lineageTag: a79d397e-b1ff-4b46-90a7-a4f9bcc8a008
 
-	/// Distinct verified efforts touching the selected GPS points. Honors partial trail/date selections and current segment filters; incomplete until historical verification finishes.
+	/// Count of distinct verified segment efforts touching selected GPS points.
+	/// Filters: Follows segment selection and the actual selected point subset, including partial trail/date filters.
+	/// Notes: Unlike Segment Effort Count, requires verified point memberships. An effort touching several selected points still counts once.
 	measure 'Linked Segment Effort Count' =
 			VAR SelectedEfforts =
 			    CALCULATETABLE(
@@ -171,25 +243,33 @@ table measures_
 		displayFolder: Segments
 		lineageTag: 4ca6dbc8-9c35-40d9-8aee-0c96c6a45da8
 
-	/// Distinct activities with at least one selected point confidently assigned to a trail.
+	/// Distinct activities with at least one selected point assigned to a trail.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: The same activity may appear under several trails, so trail-row counts are not additive.
 	measure 'Matched Trail Activities' = CALCULATE([Activities], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
 		formatString: #,0
 		displayFolder: Trails
 		lineageTag: 0f43d24f-ecb6-4b2f-a592-daca26cba48a
 
-	/// Selected interval mileage assigned to named trails; excludes unmatched and ambiguous trail points.
+	/// Eligible selected point mileage confidently assigned to a trail.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Excludes ambiguous/unmatched trails. This is traveled mileage, not unique geographic coverage or a completion measure.
 	measure 'Matched Trail Miles' = CALCULATE([Miles], KEEPFILTERS(NOT ISBLANK(activity_points[trail_key])))
 		formatString: #,0.00
 		displayFolder: Trails
 		lineageTag: 3636ec7f-c477-4602-96dc-3a46128fac58
 
-	/// Distinct mapped trails represented by selected points. Includes GPS activities of all sport types.
+	/// Distinct nonblank trail keys represented by selected GPS points.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Counts any point assignment, even without positive interval mileage. Repeated visits count once; includes all GPS sport types.
 	measure 'Trails Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_key])
 		formatString: #,0
 		displayFolder: Trails
 		lineageTag: 04f55b57-ee39-46ae-a58f-edbf69c49d4a
 
-	/// Full mapped lengths of distinct trails touched by selected points. This is not unique distance covered or a completion measure.
+	/// Full mapped lengths of the distinct trails touched by selected points.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Each touched trail contributes its whole catalog length once. Does not measure traveled distance, unique distance covered or completion.
 	measure 'Visited Trail Length Miles' =
 			CALCULATE(
 			    SUM(trails[length_miles]),
@@ -199,61 +279,81 @@ table measures_
 		displayFolder: Trails
 		lineageTag: e5fcba50-8c96-4f48-bbc7-f86af300a870
 
-	/// Selected interval mileage inside confirmed mapped system boundaries.
+	/// Eligible selected point mileage assigned to mapped trail systems.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Uses existing confirmed boundaries. Does not imply that every point has an individual trail match.
 	measure 'Matched System Miles' = CALCULATE([Miles], KEEPFILTERS(NOT ISBLANK(activity_points[trail_system_key])))
 		formatString: #,0.00
 		displayFolder: Trail Systems
 		lineageTag: 38429a49-2a56-491d-959c-cfa9be296fe1
 
-	/// Distinct systems represented by selected GPS points, excluding unmatched blank keys.
+	/// Distinct nonblank trail-system keys represented by selected GPS points.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: A point assignment is sufficient; repeat visits count once. Systems without mapped boundaries cannot be discovered by this measure.
 	measure 'Trail Systems Visited' = DISTINCTCOUNTNOBLANK(activity_points[trail_system_key])
 		formatString: #,0
 		displayFolder: Trail Systems
 		lineageTag: 69a0a607-a365-4d55-8e63-b3778dc5ba5b
 
-	/// Share of selected point mileage confidently assigned to trails. Assignment coverage only, not geographic trail completion.
+	/// Matched Trail Miles divided by Miles.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Reports assignment coverage within the current selection, not trail completion or matching accuracy. Blank when selected eligible mileage is zero.
 	measure 'Trail Match %' = DIVIDE([Matched Trail Miles], [Miles])
 		formatString: 0.0%
 		displayFolder: Validation
 		lineageTag: 5c5e361e-3be9-4e07-a4f9-9c3af14e95e0
 
-	/// Share of selected point mileage assigned to mapped systems. Blank when selected mileage is zero.
+	/// Matched System Miles divided by Miles.
+	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
+	/// Notes: Reports assignment coverage, not system completion. Unmapped riding locations are expected gaps; blank when mileage is zero.
 	measure 'System Match %' = DIVIDE([Matched System Miles], [Miles])
 		formatString: 0.0%
 		displayFolder: Validation
 		lineageTag: deb0f498-e18e-4295-b80e-9039902ff32e
 
-	/// Observed segment/trail/system combinations across all verified history; activity and date filters do not restrict this catalog.
+	/// Count of observed segment-trail-system combinations in the association bridge.
+	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
+	/// Notes: Despite the name, this is not a distinct segment count. One segment can contribute multiple combinations, including system-only or point-only evidence.
 	measure 'Segments Associated' = COUNTROWS(segment_trail_associations)
 		formatString: #,0
 		displayFolder: Segments\Associations
 		lineageTag: 1120c6ac-148b-46a5-ad02-43f46be13411
 
-	/// Trails associated with the selected segments and dimension context. Blank trail keys are excluded.
+	/// Distinct nonblank trail keys in the selected segment associations.
+	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
+	/// Notes: System-only rows do not add a trail. Associations are observations from verified GPS history, not manually confirmed geographic ownership.
 	measure 'Associated Trails' = DISTINCTCOUNTNOBLANK(segment_trail_associations[trail_key])
 		formatString: #,0
 		displayFolder: Segments\Associations
 		lineageTag: cf9f1068-2db3-4637-935c-d836c89f37b3
 
-	/// Systems associated with selected segments across verified history, excluding blanks.
+	/// Distinct nonblank system keys in the selected segment associations.
+	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
+	/// Notes: Includes system-only associations without a named trail. Verification and mapped geometry limit coverage.
 	measure 'Associated Trail Systems' = DISTINCTCOUNTNOBLANK(segment_trail_associations[trail_system_key])
 		formatString: #,0
 		displayFolder: Segments\Associations
 		lineageTag: 910e07d3-2355-4e94-bb20-21a4836a8974
 
-	/// Sum observed interval miles per segment effort. Repeated and overlapping segment efforts are additive, not unique route length.
+	/// Sum of eligible observed interval miles per associated segment effort.
+	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
+	/// Notes: Repeated and overlapping efforts are additive. Excludes intervals ending at effort start indexes; not unique segment length or a confidence score.
 	measure 'Observed Segment Association Miles' = SUM(segment_trail_associations[observed_distance_miles])
 		formatString: #,0.00
 		displayFolder: Segments\Associations
 		lineageTag: d9ca6283-4e21-46d0-87c2-de88fcdb3e56
 
-	/// Calendar weeks touched by the selected modeled dates, including inactive and partial weeks.
+	/// Number of Monday-Sunday weeks touched by the selected modeled calendar dates.
+	/// Filters: Follows date-dimension filters; activity, gear and trail filters do not reduce the calendar denominator.
+	/// Notes: Includes inactive and partial boundary weeks. Dates outside the modeled calendar are not counted.
 	measure 'Weeks in Selection' = COALESCE(COUNTROWS(FILTER(VALUES(dates[week_start_date]), NOT ISBLANK(dates[week_start_date]))), 0)
 		formatString: #,0
 		displayFolder: Consistency\Weeks
 		lineageTag: 2205c7e0-9deb-4f4a-ac52-f19da36b5d09
 
-	/// Monday-Sunday local weeks containing at least one selected GPS activity point. Respects the date slicer and other point filters.
+	/// Number of selected Monday-Sunday weeks containing at least one qualifying GPS point.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Only points on dates actually selected qualify. A partial week counts once; activity crossing a week boundary can activate both weeks.
 	measure 'Active Weeks' =
 			COALESCE(COUNTROWS(
 			    FILTER(
@@ -261,42 +361,53 @@ table measures_
 			        NOT ISBLANK(dates[week_start_date]) && CALCULATE([Activities]) > 0
 			    )
 			), 0)
-
 		formatString: #,0
 		displayFolder: Consistency\Weeks
 		lineageTag: cdfa32e0-a7c1-4e47-b695-d332573b9ad7
 
-	/// Selected calendar weeks with no qualifying GPS activity points.
+	/// Weeks in Selection minus Active Weeks.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: No qualifying selected GPS activity means inactive for this dataset; indoor/non-GPS activities and missing history do not make a week active.
 	measure 'Inactive Weeks' = [Weeks in Selection] - [Active Weeks]
 		formatString: #,0
 		displayFolder: Consistency\Weeks
 		lineageTag: af44923a-6260-4cad-8a7e-e8eaa8e625ef
 
-	/// Share of selected modeled calendar weeks with activity. Partial boundary weeks count as weeks.
+	/// Active Weeks divided by Weeks in Selection.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Inactive and partial boundary weeks are included in the calendar denominator. Blank when no modeled weeks are selected.
 	measure 'Active Week %' = DIVIDE([Active Weeks], [Weeks in Selection])
 		formatString: 0.0%
 		displayFolder: Consistency\Weeks
 		lineageTag: 4c55f24f-f67e-449b-9f66-4464a551ff76
 
-	/// Average selected active days per selected calendar week, including inactive weeks. On week rows this is the active-day count.
+	/// Active reporting dates divided by all selected calendar weeks.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Includes inactive weeks as zero-active-day weeks. On a single week row, shows the selected active-day count; partial weeks are not prorated.
 	measure 'Active Days per Week' = DIVIDE(COALESCE([Activity Days], 0), [Weeks in Selection])
 		formatString: 0.00
 		displayFolder: Consistency\Weeks
 		lineageTag: a17d12a2-e1bd-4b1c-80cb-df580f4e4dff
 
-	/// Average selected active days across weeks that contain activity; inactive weeks are excluded.
+	/// Active reporting dates divided by active weeks only.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Excludes inactive weeks from the average. Blank when no active weeks qualify.
 	measure 'Active Days per Active Week' = DIVIDE([Activity Days], [Active Weeks])
 		formatString: 0.00
 		displayFolder: Consistency\Weeks
 		lineageTag: 5c913f17-5f97-4686-8e1e-ee421c130283
 
-	/// Distinct selected activities divided by active weeks. Activities spanning week boundaries are counted once in the numerator.
-	measure 'Activities per Active Week' = DIVIDE([Activities], [Active Weeks])
+	/// Distinct selected activities divided by active weeks.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: An activity spanning weeks counts once in the activity numerator. Blank when no active weeks qualify.
+	measure 'Activities per Week' = DIVIDE([Activities], [Active Weeks])
 		formatString: 0.00
 		displayFolder: Consistency\Weeks
 		lineageTag: 7dfe1985-85f3-4684-b7ad-799708aeb0a4
 
-	/// Longest consecutive Monday-Sunday active-week run within the date selection. Missing weeks break the streak, including omitted weeks in disjoint selections.
+	/// Longest consecutive run of active Monday-Sunday weeks within the current date selection.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Uses actual week-start dates, so streaks cross New Year. Inactive or omitted whole weeks break a streak; partial boundary weeks can qualify. Returns zero when none qualify.
 	measure 'Longest Active Week Streak' =
 			VAR ActiveWeeks =
 			    FILTER(
@@ -323,55 +434,73 @@ table measures_
 		displayFolder: Consistency\Weeks
 		lineageTag: 63eb40ad-350b-49de-afaf-e35f0d1b5b89
 
-	/// Longest active-week streak ignoring date-dimension filters while preserving other filters such as gear and activity type.
+	/// Longest consecutive active-week run across the modeled date history.
+	/// Filters: Removes all date-dimension filters, including the date slicer; retains other filters such as activity, gear, sport and trail.
+	/// Notes: Not an unfiltered personal lifetime record when other filters remain. Missing/non-GPS history is not inferred; returns zero when none qualify.
 	measure 'Longest Active Week Streak All Dates' = CALCULATE([Longest Active Week Streak], REMOVEFILTERS(dates))
 		formatString: #,0
 		displayFolder: Consistency\Weeks
 		lineageTag: 76f74359-cab6-481b-90d1-5e28298cfb43
 
-	/// Selected local dates with GPS activity points. Reuses Activity Days and displays zero when none qualify.
+	/// Count of selected nonblank reporting dates with qualifying GPS points.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Reuses Activity Days, displaying zero rather than blank when none qualify. Local dates use timezone metadata, otherwise UTC fallback.
 	measure 'Active Days' = COALESCE([Activity Days], 0)
 		formatString: #,0
 		displayFolder: Consistency\Days
 		lineageTag: 3a4a9c73-e00f-4e7c-9dac-fe22fde1e5e4
 
-	/// Distinct modeled calendar dates in the current selection, including dates without activity.
+	/// Number of distinct selected modeled calendar dates.
+	/// Filters: Follows date-dimension filters; activity, gear and trail filters do not reduce this calendar denominator.
+	/// Notes: Includes dates without activity. Does not count dates outside the modeled calendar; returns zero for an empty date selection.
 	measure 'Days in Selection' = COALESCE(COUNTROWS(FILTER(VALUES(dates[date]), NOT ISBLANK(dates[date]))), 0)
 		formatString: #,0
 		displayFolder: Consistency\Days
 		lineageTag: c99c4198-4533-405e-a848-075435320a44
 
-	/// Selected modeled dates containing no qualifying GPS activity points.
+	/// Days in Selection minus Active Days.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Describes absence of qualifying selected GPS points, not absence of all exercise. Indoor/non-GPS activities are outside this dataset.
 	measure 'Inactive Days' = [Days in Selection] - [Active Days]
 		formatString: #,0
 		displayFolder: Consistency\Days
 		lineageTag: 8acf1fcc-5984-4b6d-95b3-4566f8618dd3
 
-	/// Share of selected modeled dates with at least one qualifying GPS activity point.
+	/// Active Days divided by Days in Selection.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Includes inactive modeled dates in the denominator. Blank when no modeled dates are selected.
 	measure 'Active Day %' = DIVIDE([Active Days], [Days in Selection])
 		formatString: 0.0%
 		displayFolder: Consistency\Days
 		lineageTag: 5d679bfe-bede-4ee8-977a-21c4c8577832
 
-	/// Distinct selected activities per active local date. An activity spanning dates counts once in the activity numerator.
-	measure 'Activities per Active Day' = DIVIDE([Activities], [Active Days])
+	/// Distinct selected activities divided by active reporting dates.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: A multi-day activity contributes once to the activity numerator but may activate several dates. Blank when no active dates qualify.
+	measure 'Activities per Day' = DIVIDE([Activities], [Active Days])
 		formatString: 0.00
 		displayFolder: Consistency\Days
 		lineageTag: 6ade024e-7f92-49d6-b938-90d972c8ccdb
 
-	/// Selected GPS interval mileage divided by active local dates; respects partial route filters.
+	/// Eligible selected point miles divided by active reporting dates.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Uses point mileage, including only selected route portions. Blank when no active dates qualify.
 	measure 'Point Miles per Active Day' = DIVIDE([Miles], [Active Days])
 		formatString: 0.00
 		displayFolder: Consistency\Days
 		lineageTag: b6db10e0-1fb7-4114-a845-aa2635b7842c
 
-	/// Eligible selected point moving hours divided by active local dates.
+	/// Eligible selected point moving hours divided by active reporting dates.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Uses point-derived movement, not full Strava activity summaries. Blank when no active dates qualify.
 	measure 'Point Moving Hours per Active Day' = DIVIDE([Point Moving Hours], [Active Days])
 		formatString: 0.00
 		displayFolder: Consistency\Days
 		lineageTag: 798bc090-aeab-4485-a54a-b90a13ab2e18
 
-	/// Longest consecutive active local-date run within the date selection. Inactive or omitted dates break the streak.
+	/// Longest run of consecutive active local reporting dates within the selection.
+	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
+	/// Notes: Inactive dates or omitted dates in disjoint selections break the streak. Crosses month/year/leap-day boundaries; returns zero when no dates qualify.
 	measure 'Longest Active Day Streak' =
 			VAR ActiveDates =
 			    FILTER(
@@ -397,7 +526,9 @@ table measures_
 		displayFolder: Consistency\Days
 		lineageTag: 3f736b8f-e3ec-4919-819e-2f7851b2c208
 
-	/// Longest daily streak ignoring date-dimension filters while preserving other filters such as gear and activity type.
+	/// Longest consecutive active-day run across the modeled date history.
+	/// Filters: Removes date-dimension filters, including the date slicer; retains other filters such as activity, gear, sport and trail.
+	/// Notes: Does not infer dates outside available history or activity without GPS. Not necessarily a personal lifetime record under other filters.
 	measure 'Longest Active Day Streak All Dates' = CALCULATE([Longest Active Day Streak], REMOVEFILTERS(dates))
 		formatString: #,0
 		displayFolder: Consistency\Days
