@@ -23,6 +23,5 @@ ref table trail_systems
 ref table segments
 ref table segment_efforts
 ref table activity_point_segments
-
-
 ref table segment_trail_associations
+
