@@ -39,6 +39,7 @@ class FieldParameterTests(unittest.TestCase):
             self.assertIn('sortByColumn: sort_order',content)
             metadata=re.search(r'extendedProperty ParameterMetadata =\s*(\{.*?\})',content,re.S)
             self.assertEqual(json.loads(metadata[1]),{'version':3,'kind':2})
+            self.assertRegex(content,r'extendedProperty ParameterMetadata =[^\n]+\n\t\t\ttype: json')
             self.assertIn(f'partition {name} = calculated',content)
             for field in ['fields','sort_order']:
                 block=re.search(r'\n\tcolumn '+field+r'\n(.*?)(?=\n\t(?:column|partition)|\Z)',content,re.S)[1]

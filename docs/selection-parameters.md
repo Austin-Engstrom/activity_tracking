@@ -61,3 +61,18 @@ renames when made through its model editor.
 Static tests cover all bindings, ordinals, metadata, hidden columns and disconnected
 relationships. Desktop still needs to validate actual field substitution, formats,
 slicer behavior and connected-report support before merging.
+
+## Refresh and field-parameter recognition
+
+The hidden `fields` column on each selector has a JSON extended property named
+`ParameterMetadata`, with value `{"version":3,"kind":2}` and explicit `type: json`.
+That belongs on the field-reference column, not on the table or visible label.
+The visible label already groups by `fields` and sorts by `sort_order`.
+
+After importing new calculated selector tables, Desktop can show `#ERROR` rows
+with a banner saying calculated tables must be manually refreshed. Reopen the
+updated project and use Home > Refresh to process the calculated tables before
+checking parameter behavior. Updating a property in an external editor alone does
+not populate those tables. No SQL refresh or Parquet export is required.
+If errors remain after a successful refresh, capture the refresh error details;
+unprocessed tables and parameter recognition are separate issues.
