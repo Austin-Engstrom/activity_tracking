@@ -1,17 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "date_filter",
   "position": {
     "x": 24,
     "y": 104.96,
-    "width": 448,
-    "height": 115.2,
     "z": 2,
+    "height": 115.2,
+    "width": 448,
     "tabOrder": 2
   },
   "visual": {
     "visualType": "slicer",
-    "drillFilterOtherVisuals": true,
     "query": {
       "queryState": {
         "Values": {
@@ -28,7 +27,8 @@
                 }
               },
               "queryRef": "dates.date",
-              "nativeQueryRef": "date"
+              "nativeQueryRef": "date",
+              "active": true
             }
           ]
         }
@@ -60,13 +60,6 @@
               "expr": {
                 "Literal": {
                   "Value": "'Between'"
-                }
-              }
-            },
-            "start": {
-              "expr": {
-                "Literal": {
-                  "Value": "datetime'2026-01-01T00:00:00'"
                 }
               }
             }
@@ -282,6 +275,7 @@
       "groupName": "cycling_dates_date",
       "fieldChanges": true,
       "filterChanges": true
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

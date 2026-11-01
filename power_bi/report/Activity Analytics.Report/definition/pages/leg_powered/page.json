@@ -5,32 +5,6 @@
   "displayOption": "FitToWidth",
   "height": 1280,
   "width": 1440,
-  "objects": {
-    "background": [
-      {
-        "properties": {
-          "color": {
-            "solid": {
-              "color": {
-                "expr": {
-                  "Literal": {
-                    "Value": "'#11151C'"
-                  }
-                }
-              }
-            }
-          },
-          "transparency": {
-            "expr": {
-              "Literal": {
-                "Value": "0D"
-              }
-            }
-          }
-        }
-      }
-    ]
-  },
   "filterConfig": {
     "filters": [
       {
@@ -47,9 +21,6 @@
           }
         },
         "type": "Categorical",
-        "howCreated": "User",
-        "isLockedInViewMode": false,
-        "isHiddenInViewMode": false,
         "filter": {
           "Version": 2,
           "From": [
@@ -95,6 +66,33 @@
               }
             }
           ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#11151C'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
         }
       }
     ]

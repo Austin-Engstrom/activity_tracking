@@ -1,17 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "table_filter",
   "position": {
     "x": 496,
     "y": 104.96,
-    "width": 448,
-    "height": 115.2,
     "z": 3,
+    "height": 115.2,
+    "width": 448,
     "tabOrder": 3
   },
   "visual": {
     "visualType": "slicer",
-    "drillFilterOtherVisuals": true,
     "query": {
       "queryState": {
         "Values": {
@@ -28,7 +27,8 @@
                 }
               },
               "queryRef": "data_dictionary.Table Name",
-              "nativeQueryRef": "Table Name"
+              "nativeQueryRef": "Table Name",
+              "active": true
             }
           ]
         }
@@ -210,6 +210,7 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

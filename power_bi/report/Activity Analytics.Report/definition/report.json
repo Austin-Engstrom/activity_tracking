@@ -40,7 +40,7 @@
           "expanded": {
             "expr": {
               "Literal": {
-                "Value": "true"
+                "Value": "false"
               }
             }
           }
@@ -54,14 +54,14 @@
       "type": "SharedResources",
       "items": [
         {
-          "name": "Fluent2-CY26SU10",
-          "path": "BaseThemes/Fluent2-CY26SU10.json",
-          "type": "BaseTheme"
-        },
-        {
           "name": "ActivityDark",
           "path": "BuiltInThemes/ActivityDark.json",
           "type": "CustomTheme"
+        },
+        {
+          "name": "Fluent2-CY26SU10",
+          "path": "BaseThemes/Fluent2-CY26SU10.json",
+          "type": "BaseTheme"
         }
       ]
     }
