@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "sport_mix",
   "position": {
-    "x": 968,
-    "y": 409.6,
+    "x": 960,
+    "y": 408,
     "z": 10,
-    "height": 179.2,
-    "width": 448,
+    "height": 384,
+    "width": 456,
     "tabOrder": 10
   },
   "visual": {
@@ -121,6 +121,19 @@
                       "Value": "'#E6EDF5'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

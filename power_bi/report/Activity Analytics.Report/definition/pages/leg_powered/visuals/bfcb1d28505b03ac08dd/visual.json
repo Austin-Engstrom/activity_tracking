@@ -1,38 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "gear_mix",
+  "name": "bfcb1d28505b03ac08dd",
   "position": {
     "x": 968,
-    "y": 614.4,
-    "z": 11,
-    "height": 179.2,
-    "width": 448,
-    "tabOrder": 11
+    "y": 408,
+    "z": 14,
+    "height": 144,
+    "width": 216,
+    "tabOrder": 14
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "card",
     "query": {
       "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "gear"
-                    }
-                  },
-                  "Property": "gear_name"
-                }
-              },
-              "queryRef": "gear.gear_name",
-              "nativeQueryRef": "gear_name",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -42,11 +23,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Whole Activity Miles"
+                  "Property": "Average Activity Miles"
                 }
               },
-              "queryRef": "measures_.Whole Activity Miles",
-              "nativeQueryRef": "Whole Activity Miles"
+              "queryRef": "measures_.Average Activity Miles",
+              "nativeQueryRef": "Average Activity Miles"
             }
           ]
         }
@@ -61,7 +42,7 @@
                     "Entity": "measures_"
                   }
                 },
-                "Property": "Whole Activity Miles"
+                "Property": "Average Activity Miles"
               }
             },
             "direction": "Descending"
@@ -71,21 +52,24 @@
       }
     },
     "objects": {
-      "categoryAxis": [
+      "labels": [
         {
           "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C2CDDA'"
-                    }
-                  }
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             },
-            "titleColor": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "28D"
+                }
+              }
+            },
+            "color": {
               "solid": {
                 "color": {
                   "expr": {
@@ -99,28 +83,13 @@
           }
         }
       ],
-      "valueAxis": [
+      "categoryLabels": [
         {
           "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C2CDDA'"
-                    }
-                  }
-                }
-              }
-            },
-            "titleColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E6EDF5'"
-                    }
-                  }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -142,7 +111,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Whole activity miles by equipment'"
+                  "Value": "'Average Distance'"
                 }
               }
             },

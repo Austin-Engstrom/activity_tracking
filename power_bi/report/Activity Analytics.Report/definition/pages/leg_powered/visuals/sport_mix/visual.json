@@ -3,9 +3,9 @@
   "name": "sport_mix",
   "position": {
     "x": 968,
-    "y": 409.6,
+    "y": 568,
     "z": 10,
-    "height": 179.2,
+    "height": 224,
     "width": 448,
     "tabOrder": 10
   },
@@ -121,6 +121,19 @@
                       "Value": "'#E6EDF5'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
