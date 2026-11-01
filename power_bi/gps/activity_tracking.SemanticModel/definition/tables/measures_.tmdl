@@ -250,7 +250,7 @@ table measures_
 	/// Calendar weeks touched by the selected modeled dates, including inactive and partial weeks.
 	measure 'Weeks in Selection' = COALESCE(COUNTROWS(FILTER(VALUES(dates[week_start_date]), NOT ISBLANK(dates[week_start_date]))), 0)
 		formatString: #,0
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 2205c7e0-9deb-4f4a-ac52-f19da36b5d09
 
 	/// Monday-Sunday local weeks containing at least one selected GPS activity point. Respects the date slicer and other point filters.
@@ -263,37 +263,37 @@ table measures_
 			), 0)
 
 		formatString: #,0
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: cdfa32e0-a7c1-4e47-b695-d332573b9ad7
 
 	/// Selected calendar weeks with no qualifying GPS activity points.
 	measure 'Inactive Weeks' = [Weeks in Selection] - [Active Weeks]
 		formatString: #,0
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: af44923a-6260-4cad-8a7e-e8eaa8e625ef
 
 	/// Share of selected modeled calendar weeks with activity. Partial boundary weeks count as weeks.
 	measure 'Active Week %' = DIVIDE([Active Weeks], [Weeks in Selection])
 		formatString: 0.0%
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 4c55f24f-f67e-449b-9f66-4464a551ff76
 
 	/// Average selected active days per selected calendar week, including inactive weeks. On week rows this is the active-day count.
 	measure 'Active Days per Week' = DIVIDE(COALESCE([Activity Days], 0), [Weeks in Selection])
 		formatString: 0.00
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: a17d12a2-e1bd-4b1c-80cb-df580f4e4dff
 
 	/// Average selected active days across weeks that contain activity; inactive weeks are excluded.
 	measure 'Active Days per Active Week' = DIVIDE([Activity Days], [Active Weeks])
 		formatString: 0.00
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 5c913f17-5f97-4686-8e1e-ee421c130283
 
 	/// Distinct selected activities divided by active weeks. Activities spanning week boundaries are counted once in the numerator.
 	measure 'Activities per Active Week' = DIVIDE([Activities], [Active Weeks])
 		formatString: 0.00
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 7dfe1985-85f3-4684-b7ad-799708aeb0a4
 
 	/// Longest consecutive Monday-Sunday active-week run within the date selection. Missing weeks break the streak, including omitted weeks in disjoint selections.
@@ -320,14 +320,88 @@ table measures_
 			        0
 			    )
 		formatString: #,0
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 63eb40ad-350b-49de-afaf-e35f0d1b5b89
 
 	/// Longest active-week streak ignoring date-dimension filters while preserving other filters such as gear and activity type.
 	measure 'Longest Active Week Streak All Dates' = CALCULATE([Longest Active Week Streak], REMOVEFILTERS(dates))
 		formatString: #,0
-		displayFolder: Consistency
+		displayFolder: Consistency\Weeks
 		lineageTag: 76f74359-cab6-481b-90d1-5e28298cfb43
+
+	/// Selected local dates with GPS activity points. Reuses Activity Days and displays zero when none qualify.
+	measure 'Active Days' = COALESCE([Activity Days], 0)
+		formatString: #,0
+		displayFolder: Consistency\Days
+		lineageTag: 3a4a9c73-e00f-4e7c-9dac-fe22fde1e5e4
+
+	/// Distinct modeled calendar dates in the current selection, including dates without activity.
+	measure 'Days in Selection' = COALESCE(COUNTROWS(FILTER(VALUES(dates[date]), NOT ISBLANK(dates[date]))), 0)
+		formatString: #,0
+		displayFolder: Consistency\Days
+		lineageTag: c99c4198-4533-405e-a848-075435320a44
+
+	/// Selected modeled dates containing no qualifying GPS activity points.
+	measure 'Inactive Days' = [Days in Selection] - [Active Days]
+		formatString: #,0
+		displayFolder: Consistency\Days
+		lineageTag: 8acf1fcc-5984-4b6d-95b3-4566f8618dd3
+
+	/// Share of selected modeled dates with at least one qualifying GPS activity point.
+	measure 'Active Day %' = DIVIDE([Active Days], [Days in Selection])
+		formatString: 0.0%
+		displayFolder: Consistency\Days
+		lineageTag: 5d679bfe-bede-4ee8-977a-21c4c8577832
+
+	/// Distinct selected activities per active local date. An activity spanning dates counts once in the activity numerator.
+	measure 'Activities per Active Day' = DIVIDE([Activities], [Active Days])
+		formatString: 0.00
+		displayFolder: Consistency\Days
+		lineageTag: 6ade024e-7f92-49d6-b938-90d972c8ccdb
+
+	/// Selected GPS interval mileage divided by active local dates; respects partial route filters.
+	measure 'Point Miles per Active Day' = DIVIDE([Miles], [Active Days])
+		formatString: 0.00
+		displayFolder: Consistency\Days
+		lineageTag: b6db10e0-1fb7-4114-a845-aa2635b7842c
+
+	/// Eligible selected point moving hours divided by active local dates.
+	measure 'Point Moving Hours per Active Day' = DIVIDE([Point Moving Hours], [Active Days])
+		formatString: 0.00
+		displayFolder: Consistency\Days
+		lineageTag: 798bc090-aeab-4485-a54a-b90a13ab2e18
+
+	/// Longest consecutive active local-date run within the date selection. Inactive or omitted dates break the streak.
+	measure 'Longest Active Day Streak' =
+			VAR ActiveDates =
+			    FILTER(
+			        VALUES(dates[date]),
+			        NOT ISBLANK(dates[date]) && CALCULATE([Activities]) > 0
+			    )
+			VAR DayGroups =
+			    ADDCOLUMNS(
+			        ActiveDates,
+			        "__DayGroup",
+			            INT(dates[date]) - RANKX(ActiveDates, dates[date], , ASC, DENSE)
+			    )
+			RETURN
+			    COALESCE(
+			        MAXX(
+			            DayGroups,
+			            VAR CurrentGroup = [__DayGroup]
+			            RETURN COUNTROWS(FILTER(DayGroups, [__DayGroup] = CurrentGroup))
+			        ),
+			        0
+			    )
+		formatString: #,0
+		displayFolder: Consistency\Days
+		lineageTag: 3f736b8f-e3ec-4919-819e-2f7851b2c208
+
+	/// Longest daily streak ignoring date-dimension filters while preserving other filters such as gear and activity type.
+	measure 'Longest Active Day Streak All Dates' = CALCULATE([Longest Active Day Streak], REMOVEFILTERS(dates))
+		formatString: #,0
+		displayFolder: Consistency\Days
+		lineageTag: 4b85d017-3208-4eb8-af98-99d51b7c7c45
 
 	column Placeholder
 		dataType: int64

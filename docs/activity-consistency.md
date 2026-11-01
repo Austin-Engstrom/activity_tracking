@@ -66,3 +66,40 @@ relationship changes and no GPS/spatial rebuild is needed.
 Calendar boundary/type tests and reference/dependency checks run offline. They do
 not evaluate DAX; the slicer, gap and year-boundary behavior still needs Desktop
 validation before merging. No report layout changes are included.
+
+## Daily consistency
+
+The same branch adds a **Consistency / Days** folder:
+
+| Measure | Meaning |
+|---|---|
+| Active Days | Existing Activity Days count, displayed as zero when no dates qualify |
+| Days in Selection | Modeled dates selected, including dates without activity |
+| Inactive Days | Selected dates minus active dates |
+| Active Day % | Active dates divided by selected dates |
+| Activities per Active Day | Distinct selected activities divided by active dates |
+| Point Miles per Active Day | Selected point miles divided by active dates |
+| Point Moving Hours per Active Day | Selected point moving hours divided by active dates |
+| Longest Active Day Streak | Longest consecutive run of active local dates within selection |
+| Longest Active Day Streak All Dates | Same daily streak ignoring date-dimension filters only |
+
+Weekly measures are organized under **Consistency / Weeks**. The legacy Activity
+Days measure stays in Activities for compatibility and is the counting source for
+Active Days. There are no additional SQL fields, exports or relationship changes
+for the daily measures. If you already applied the weekly calendar update, only
+pull/reopen the updated model; no repeat export is needed for the daily additions.
+
+Daily streaks use actual local dates, so they cross months, leap days and years
+without resetting. Inactive dates break a streak; an omitted date in a disjoint
+selection also breaks it. Days outside the modeled calendar do not count. An
+activity spanning midnight can make multiple dates active, but the activity-count
+numerator still counts it once. These metrics cover GPS activities only and retain
+the same segment-filter behavior as other ordinary point-based measures.
+
+Before merging, use a date slicer with a known seven-day interval containing
+activity on days 1, 2, 3 and 5: expect 4 active days, 3 inactive days, 57.1% active
+days and a longest daily streak of 3. Remove day 2 from a disjoint selection and
+confirm the gap breaks the streak. Compare the All Dates version while changing
+only the date slicer. Ratios with no active-day denominator should be blank.
+These are Desktop validation scenarios, not hardcoded targets or claims of DAX
+execution by the Python test suite.
