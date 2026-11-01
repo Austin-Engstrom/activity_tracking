@@ -24,11 +24,57 @@
                       "Entity": "dates"
                     }
                   },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "dates.year",
+              "nativeQueryRef": "Year",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dates"
+                    }
+                  },
+                  "Property": "quarter_number"
+                }
+              },
+              "queryRef": "dates.quarter_number",
+              "nativeQueryRef": "Quarter",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dates"
+                    }
+                  },
+                  "Property": "month_number"
+                }
+              },
+              "queryRef": "dates.month_number",
+              "nativeQueryRef": "Month",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dates"
+                    }
+                  },
                   "Property": "date"
                 }
               },
               "queryRef": "dates.date",
-              "nativeQueryRef": "date"
+              "nativeQueryRef": "Date",
+              "active": false
             }
           ]
         },
@@ -61,7 +107,7 @@
                     "Entity": "dates"
                   }
                 },
-                "Property": "date"
+                "Property": "year"
               }
             },
             "direction": "Descending"
@@ -84,7 +130,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Daily activity count | local dates'"
+                  "Value": "'Activity count by date | drill year / quarter / month / date'"
                 }
               }
             },
@@ -145,6 +191,13 @@
       "categoryAxis": [
         {
           "properties": {
+            "axisType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Categorical'"
+                }
+              }
+            },
             "labelColor": {
               "solid": {
                 "color": {

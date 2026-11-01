@@ -76,3 +76,12 @@ Static tests check the preserved live binding, seven-page layout, field referenc
 page bounds/grid, page-specific sports, isolated sport/gear slicers and shared date
 selection. They do not render visuals or execute live queries. One existing
 field-parameter metadata-format test on main remains unrelated to this report.
+
+The Activity Overview category breakdown uses `activity_types[activity_category]`.
+Every date-axis chart has a report-level drill sequence of year, quarter_number,
+month_number and date using existing calendar columns. It opens at Year with
+newest-first sorting; use the chart drill/expand controls for finer time detail.
+No model hierarchy, additional calendar fields or dataset publication is required.
+Date slicers explicitly persist their displayed start as January 1, 2026 in addition
+to the lower-bound selection; no end value is stored. Desktop rendering remains
+the verification for the displayed date inputs.

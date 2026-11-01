@@ -108,3 +108,22 @@ class CyclingReportTests(unittest.TestCase):
             self.assertEqual(condition['Comparison']['ComparisonKind'],2)
             self.assertEqual(condition['Comparison']['Right']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
             self.assertTrue(visual['visual']['syncGroup']['filterChanges'])
+
+    def test_overview_category_and_date_axis_drill_fields(self):
+        path=REPORT/'definition/pages/activity_overview/visuals/sport_mix/visual.json'
+        d=json.loads(path.read_text())
+        self.assertEqual(d['visual']['query']['queryState']['Category']['projections'][0]['field']['Column']['Property'],'activity_category')
+        date_chart_count=0
+        for path in (REPORT/'definition/pages').glob('*/visuals/*/visual.json'):
+            d=json.loads(path.read_text());v=d['visual'];q=v.get('query',{})
+            category=q.get('queryState',{}).get('Category',{}).get('projections',[])
+            if category and category[0]['field'].get('Column',{}).get('Expression',{}).get('SourceRef',{}).get('Entity')=='dates':
+                date_chart_count+=1
+                self.assertEqual([p['field']['Column']['Property'] for p in category],['year','quarter_number','month_number','date'])
+                self.assertEqual([p['active'] for p in category],[True,False,False,False])
+                self.assertEqual(q['sortDefinition']['sort'][0]['direction'],'Descending')
+            if d['name']=='date_filter':
+                props=v['objects']['data'][0]['properties']
+                self.assertEqual(props['start']['expr']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
+                self.assertNotIn('end',props)
+        self.assertGreater(date_chart_count,0)

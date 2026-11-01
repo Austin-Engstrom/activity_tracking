@@ -24,11 +24,11 @@
                       "Entity": "activity_types"
                     }
                   },
-                  "Property": "activity_type"
+                  "Property": "activity_category"
                 }
               },
-              "queryRef": "activity_types.activity_type",
-              "nativeQueryRef": "activity_type"
+              "queryRef": "activity_types.activity_category",
+              "nativeQueryRef": "activity_category"
             }
           ]
         },
@@ -84,7 +84,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Whole activity miles by sport'"
+                  "Value": "'Whole activity miles by category'"
                 }
               }
             },
