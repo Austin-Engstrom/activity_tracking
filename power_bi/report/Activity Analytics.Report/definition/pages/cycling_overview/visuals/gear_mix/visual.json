@@ -3,9 +3,9 @@
   "name": "gear_mix",
   "position": {
     "x": 968,
-    "y": 614.4,
+    "y": 408,
     "z": 11,
-    "height": 179.2,
+    "height": 384,
     "width": 448,
     "tabOrder": 11
   },
@@ -121,6 +121,19 @@
                       "Value": "'#E6EDF5'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }

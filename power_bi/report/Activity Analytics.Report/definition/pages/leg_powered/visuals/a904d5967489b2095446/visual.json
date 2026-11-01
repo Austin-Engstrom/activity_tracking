@@ -1,38 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "sport_mix",
+  "name": "a904d5967489b2095446",
   "position": {
-    "x": 968,
-    "y": 409.6,
-    "z": 10,
-    "height": 179.2,
-    "width": 448,
-    "tabOrder": 10
+    "x": 1200,
+    "y": 408,
+    "z": 13,
+    "height": 144,
+    "width": 216,
+    "tabOrder": 13
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "card",
     "query": {
       "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "activity_types"
-                    }
-                  },
-                  "Property": "activity_type"
-                }
-              },
-              "queryRef": "activity_types.activity_type",
-              "nativeQueryRef": "activity_type",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -42,11 +23,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Whole Activity Miles"
+                  "Property": "Average Moving Time"
                 }
               },
-              "queryRef": "measures_.Whole Activity Miles",
-              "nativeQueryRef": "Whole Activity Miles"
+              "queryRef": "measures_.Average Moving Time",
+              "nativeQueryRef": "Average Moving Time"
             }
           ]
         }
@@ -61,7 +42,7 @@
                     "Entity": "measures_"
                   }
                 },
-                "Property": "Whole Activity Miles"
+                "Property": "Average Moving Time"
               }
             },
             "direction": "Descending"
@@ -71,21 +52,24 @@
       }
     },
     "objects": {
-      "categoryAxis": [
+      "labels": [
         {
           "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C2CDDA'"
-                    }
-                  }
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             },
-            "titleColor": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "28D"
+                }
+              }
+            },
+            "color": {
               "solid": {
                 "color": {
                   "expr": {
@@ -99,28 +83,13 @@
           }
         }
       ],
-      "valueAxis": [
+      "categoryLabels": [
         {
           "properties": {
-            "labelColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C2CDDA'"
-                    }
-                  }
-                }
-              }
-            },
-            "titleColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E6EDF5'"
-                    }
-                  }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -142,7 +111,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Whole activity miles by sport'"
+                  "Value": "'Average Moving Time'"
                 }
               }
             },

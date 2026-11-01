@@ -1,17 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "trail_detail",
   "position": {
-    "x": 24,
-    "y": 821.76,
-    "width": 1392,
-    "height": 381.44,
+    "x": 32,
+    "y": 816,
     "z": 11,
+    "height": 384,
+    "width": 672,
     "tabOrder": 11
   },
   "visual": {
     "visualType": "tableEx",
-    "drillFilterOtherVisuals": true,
     "query": {
       "queryState": {
         "Values": {
@@ -309,6 +308,7 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

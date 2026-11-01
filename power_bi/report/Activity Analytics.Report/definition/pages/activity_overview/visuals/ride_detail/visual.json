@@ -1,35 +1,20 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "ride_detail",
   "position": {
     "x": 24,
-    "y": 821.76,
-    "width": 1392,
-    "height": 427.52,
+    "y": 824,
     "z": 12,
+    "height": 424,
+    "width": 920,
     "tabOrder": 12
   },
   "visual": {
     "visualType": "tableEx",
-    "drillFilterOtherVisuals": true,
     "query": {
       "queryState": {
         "Values": {
           "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "activities"
-                    }
-                  },
-                  "Property": "activity_id"
-                }
-              },
-              "queryRef": "activities.activity_id",
-              "nativeQueryRef": "activity_id"
-            },
             {
               "field": {
                 "Column": {
@@ -358,6 +343,7 @@
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

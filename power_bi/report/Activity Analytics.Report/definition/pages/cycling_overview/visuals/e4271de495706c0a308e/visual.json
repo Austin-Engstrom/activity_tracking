@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "e4271de495706c0a308e",
+  "position": {
+    "x": 968,
+    "y": 824,
+    "z": 13,
+    "height": 424,
+    "width": 448,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "azureMap",
+    "objects": {
+      "mapControls": [
+        {
+          "properties": {
+            "zoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "-0.53D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
