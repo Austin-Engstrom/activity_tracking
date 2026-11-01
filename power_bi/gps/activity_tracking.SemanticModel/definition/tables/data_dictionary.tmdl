@@ -319,4 +319,3 @@ table data_dictionary
 				)
 
 	annotation PBI_ResultType = Table
-
