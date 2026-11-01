@@ -50,8 +50,8 @@ class CyclingReportTests(unittest.TestCase):
 
     def test_cycling_filter_is_visible_and_editable(self):
         filters=json.loads((REPORT/'definition/report.json').read_text())['filterConfig']['filters']
-        self.assertEqual(len(filters),1)
-        f=filters[0];self.assertFalse(f['isLockedInViewMode']);self.assertFalse(f['isHiddenInViewMode'])
+        self.assertEqual(len(filters),2)
+        f=next(f for f in filters if f['name']=='cycling_sport_filter');self.assertFalse(f['isLockedInViewMode']);self.assertFalse(f['isHiddenInViewMode'])
         values=f['filter']['Where'][0]['Condition']['In']['Values']
         sports={v[0]['Literal']['Value'] for v in values}
         self.assertTrue({"'Ride'","'MountainBikeRide'","'GravelRide'"} <= sports)
@@ -81,3 +81,10 @@ class CyclingReportTests(unittest.TestCase):
                 self.assertEqual(cards[-1]['x']+cards[-1]['width'],1416)
                 for left,right in zip(cards,cards[1:]):
                     self.assertEqual(right['x']-left['x']-left['width'],24)
+
+    def test_default_year_is_editable_current_calendar_year(self):
+        filters=json.loads((REPORT/'definition/report.json').read_text())['filterConfig']['filters']
+        f=next(f for f in filters if f['name']=='reporting_year_filter')
+        self.assertFalse(f['isLockedInViewMode'])
+        self.assertEqual(f['field']['Column']['Property'],'year')
+        self.assertEqual(f['filter']['Where'][0]['Condition']['In']['Values'],[[{'Literal':{'Value':'2026L'}}]])

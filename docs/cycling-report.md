@@ -88,3 +88,5 @@ Cards use their visual title without a duplicate category label below the value.
 All pages open Fit to width. Mileage visuals without dates sort by their mileage measure descending; date visuals retain newest-first ordering.
 
 All pages share a 12-column layout with 24px side margins and gutters. Cards use equal three-column widths, slicers use four columns, and chart rows use either 8/4 or 6/6 column splits. All row edges align with the full-width detail tables.
+
+The saved report defaults to calendar year 2026 through an unlocked report-level Reporting year filter. Change or clear it to explore other years. This is a saved default and does not automatically advance at New Year; update it when preparing the next annual default.
