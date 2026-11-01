@@ -66,14 +66,14 @@ new secrets, or Strava requests are needed to create this bridge.
 
 After export, open `power_bi/gps/activity_tracking.pbip` and refresh. In a new table
 or matrix put `trails[trail_name]` and `trail_systems[trail_system_name]` on rows,
-and `Segment Association Count` in values. Select a segment or add a segment-name
+and `Segments Associated` in values. Select a segment or add a segment-name
 slicer. Hide rows without associations (visual filter: association count greater
 than zero). For positive-distance evidence only, additionally filter
 `segment_trail_associations[evidence_status]` to `distance_supported`.
 
 Measures live in `measures_`, in the **Segments / Associations** display folder:
 
-- **Segment Association Count**: number of observed combinations.
+- **Segments Associated**: number of observed combinations.
 - **Associated Trails**: distinct nonblank associated trails.
 - **Associated Trail Systems**: distinct nonblank associated systems.
 - **Observed Segment Association Miles**: additive observed distance per effort.
@@ -115,3 +115,37 @@ the association view, so the same two local install/export commands above apply.
 A full point/spatial rebuild is unnecessary for this scope change. Refresh Power BI
 after all 11 exports succeed. Eligible activity and point totals should stay the
 same; activity-type, gear or segment member counts can decrease.
+
+## Diagnose low association coverage before changing tolerances
+
+Run the offline coverage audit on the populated local database:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.audit_segment_coverage --explain
+```
+
+It prints progress/timings and writes `exports/validation/segment_coverage/`:
+
+- `summary.json`: mutually exclusive coverage categories for GPS-scoped segments.
+- `segments.csv`: per-segment effort, verification and point-assignment evidence.
+- `verification_candidates.csv`: unverified activities ordered by existing matched
+  trail evidence and their count of currently uncovered segments.
+- `system_geometry.csv`: boundary confirmation and trail-geometry availability.
+
+Coverage categories distinguish named-trail observations, system-only observations,
+verified points outside mapped systems, verified efforts without usable GPS
+memberships, and activities awaiting verification. A system-only observation may
+reflect an ambiguous match or a missing/too-distant trail; ambiguous membership
+counts help distinguish these. No association or tolerance changes are applied.
+
+An activity's candidate-uncovered count is an investigation priority, not a promise
+of new matches: unverified indexes are not used to assign trails, activities can
+share candidate segments, and matched activity points may belong to a different
+part of the ride. Only the existing original-array verification can enable links.
+Raw point memberships include effort endpoints, consistent with association counts;
+positive eligible distance is a separate evidence status on the association bridge.
+
+Do not treat catalog segment coverage as spatial matching accuracy. Complete
+verification where useful, inspect missing geometry, and review ambiguous routes
+before widening trail tolerances. Wider tolerances can incorrectly assign parallel
+trails. SQL work tables are connection-local TEMP tables and source data is unchanged.

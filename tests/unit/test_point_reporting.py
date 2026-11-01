@@ -283,4 +283,36 @@ class PointReportingTests(unittest.TestCase):
         self.assertEqual(set(self.c.exec_driver_sql('SELECT activity_type_key FROM view_activity_type').scalars()),{'Ride','WeightTraining'})
 
 
+    def test_segment_coverage_distinguishes_verification_and_mapping_gaps(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from src.tools.audit_segment_coverage import run
+        self.streams([(i,i*10,i*25,41) for i in range(6)])
+        self.c.exec_driver_sql("INSERT INTO activity_streams(activity_id,point_index,time_seconds,distance_meters,latitude,longitude,created_at) VALUES (2,0,0,0,41,-93,CURRENT_TIMESTAMP)")
+        for key in range(1,6):
+            self.c.exec_driver_sql(f"INSERT INTO segments(segment_id,name,created_at,updated_at) VALUES ({key},'segment{key}',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        for key,activity,start,end in [(1,1,0,1),(2,1,2,3),(3,1,4,5),(4,1,999,1000),(5,2,0,0)]:
+            self.c.exec_driver_sql(f"INSERT INTO segment_efforts(segment_effort_id,activity_id,segment_id,name,elapsed_time_seconds,moving_time_seconds,start_date,start_index,end_index,created_at,updated_at) VALUES ({key},{activity},{key},'effort',10,10,'2026-01-02',{start},{end},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)")
+        self.c.exec_driver_sql('INSERT INTO stream_index_alignment VALUES (1,1)')
+        rebuild_points(self.c);self.views()
+        self.c.exec_driver_sql("UPDATE activity_points SET trail_key=NULL,match_method='boundary:ambiguous_trail' WHERE activity_id=1 AND point_index BETWEEN 2 AND 3")
+        self.c.exec_driver_sql("UPDATE activity_points SET trail_key=NULL,trail_system_key=NULL,match_method='unmatched' WHERE activity_id=1 AND point_index BETWEEN 4 AND 5")
+        self.c.commit()
+        with TemporaryDirectory() as folder:
+            with patch('src.tools.audit_segment_coverage.engine',self.engine):
+                summary=run(Path(folder),explain=True)
+            self.assertEqual(summary['segments'],5)
+            self.assertEqual(summary['coverage_status_counts'],{
+                'named_trail_observed':1,'system_only_observed':1,
+                'verified_points_outside_mapped_systems':1,
+                'verified_efforts_without_gps_memberships':1,
+                'awaiting_verification':1})
+            import csv
+            with (Path(folder)/'verification_candidates.csv').open(encoding='utf-8-sig') as f:
+                candidates=list(csv.DictReader(f))
+            self.assertEqual(len(candidates),1)
+            self.assertEqual(candidates[0]['activity_id'],'2')
+            self.assertEqual(candidates[0]['candidate_uncovered_segments'],'1')
+            self.assertEqual(summary['system_associated_segments'],2)
+
 if __name__=='__main__': unittest.main()

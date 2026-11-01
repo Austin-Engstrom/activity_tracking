@@ -100,7 +100,10 @@ class SegmentAssociationTests(unittest.TestCase):
         blocks=re.split(r'\n(?=relationship )',(model/'relationships.tmdl').read_text())
         associations=[b for b in blocks if 'segment_trail_associations.' in b]
         self.assertEqual(len(associations),3)
-        self.assertTrue(all('crossFilteringBehavior: oneDirection' in b for b in associations))
+        # Desktop omits oneDirection because it is the Tabular default.
+        for block in associations:
+            behavior=re.search(r'crossFilteringBehavior: (\w+)',block)
+            self.assertEqual(behavior[1] if behavior else 'oneDirection','oneDirection')
         self.assertFalse(any('activity_points.' in b for b in associations))
         for table in ['segments','trails','trail_systems']:
             self.assertTrue(any('toColumn: '+table+'.' in b for b in associations))
