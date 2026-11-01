@@ -32,7 +32,7 @@ class CyclingReportTests(unittest.TestCase):
             if isinstance(obj,dict):
                 for kind in ['Column','Measure']:
                     if kind in obj:
-                        field=obj[kind]; table=field['Expression']['SourceRef']['Entity']
+                        field=obj[kind]; table=field['Expression']['SourceRef'].get('Entity','dates')
                         self.assertIn(field['Property'],measures if kind=='Measure' else columns[table])
                 for v in obj.values():verify(v)
             elif isinstance(obj,list):
@@ -87,7 +87,8 @@ class CyclingReportTests(unittest.TestCase):
         self.assertFalse(any(f['name']=='reporting_year_filter' for f in report['filterConfig']['filters']))
         for path in (REPORT/'definition/pages').glob('*/visuals/date_filter/visual.json'):
             visual=json.loads(path.read_text())
-            bounds=visual['filterConfig']['filters'][0]['filter']['Where'][0]['Condition']['And']
+            self.assertNotIn('filterConfig',visual)
+            bounds=visual['visual']['objects']['general'][0]['properties']['filter']['filter']['Where'][0]['Condition']['And']
             self.assertEqual(bounds['Left']['Comparison']['ComparisonKind'],2)
             self.assertEqual(bounds['Right']['Comparison']['ComparisonKind'],3)
             self.assertEqual(bounds['Left']['Comparison']['Right']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
