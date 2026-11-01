@@ -88,9 +88,9 @@ class CyclingReportTests(unittest.TestCase):
         for path in (REPORT/'definition/pages').glob('*/visuals/date_filter/visual.json'):
             visual=json.loads(path.read_text())
             self.assertNotIn('filterConfig',visual)
-            bounds=visual['visual']['objects']['general'][0]['properties']['filter']['filter']['Where'][0]['Condition']['And']
-            self.assertEqual(bounds['Left']['Comparison']['ComparisonKind'],2)
-            self.assertEqual(bounds['Right']['Comparison']['ComparisonKind'],3)
-            self.assertEqual(bounds['Left']['Comparison']['Right']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
-            self.assertEqual(bounds['Right']['Comparison']['Right']['Literal']['Value'],"datetime'2026-12-31T00:00:00'")
+            selection=visual['visual']['objects']['general'][0]['properties']['filter']['filter']
+            condition=selection['Where'][0]['Condition']
+            self.assertEqual(set(condition),{'Comparison'})
+            self.assertEqual(condition['Comparison']['ComparisonKind'],2)
+            self.assertEqual(condition['Comparison']['Right']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
             self.assertTrue(visual['visual']['syncGroup']['filterChanges'])

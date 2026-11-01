@@ -89,4 +89,4 @@ All pages open Fit to width. Mileage visuals without dates sort by their mileage
 
 All pages share a 12-column layout with 24px side margins and gutters. Cards use equal three-column widths, slicers use four columns, and chart rows use either 8/4 or 6/6 column splits. All row edges align with the full-width detail tables.
 
-The synced Between date slicers default to January 1–December 31, 2026. Adjust or clear the slicer selection to explore other dates; no report-level year filter restricts the range. This is a saved default and does not automatically advance at New Year.
+The synced date slicers default to a January 1, 2026 start with no fixed upper bound, allowing newly available dates to enter the selection. Adjust or clear the slicer selection to explore other dates; no report-level year filter restricts the range. This is a saved default and does not automatically advance at New Year.

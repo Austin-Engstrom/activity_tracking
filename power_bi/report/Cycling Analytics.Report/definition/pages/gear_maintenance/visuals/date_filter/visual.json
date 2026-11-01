@@ -147,45 +147,21 @@
                 "Where": [
                   {
                     "Condition": {
-                      "And": {
+                      "Comparison": {
+                        "ComparisonKind": 2,
                         "Left": {
-                          "Comparison": {
-                            "ComparisonKind": 2,
-                            "Left": {
-                              "Column": {
-                                "Expression": {
-                                  "SourceRef": {
-                                    "Source": "d"
-                                  }
-                                },
-                                "Property": "date"
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "d"
                               }
                             },
-                            "Right": {
-                              "Literal": {
-                                "Value": "datetime'2026-01-01T00:00:00'"
-                              }
-                            }
+                            "Property": "date"
                           }
                         },
                         "Right": {
-                          "Comparison": {
-                            "ComparisonKind": 3,
-                            "Left": {
-                              "Column": {
-                                "Expression": {
-                                  "SourceRef": {
-                                    "Source": "d"
-                                  }
-                                },
-                                "Property": "date"
-                              }
-                            },
-                            "Right": {
-                              "Literal": {
-                                "Value": "datetime'2026-12-31T00:00:00'"
-                              }
-                            }
+                          "Literal": {
+                            "Value": "datetime'2026-01-01T00:00:00'"
                           }
                         }
                       }
