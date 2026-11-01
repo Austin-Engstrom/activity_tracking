@@ -3,6 +3,32 @@
   "name": "trails_systems",
   "displayName": "Trails & Systems",
   "displayOption": "FitToPage",
-  "height": 1000,
-  "width": 1440
+  "height": 1280,
+  "width": 1440,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#11151C'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
 }

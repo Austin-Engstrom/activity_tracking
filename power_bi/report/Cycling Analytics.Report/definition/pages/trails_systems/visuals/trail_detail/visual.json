@@ -3,9 +3,9 @@
   "name": "trail_detail",
   "position": {
     "x": 24,
-    "y": 642,
+    "y": 821.76,
     "width": 1392,
-    "height": 298,
+    "height": 381.44,
     "z": 11,
     "tabOrder": 11
   },
@@ -93,6 +93,50 @@
                   "Value": "10D"
                 }
               }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1C2430'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#222D3B'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -111,6 +155,52 @@
               "expr": {
                 "Literal": {
                   "Value": "10D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#283342'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#344154'"
+                    }
+                  }
                 }
               }
             }
@@ -148,7 +238,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }
@@ -172,7 +262,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1C2430'"
                     }
                   }
                 }

@@ -3,9 +3,9 @@
   "name": "kpi_1",
   "position": {
     "x": 374,
-    "y": 190,
+    "y": 243.2,
     "width": 326,
-    "height": 110,
+    "height": 140.8,
     "z": 6,
     "tabOrder": 6
   },
@@ -51,6 +51,30 @@
                   "Value": "28D"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         }
@@ -86,7 +110,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }
@@ -110,7 +134,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1C2430'"
                     }
                   }
                 }

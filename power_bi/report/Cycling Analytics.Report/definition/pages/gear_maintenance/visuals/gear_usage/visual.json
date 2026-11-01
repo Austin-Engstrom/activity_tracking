@@ -3,9 +3,9 @@
   "name": "gear_usage",
   "position": {
     "x": 24,
-    "y": 320,
+    "y": 409.6,
     "width": 880,
-    "height": 250,
+    "height": 320.0,
     "z": 9,
     "tabOrder": 9
   },
@@ -64,7 +64,7 @@
                 "Property": "week_start_date"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": true
@@ -100,7 +100,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }
@@ -124,7 +124,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1C2430'"
                     }
                   }
                 }
@@ -134,6 +134,64 @@
               "expr": {
                 "Literal": {
                   "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C2CDDA'"
+                    }
+                  }
+                }
+              }
+            },
+            "titleColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C2CDDA'"
+                    }
+                  }
+                }
+              }
+            },
+            "titleColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
                 }
               }
             }

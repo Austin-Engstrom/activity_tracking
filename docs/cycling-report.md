@@ -12,7 +12,7 @@ All visuals are native Power BI visuals and can be edited in Desktop.
 | Gear & Maintenance | Date-selected riding usage and gear comparison; separate current component service table |
 | Data Definitions | Searchable object/table/name slicers and wrapped model descriptions |
 
-The canvas is 1440 × 1000 with shared spacing, a light theme, navy text, teal and
+The canvas is 1440 × 1280 with shared spacing, middle canvas alignment, a dark theme, light text, teal and
 orange accents, four top-row KPI cards, charts and bottom detail tables. Use the
 normal page tabs to navigate. This is an editable draft, not a claim of rendered
 Desktop validation.
@@ -82,3 +82,5 @@ reproduced on unmodified `main` at `73107bc`: the field-parameter metadata-forma
 assertion and embedded dictionary freshness assertion. No semantic-model files are
 changed in this report branch. Desktop rendering and live Service queries remain
 manual checks.
+
+Cards use their visual title without a duplicate category label below the value. Date charts, date detail tables and date slicers default to newest first.

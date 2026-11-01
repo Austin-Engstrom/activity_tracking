@@ -3,9 +3,9 @@
   "name": "maintenance_note",
   "position": {
     "x": 932,
-    "y": 85,
+    "y": 108.8,
     "width": 484,
-    "height": 82,
+    "height": 104.96,
     "z": 4,
     "tabOrder": 4
   },
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }

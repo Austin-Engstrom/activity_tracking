@@ -3,9 +3,9 @@
   "name": "service_note",
   "position": {
     "x": 24,
-    "y": 942,
+    "y": 1205.76,
     "width": 1392,
-    "height": 34,
+    "height": 43.52,
     "z": 12,
     "tabOrder": 12
   },
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }

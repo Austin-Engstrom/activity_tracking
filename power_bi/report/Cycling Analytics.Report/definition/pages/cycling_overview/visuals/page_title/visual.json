@@ -3,9 +3,9 @@
   "name": "page_title",
   "position": {
     "x": 24,
-    "y": 12,
+    "y": 15.36,
     "width": 1000,
-    "height": 44,
+    "height": 56.32,
     "z": 0,
     "tabOrder": 0
   },
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }

@@ -3,9 +3,9 @@
   "name": "coverage_note",
   "position": {
     "x": 24,
-    "y": 947,
+    "y": 1212.16,
     "width": 1392,
-    "height": 29,
+    "height": 37.12,
     "z": 12,
     "tabOrder": 12
   },
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }

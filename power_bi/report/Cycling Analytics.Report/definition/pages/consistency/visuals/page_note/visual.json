@@ -3,9 +3,9 @@
   "name": "page_note",
   "position": {
     "x": 24,
-    "y": 54,
+    "y": 69.12,
     "width": 1360,
-    "height": 24,
+    "height": 30.72,
     "z": 1,
     "tabOrder": 1
   },
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }

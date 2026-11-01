@@ -11,7 +11,7 @@
       "type": "SharedResources"
     },
     "customTheme": {
-      "name": "CyclingDraft",
+      "name": "CyclingDark",
       "reportVersionAtImport": {
         "visual": "2.12.0",
         "report": "3.4.0",
@@ -27,7 +27,7 @@
           "verticalAlignment": {
             "expr": {
               "Literal": {
-                "Value": "'Top'"
+                "Value": "'Middle'"
               }
             }
           }
@@ -59,8 +59,8 @@
           "type": "BaseTheme"
         },
         {
-          "name": "CyclingDraft",
-          "path": "BuiltInThemes/CyclingDraft.json",
+          "name": "CyclingDark",
+          "path": "BuiltInThemes/CyclingDark.json",
           "type": "CustomTheme"
         }
       ]

@@ -3,9 +3,9 @@
   "name": "name_filter",
   "position": {
     "x": 772,
-    "y": 82,
+    "y": 104.96,
     "width": 644,
-    "height": 90,
+    "height": 115.2,
     "z": 4,
     "tabOrder": 4
   },
@@ -80,6 +80,51 @@
             }
           }
         }
+      ],
+      "items": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            },
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1C2430'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6EDF5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "visualContainerObjects": {
@@ -112,7 +157,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#182C45'"
+                      "Value": "'#E6EDF5'"
                     }
                   }
                 }
@@ -136,7 +181,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1C2430'"
                     }
                   }
                 }
