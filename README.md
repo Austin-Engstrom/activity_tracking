@@ -51,7 +51,7 @@ Start with the [publishing handoff and manual refresh runbook](docs/publishing-h
 The handoff includes a release validation record; Desktop and deployed-model checks
 remain manual.
 
-## Cycling report draft
+## Activity Analytics report
 
-Open `power_bi/report/Cycling Analytics.pbip` for the five-page cycling report connected to the
+Open `power_bi/report/Activity Analytics.pbip` for the seven-page activity report connected to the
 published semantic model. See the [layout and Desktop review notes](docs/cycling-report.md).

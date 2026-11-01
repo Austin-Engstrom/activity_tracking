@@ -6,22 +6,22 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'power_bi/report'
-REPORT=BASE/'Cycling Analytics.Report'
+REPORT=BASE/'Activity Analytics.Report'
 MODEL=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition/tables'
 
 
 class CyclingReportTests(unittest.TestCase):
-    def test_project_uses_shared_model_and_has_five_pages(self):
-        project=json.loads((BASE/'Cycling Analytics.pbip').read_text())
-        self.assertEqual(project['artifacts'][0]['report']['path'],'Cycling Analytics.Report')
+    def test_project_uses_shared_model_and_has_seven_pages(self):
+        project=json.loads((BASE/'Activity Analytics.pbip').read_text())
+        self.assertEqual(project['artifacts'][0]['report']['path'],'Activity Analytics.Report')
         binding=json.loads((REPORT/'definition.pbir').read_text())
         self.assertNotIn('byPath',binding['datasetReference'])
         connection=binding['datasetReference']['byConnection']['connectionString']
         self.assertIn('semanticmodelid=',connection.lower())
         self.assertIn('integrated security=ClaimsToken',connection)
         pages=json.loads((REPORT/'definition/pages/pages.json').read_text())
-        self.assertEqual(pages['pageOrder'],['cycling_overview','consistency','trails_systems','gear_maintenance','data_definitions'])
-        self.assertEqual(pages['activePageName'],'cycling_overview')
+        self.assertEqual(pages['pageOrder'],['activity_overview','cycling_overview','leg_powered','consistency','trails_systems','gear_maintenance','data_definitions'])
+        self.assertEqual(pages['activePageName'],'activity_overview')
 
     def test_all_visual_fields_resolve_and_visuals_fit(self):
         columns={p.stem:set(re.findall(r"\n\tcolumn (?:'([^']+)'|([^\s]+))",p.read_text())) for p in MODEL.glob('*.tmdl')}
@@ -49,7 +49,9 @@ class CyclingReportTests(unittest.TestCase):
                 self.assertLessEqual(pos['y']+pos['height'],size['height'])
 
     def test_cycling_filter_is_visible_and_editable(self):
-        filters=json.loads((REPORT/'definition/report.json').read_text())['filterConfig']['filters']
+        report=json.loads((REPORT/'definition/report.json').read_text())
+        self.assertFalse(report.get('filterConfig',{}).get('filters',[]))
+        filters=json.loads((REPORT/'definition/pages/cycling_overview/page.json').read_text())['filterConfig']['filters']
         self.assertEqual(len(filters),1)
         f=next(f for f in filters if f['name']=='cycling_sport_filter');self.assertFalse(f['isLockedInViewMode']);self.assertFalse(f['isHiddenInViewMode'])
         values=f['filter']['Where'][0]['Condition']['In']['Values']
@@ -57,13 +59,23 @@ class CyclingReportTests(unittest.TestCase):
         self.assertTrue({"'Ride'","'MountainBikeRide'","'GravelRide'"} <= sports)
         self.assertNotIn("'Run'",sports)
 
-    def test_analysis_slicers_sync_and_dictionary_is_independent(self):
-        for page in ['cycling_overview','consistency','trails_systems','gear_maintenance']:
-            for name in ['date_filter','gear_filter']:
-                v=json.loads((REPORT/f'definition/pages/{page}/visuals/{name}/visual.json').read_text())
-                self.assertTrue(v['visual']['syncGroup']['filterChanges'])
-        for path in (REPORT/'definition/pages/data_definitions').glob('visuals/*/visual.json'):
-            self.assertNotIn('syncGroup',json.loads(path.read_text())['visual'])
+    def test_only_dates_sync_between_activity_scopes(self):
+        for page in ['activity_overview','cycling_overview','leg_powered','consistency','trails_systems','gear_maintenance']:
+            v=json.loads((REPORT/f'definition/pages/{page}/visuals/date_filter/visual.json').read_text())
+            self.assertTrue(v['visual']['syncGroup']['filterChanges'])
+            for name in ['gear_filter','sport_filter']:
+                path=REPORT/f'definition/pages/{page}/visuals/{name}/visual.json'
+                if path.exists():
+                    self.assertNotIn('syncGroup',json.loads(path.read_text())['visual'])
+        for page in ['activity_overview','consistency','trails_systems','gear_maintenance','data_definitions']:
+            config=json.loads((REPORT/f'definition/pages/{page}/page.json').read_text())
+            self.assertFalse(config.get('filterConfig',{}).get('filters',[]))
+        config=json.loads((REPORT/'definition/pages/leg_powered/page.json').read_text())
+        f=config['filterConfig']['filters'][0]
+        self.assertFalse(f['isLockedInViewMode'])
+        sports={v[0]['Literal']['Value'] for v in f['filter']['Where'][0]['Condition']['In']['Values']}
+        self.assertTrue({"'Run'","'TrailRun'","'Walk'","'Hike'"} <= sports)
+        self.assertNotIn("'Ride'",sports)
 
     def test_visuals_share_uniform_grid_and_outer_edges(self):
         for page in (REPORT/'definition/pages').glob('*/page.json'):
@@ -84,7 +96,7 @@ class CyclingReportTests(unittest.TestCase):
 
     def test_current_year_selection_lives_on_synced_date_slicers(self):
         report=json.loads((REPORT/'definition/report.json').read_text())
-        self.assertFalse(any(f['name']=='reporting_year_filter' for f in report['filterConfig']['filters']))
+        self.assertFalse(any(f['name']=='reporting_year_filter' for f in report.get('filterConfig',{}).get('filters',[])))
         for path in (REPORT/'definition/pages').glob('*/visuals/date_filter/visual.json'):
             visual=json.loads(path.read_text())
             self.assertNotIn('filterConfig',visual)

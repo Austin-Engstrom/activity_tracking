@@ -1,94 +1,79 @@
-# Cycling report draft
+# Activity Analytics report
 
-Open `power_bi/report/Cycling Analytics.pbip`. This is a separate five-page report using the
-published activity_tracking shared model; the existing GPS PBIP and Quanta Check report are unchanged.
-All visuals are native Power BI visuals and can be edited in Desktop.
+Open `power_bi/report/Activity Analytics.pbip` on the report branch. The project
+retains the original published `activity_tracking` semantic-model connection and
+logical report identity; there is no copied model or Parquet dependency. The
+existing GPS project and Quanta Check are unchanged.
 
-| Page | Draft layout |
+## Pages and scope
+
+| Page | Scope and layout |
 |---|---|
-| Cycling Overview | Activity miles/hours, activity and active-day cards; weekly point-mile trend; sport and gear breakdowns; activity detail with Strava URL |
-| Consistency | Active-day/week cards and weekly streak; weekly active days, daily counts, weekly detail |
-| Trails & Systems | Assigned trail mileage and coverage cards; system/trail rankings; point-mile detail |
-| Gear & Maintenance | Date-selected riding usage and gear comparison; separate current component service table |
-| Data Definitions | Searchable object/table/name slicers and wrapped model descriptions |
+| Activity Overview | All GPS activities; activity miles/hours, activity and active-day cards; weekly point-mile trend; activity-type and equipment breakdowns; detail with Strava links |
+| Cycling Overview | Editable cycling page filter; same riding summary and detail |
+| On Foot & Leg-Powered | Editable non-cycling leg-powered filter; mileage, moving hours, active days, type mix, weekly active-day trend and activity links |
+| Consistency | All GPS activity types by default; active days/weeks, weekly participation and streaks; weekly/daily trends and detail |
+| Trails & Systems | All GPS activity types by default; matched point mileage, assignment coverage, system/trail breakdowns and route detail |
+| Gear & Maintenance | All GPS activity types for riding usage; separate latest exported component-service snapshot |
+| Data Definitions | Independent, searchable measure and column reference |
 
-The canvas is 1440 × 1280 with shared spacing, middle canvas alignment, a dark theme, light text, teal and
-orange accents, four top-row KPI cards, charts and bottom detail tables. Use the
-normal page tabs to navigate. This is an editable draft, not a claim of rendered
-Desktop validation.
+There is **no report-wide sport filter**. The cycling filter moved to the Cycling
+Overview page, where it selects Ride, MountainBikeRide, GravelRide, EBikeRide,
+EMountainBikeRide, VirtualRide, Handcycle and Velomobile. The On Foot & Leg-Powered
+page selects Run, TrailRun, VirtualRun, Walk, Hike, Snowshoe, NordicSki,
+BackcountrySki, IceSkate, InlineSkate, RollerSki, StairStepper and Elliptical.
+Both filters are visible and unlocked in Filters on this page. Only GPS-eligible
+activities present in the semantic model participate, including indoor sports only
+when they actually have GPS points. Downhill skiing/snowboarding, cycling and
+paddling are excluded from the leg-powered page by default. Adjust the whitelist
+to match the intended interpretation.
 
-## Cycling and other filters
+Only **date slicers sync** between analysis pages. Sport and equipment slicers are
+page-specific so a bike/sport selection does not silently restrict all-activity
+Consistency or the leg-powered page. A manual selection on Consistency still
+intentionally changes its results; clear local slicers for all GPS activities.
+The shared date selection starts January 1, 2026 with no fixed upper bound. This
+saved start does not automatically change next January. Slider bars are hidden;
+the date inputs remain visible.
 
-The unlocked, visible **Cycling sports (editable)** report filter selects Ride,
-MountainBikeRide, GravelRide, EBikeRide, EMountainBikeRide, VirtualRide, Handcycle and
-Velomobile. Only sports present in the GPS model appear in visuals. Expand, replace
-or clear this filter in the report Filters pane to change scope across pages.
-Non-GPS indoor activities remain outside the source model regardless of this filter.
+## Layout and interpretation
 
-Date and equipment slicers are synchronized across the four analysis pages. Sport
-slicers are synchronized on Overview, Consistency and Trails. Definitions has its
-own independent searchable metadata slicers. Use Desktop's slicer Search option
-if the search box is not displayed initially.
+All seven pages use a dark theme, 1440 × 1280 canvas, middle alignment and Fit to
+width. A twelve-column grid gives 24px outer margins and gutters: equal cards span
+three columns, slicers span four, and chart rows use 8/4 or 6/6 splits. Titles replace
+duplicate card category labels. Date visuals sort newest first; mileage visuals
+without dates sort highest first. Normal page tabs provide navigation.
 
-Maintenance status comes from the latest exported snapshot, uses all source usage
-on its equipment, and does not respond to the riding date/sport filters. Gear
-selection does filter its components. The page labels this explicitly. It shows
-per-component remaining intervals with units, avoiding an aggregate of hours/miles.
+Overview cards show whole-activity totals while weekly trends use point mileage.
+Whole summaries for activities crossing dates can contribute to multiple contexts;
+partial-route/period whole totals are not always additive. Activity-detail dates
+are UTC source dates; date slicers use local point dates. IDs distinguish duplicate
+activity names; Activity URL opens the corresponding Strava page with viewer access.
+Trail matching coverage is not matching accuracy or unique completion.
 
-Overview cards show whole-activity totals; its weekly trend uses point miles.
-Trail visuals use point mileage and assignment coverage, not unique trail completion.
-Activities crossing local dates can contribute whole summaries to multiple contexts;
-whole-activity rows across periods/partial routes are not always additive. Activity
-start dates in the detail table are UTC; the report date slicer uses local point dates.
-Strava URLs are measure values categorized as Web URL; enable URL icons or conditional
-URL formatting in Desktop if needed. Activity IDs remain in the detail for unique rows.
-
-## Published-model connection
-
-The report preserves the `byConnection` definition from the merged blank
-`power_bi/report/Cycling Analytics.pbip`. It connects directly to the published `activity_tracking`
-semantic model. The project, connection string and base theme remain unchanged;
-this branch adds report pages, visuals, filters and a custom theme only. There is
-no copied semantic model, local Parquet source or dataset recalculation required.
-
-Sign in to Power BI Desktop with an account that can author against the published
-model. The deployed model must include `Activity URL` and `data_dictionary` from the
-merged dataset changes. If those fields are missing in Service, refresh and republish
-the semantic model first. Publishing this report is a separate step from committing
-these files.
+Maintenance is a current export-time snapshot using all source usage on each
+component's equipment; it does not recalculate with riding date/sport filters.
+The local equipment slicer does filter service rows. Display remaining service
+intervals per component with their hours/miles units; do not sum mixed units.
 
 ## Desktop review
 
-1. Close Desktop before checking out the branch; open `power_bi/report/Cycling Analytics.pbip` and sign in for the published model.
-2. Check every page renders, headers and tables fit, and the cycling filter is
-   editable. Confirm date/equipment slicer selections carry between analysis pages.
-3. Check a known activity, its link, local dates, inactive weeks, unmatched trails,
-   and component service values. Confirm Definitions is unaffected by riding filters.
-4. Refine chart density, table column widths, sort, URL icons, tooltips and fonts.
-   Large history may need a bounded date selection before adding more detail.
-5. Verify totals against the published Quanta Check and intended viewer access
-   before publishing/sharing the report.
+Close Desktop before switching branches, then open `Activity Analytics.pbip` and
+sign in with access to the published model. Verify all seven pages render, the
+model includes the published Activity URL/dictionary/maintenance fixes, and renamed
+report paths load. No dataset refresh or republication is needed for these
+report-only scope/layout changes.
 
-Static checks validate JSON schemas, model field bindings, page bounds, cycling
-filter configuration and slicer groups. They do not execute report queries, verify
-DAX or render visuals. The daily calendar heatmap, custom navigation, due-count
-cards, drillthrough and a dedicated segment page are deferred from this draft.
+Compare Consistency with all GPS totals in Quanta Check under the same date range;
+check that running/walking now contribute active dates and streaks. Move between
+Cycling and On Foot pages to confirm local sport/equipment filters do not transfer,
+while date selections do. Check known activities, Strava links, inactive weeks,
+unmatched trail rows, component service values and dictionary search. Refine text
+sizes, chart density, widths and tooltips in Desktop as needed. Before publishing,
+verify intended viewer access and choose whether to replace the existing report
+or publish a renamed item.
 
-## Branch validation
-
-All four report-specific tests pass, and all 69 report/project JSON files validate
-against Microsoft schemas. The full suite has 66 passes and two existing failures,
-reproduced on unmodified `main` at `73107bc`: the field-parameter metadata-format
-assertion and embedded dictionary freshness assertion. No semantic-model files are
-changed in this report branch. Desktop rendering and live Service queries remain
-manual checks.
-
-Cards use their visual title without a duplicate category label below the value. Date charts, date detail tables and date slicers default to newest first.
-
-All pages open Fit to width. Mileage visuals without dates sort by their mileage measure descending; date visuals retain newest-first ordering.
-
-All pages share a 12-column layout with 24px side margins and gutters. Cards use equal three-column widths, slicers use four columns, and chart rows use either 8/4 or 6/6 column splits. All row edges align with the full-width detail tables.
-
-The synced date slicers default to a January 1, 2026 start with no fixed upper bound, allowing newly available dates to enter the selection. Adjust or clear the slicer selection to explore other dates; no report-level year filter restricts the range. This is a saved default and does not automatically advance at New Year.
-
-Date slicers keep their date inputs with the slider bar hidden.
+Static tests check the preserved live binding, seven-page layout, field references,
+page bounds/grid, page-specific sports, isolated sport/gear slicers and shared date
+selection. They do not render visuals or execute live queries. One existing
+field-parameter metadata-format test on main remains unrelated to this report.
