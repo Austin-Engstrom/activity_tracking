@@ -85,3 +85,5 @@ No model hierarchy, additional calendar fields or dataset publication is require
 Date slicers explicitly persist their displayed start as January 1, 2026 in addition
 to the lower-bound selection; no end value is stored. Desktop rendering remains
 the verification for the displayed date inputs.
+
+Visual subtitles are disabled throughout the report.
