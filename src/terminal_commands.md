@@ -6,14 +6,14 @@ Activity Tracking project.
 Core ETL Commands
 
 Run the main Strava ETL pipeline
-``` powershel
+``` powershell
 python -m src.main
 ```
 Use this for the normal day-to-day incremental refresh.
 
 Export Power BI Parquet files
 ``` powershell
-python -m src.export_power_bi
+python -m src.tools.export_power_bi
 ```
 
 Use this when the database is already current and you only need to
@@ -67,7 +67,7 @@ python -c "import sqlite3; from pathlib import Path; conn = sqlite3.connect('dat
 
 Then regenerate the Power BI Parquet exports:
 ``` powershell
-python -m src.export_power_bi
+python -m src.tools.export_power_bi
 ```
 
 Typical reporting-view update sequence
@@ -77,7 +77,7 @@ python -c "import sqlite3; from pathlib import Path; conn = sqlite3.connect('dat
 ```
 
 ``` powershell
-python -m src.export_power_bi
+python -m src.tools.export_power_bi
 ```
 
 Python Environment
@@ -115,10 +115,11 @@ python -c "import sqlite3; from pathlib import Path; conn = sqlite3.connect('dat
 # Re-export Power BI data
 
 ``` powershell
-python -m src.export_power_bi
+python -m src.tools.export_power_bi
 ```
 # Re-run trail-system spatial mapping
 
 ``` powershell
 python -m src.tools.run_spatial_trail_mapping
 ```
+For the current GPS dataset, use the [manual refresh and publication runbook](../docs/publishing-handoff.md). The normal `src.main` pipeline already rebuilds points and exports all 11 GPS views.

@@ -118,7 +118,7 @@ activity and tests all system polygons/candidate trails; very large trail catalo
 will need spatial indexing and incremental invalidation. No accuracy or full-history
 performance claim is made from synthetic tests alone.
 
-The default export contains the ten GPS-model views. Use `--include-legacy`
+The default export contains eleven GPS-model views, including observed segment associations. Use `--include-legacy`
 to also export the six retained legacy views; legacy maintenance exports require
 the existing maintenance-table initializer. Geometry and source data are not
 removed by the cutover. Rebuild thresholds are exposed as `--max-gap-seconds`,

@@ -43,3 +43,10 @@ with their meaning, filter behavior and interpretation notes.
 and dimension choices for visuals without changing the star-schema relationships.
 
 [Data dictionary](docs/data-dictionary-pbi.md) exposes native measure and analytical column definitions, folders and DAX as reportable rows in the GPS model.
+
+## Publishing and report building
+
+Start with the [publishing handoff and manual refresh runbook](docs/publishing-handoff.md),
+[exported data dictionary](docs/data-dictionary.md) and [proposed report outline](docs/report-outline.md).
+The handoff includes a release validation record; Desktop and deployed-model checks
+remain manual.
