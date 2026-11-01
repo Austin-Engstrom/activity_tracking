@@ -30,3 +30,15 @@ relationship 9f296454-32a7-4d67-8a87-de0ed3192338
 	fromColumn: activity_point_segments.segment_effort_key
 	toColumn: segment_efforts.segment_effort_key
 
+
+relationship d04466bb-b648-45aa-863d-fbcd5524d553
+	fromColumn: gear_components.gear_key
+	toColumn: gear.gear_key
+
+relationship 56a24f79-7062-4b33-971e-516f42ab9fca
+	fromColumn: component_services.component_key
+	toColumn: gear_components.component_key
+
+relationship f8b40caa-2528-4f56-b3c0-2dc799d8c66e
+	fromColumn: component_service_status.component_key
+	toColumn: gear_components.component_key

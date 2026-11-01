@@ -24,3 +24,6 @@ ref table segments
 ref table segment_efforts
 ref table activity_point_segments
 
+ref table gear_components
+ref table component_services
+ref table component_service_status

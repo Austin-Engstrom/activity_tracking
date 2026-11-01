@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import csv
 import sqlite3
+import math
+from datetime import datetime
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -151,6 +153,19 @@ def clean(value: str | None) -> str | None:
     return value if value else None
 
 
+def normalize_date(value: str | None) -> str | None:
+    """Accept ISO or US CSV dates and store SQLite-compatible ISO dates."""
+    value = clean(value)
+    if value is None:
+        return None
+    for pattern in ("%Y-%m-%d", "%m/%d/%Y"):
+        try:
+            return datetime.strptime(value, pattern).date().isoformat()
+        except ValueError:
+            pass
+    raise ValueError(f"Invalid maintenance date: {value!r}")
+
+
 def get_existing_gear_ids(conn: sqlite3.Connection) -> set[str]:
     """Return all valid Strava gear IDs."""
 
@@ -233,7 +248,7 @@ def import_gear_components(
             component_id_raw = clean(row.get("component_id"))
             gear_id = clean(row.get("gear_id"))
             component_type = clean(row.get("component_type"))
-            installed_at = clean(row.get("installed_at"))
+            installed_at = normalize_date(row.get("installed_at"))
             service_interval_type = clean(
                 row.get("service_interval_type")
             )
@@ -328,7 +343,7 @@ def import_gear_components(
                 result.skipped += 1
                 continue
 
-            if service_interval_value <= 0:
+            if not math.isfinite(service_interval_value) or service_interval_value <= 0:
                 print(
                     f"Skipping component {component_id}: "
                     "service_interval_value must be greater than 0."
@@ -351,7 +366,7 @@ def import_gear_components(
                 clean(row.get("manufacturer")),
                 clean(row.get("model")),
                 installed_at,
-                clean(row.get("removed_at")),
+                normalize_date(row.get("removed_at")),
                 service_interval_type,
                 service_interval_value,
                 clean(row.get("notes")),
@@ -452,7 +467,7 @@ def import_component_services(
             result.read += 1
 
             component_id_raw = clean(row.get("component_id"))
-            service_date = clean(row.get("service_date"))
+            service_date = normalize_date(row.get("service_date"))
             service_type = clean(row.get("service_type"))
 
             if not component_id_raw:
@@ -631,6 +646,13 @@ def run() -> None:
             args.services,
         )
 
+        conn.executescript(
+            (PROJECT_ROOT / "sql/views/facts/view_component_service_status.sql").read_text()
+        )
+        for view in ("view_gear_components", "view_component_services"):
+            conn.executescript(
+                (PROJECT_ROOT / f"sql/views/dimensions/{view}.sql").read_text()
+            )
         conn.commit()
 
     print_result(

@@ -1,0 +1,177 @@
+table component_service_status
+	lineageTag: cb42df6d-e817-401a-ae20-a9a38c2c330e
+
+	column component_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: component_key
+
+		annotation SummarizationSetBy = User
+
+	column component_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: component_id
+
+		annotation SummarizationSetBy = User
+
+	column gear_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
+
+	column gear_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gear_name
+
+	column component_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: component_type
+
+	column manufacturer
+		dataType: string
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column model
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model
+
+	column component_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: component_name
+
+	column installed_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: installed_at
+
+	column removed_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: removed_at
+
+	column is_active
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_active
+
+	column service_interval_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_interval_type
+
+	column service_interval_value
+		dataType: double
+		summarizeBy: none
+		sourceColumn: service_interval_value
+
+	column latest_service_id
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: latest_service_id
+
+		annotation SummarizationSetBy = User
+
+	column latest_service_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: latest_service_date
+
+	column latest_service_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: latest_service_type
+
+	column latest_service_notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: latest_service_notes
+
+	column service_baseline_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: service_baseline_date
+
+	column service_baseline_date_key
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: service_baseline_date_key
+
+		annotation SummarizationSetBy = User
+
+	column hours_since_service
+		dataType: double
+		summarizeBy: none
+		sourceColumn: hours_since_service
+
+	column miles_since_service
+		dataType: double
+		summarizeBy: none
+		sourceColumn: miles_since_service
+
+	column lifetime_component_hours
+		dataType: double
+		summarizeBy: none
+		sourceColumn: lifetime_component_hours
+
+	column lifetime_component_miles
+		dataType: double
+		summarizeBy: none
+		sourceColumn: lifetime_component_miles
+
+	column usage_since_service
+		dataType: double
+		summarizeBy: none
+		sourceColumn: usage_since_service
+
+	column usage_remaining
+		dataType: double
+		summarizeBy: none
+		sourceColumn: usage_remaining
+
+	column usage_overdue
+		dataType: double
+		summarizeBy: none
+		sourceColumn: usage_overdue
+
+	column service_interval_percent
+		dataType: double
+		summarizeBy: none
+		sourceColumn: service_interval_percent
+
+	column service_interval_remaining_percent
+		dataType: double
+		summarizeBy: none
+		sourceColumn: service_interval_remaining_percent
+		formatString: 0.0%
+
+	column service_interval_remaining
+		dataType: double
+		summarizeBy: none
+		sourceColumn: service_interval_remaining
+
+	column service_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_status
+
+	column component_notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: component_notes
+
+	partition component_service_status = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_component_service_status.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"component_key", Int64.Type}, {"component_id", Int64.Type}, {"gear_key", type text}, {"gear_name", type text}, {"component_type", type text}, {"manufacturer", type text}, {"model", type text}, {"component_name", type text}, {"installed_at", type datetime}, {"removed_at", type datetime}, {"is_active", Int64.Type}, {"service_interval_type", type text}, {"service_interval_value", type number}, {"latest_service_id", Int64.Type}, {"latest_service_date", type datetime}, {"latest_service_type", type text}, {"latest_service_notes", type text}, {"service_baseline_date", type datetime}, {"service_baseline_date_key", Int64.Type}, {"hours_since_service", type number}, {"miles_since_service", type number}, {"lifetime_component_hours", type number}, {"lifetime_component_miles", type number}, {"usage_since_service", type number}, {"usage_remaining", type number}, {"usage_overdue", type number}, {"service_interval_percent", type number}, {"service_interval_remaining_percent", type number}, {"service_interval_remaining", type number}, {"service_status", type text}, {"component_notes", type text}})
+				in
+				    Typed

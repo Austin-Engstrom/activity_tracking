@@ -48,6 +48,10 @@ with latest_service as (
                   , cs.service_id desc
           ) as service_rank
     from component_services cs
+    join gear_components gc on gc.component_id = cs.component_id
+    where date(cs.service_date) >= date(gc.installed_at)
+      and date(cs.service_date) <= date('now')
+      and (gc.removed_at is null or date(cs.service_date) <= date(gc.removed_at))
 ),
 
 component_baseline as (
@@ -144,6 +148,8 @@ component_usage as (
 
     left join activities a
         on cb.gear_id = a.gear_id
+       and datetime(a.start_date) >= datetime(cb.installed_at)
+       and datetime(a.start_date) <= datetime('now')
 
     group by
         cb.component_id
@@ -262,6 +268,12 @@ select
           * 100.0,
           2
       ) as service_interval_percent
+
+    -- Ratio for Power BI percent formatting: 1 = 100%, 0 = due/overdue.
+    , max(0.0, 1.0 - uc.usage_since_service
+        / nullif(uc.service_interval_value, 0)) as service_interval_remaining_percent
+    , max(0.0, round(uc.service_interval_value - uc.usage_since_service, 2))
+        as service_interval_remaining
 
     , case
           when uc.removed_at is not null
