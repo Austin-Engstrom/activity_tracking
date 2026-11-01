@@ -53,5 +53,5 @@ remain manual.
 
 ## Cycling report draft
 
-Open `power_bi/report/draft.pbip` for the five-page cycling report connected to the
+Open `power_bi/report/cycling_analytics.pbip` for the five-page cycling report connected to the
 published semantic model. See the [layout and Desktop review notes](docs/cycling-report.md).

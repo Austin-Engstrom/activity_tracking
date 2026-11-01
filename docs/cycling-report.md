@@ -1,6 +1,6 @@
 # Cycling report draft
 
-Open `power_bi/report/draft.pbip`. This is a separate five-page report using the
+Open `power_bi/report/cycling_analytics.pbip`. This is a separate five-page report using the
 published activity_tracking shared model; the existing GPS PBIP and Quanta Check report are unchanged.
 All visuals are native Power BI visuals and can be edited in Desktop.
 
@@ -46,7 +46,7 @@ URL formatting in Desktop if needed. Activity IDs remain in the detail for uniqu
 ## Published-model connection
 
 The report preserves the `byConnection` definition from the merged blank
-`power_bi/report/draft.pbip`. It connects directly to the published `activity_tracking`
+`power_bi/report/cycling_analytics.pbip`. It connects directly to the published `activity_tracking`
 semantic model. The project, connection string and base theme remain unchanged;
 this branch adds report pages, visuals, filters and a custom theme only. There is
 no copied semantic model, local Parquet source or dataset recalculation required.
@@ -59,7 +59,7 @@ these files.
 
 ## Desktop review
 
-1. Close Desktop before checking out the branch; open `power_bi/report/draft.pbip` and sign in for the published model.
+1. Close Desktop before checking out the branch; open `power_bi/report/cycling_analytics.pbip` and sign in for the published model.
 2. Check every page renders, headers and tables fit, and the cycling filter is
    editable. Confirm date/equipment slicer selections carry between analysis pages.
 3. Check a known activity, its link, local dates, inactive weeks, unmatched trails,
