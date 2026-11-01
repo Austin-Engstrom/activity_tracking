@@ -41,3 +41,10 @@ with their meaning, filter behavior and interpretation notes.
 
 [Selection field parameters](docs/selection-parameters.md) provide dynamic measure
 and dimension choices for visuals without changing the star-schema relationships.
+
+## Publishing and report building
+
+Start with the [publishing handoff and manual refresh runbook](docs/publishing-handoff.md),
+[exported data dictionary](docs/data-dictionary.md) and [proposed report outline](docs/report-outline.md).
+The handoff includes a release validation record; Desktop and deployed-model checks
+remain manual.
