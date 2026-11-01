@@ -58,12 +58,32 @@ table dates
 
 		annotation SummarizationSetBy = Automatic
 
+	column week_start_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: bad23327-c897-4f62-8608-2bbc14117895
+		summarizeBy: none
+		sourceColumn: week_start_date
+
+		annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = User
+
+	column week_end_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 5e5f0a7a-43b3-437f-be0b-d1b953ff3b57
+		summarizeBy: none
+		sourceColumn: week_end_date
+
+		annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = User
+
 	partition dates = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_date.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"date_key", Int64.Type}, {"date", type date}, {"year", Int64.Type}, {"month_number", Int64.Type}, {"quarter_number", Int64.Type}, {"week_number", Int64.Type}, {"day_of_week", Int64.Type}})
+				    Typed = Table.TransformColumnTypes(Source, {{"date_key", Int64.Type}, {"date", type date}, {"year", Int64.Type}, {"month_number", Int64.Type}, {"quarter_number", Int64.Type}, {"week_number", Int64.Type}, {"day_of_week", Int64.Type}, {"week_start_date", type date}, {"week_end_date", type date}})
 				in
 				    Typed
 

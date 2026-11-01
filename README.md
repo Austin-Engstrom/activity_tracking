@@ -32,3 +32,6 @@ for the dataset's single-page validation report.
 
 [Observed segment associations](docs/segment-trail-associations.md) explains the
 segment/trail/system bridge, local installation and Power BI usage.
+
+[Weekly consistency measures](docs/activity-consistency.md) cover active weeks,
+local active days and slicer-aware consecutive-week streaks.
