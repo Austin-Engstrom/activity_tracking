@@ -22,15 +22,13 @@ table select_dimensions
 		sourceColumn: [Value2]
 		sortByColumn: sort_order
 
-		extendedProperty ParameterMetadata =
-				{
-				  "version": 3,
-				  "kind": 2
-				}
+		extendedProperty ParameterMetadata = {"version":3,"kind":2}
+			type: json
 
 	/// Stable display order for parameter choices.
 	column sort_order
 		dataType: int64
+		formatString: #,0
 		isHidden
 		lineageTag: 936d42bd-6a28-4ca4-9b24-bc8b8f950b5c
 		summarizeBy: none
@@ -54,4 +52,3 @@ table select_dimensions
 				    ("Activity", NAMEOF('activities'[activity_name]), 11),
 				    ("Activity ID", NAMEOF('activities'[activity_id]), 12)
 				}
-

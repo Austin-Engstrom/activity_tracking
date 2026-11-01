@@ -1,0 +1,44 @@
+table component_services
+	lineageTag: c90b7790-465c-4133-aac4-95a07b52b444
+
+	column service_id
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: service_id
+
+		annotation SummarizationSetBy = User
+
+	column component_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: component_key
+
+		annotation SummarizationSetBy = User
+
+	column service_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: service_date
+
+	column service_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_type
+
+	column notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: notes
+
+	partition component_services = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_component_services.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"service_id", Int64.Type}, {"component_key", Int64.Type}, {"service_date", type datetime}, {"service_type", type text}, {"notes", type text}})
+				in
+				    Typed

@@ -27,3 +27,6 @@ ref table segment_trail_associations
 ref table select_measures
 ref table select_dimensions
 
+ref table gear_components
+ref table component_services
+ref table component_service_status

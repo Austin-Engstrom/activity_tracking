@@ -72,7 +72,15 @@ class ReportingTypeTests(unittest.TestCase):
                 if name.endswith(('_key','_id')):
                     self.assertIn('summarizeBy: none',body,(path.stem,name))
                     self.assertIn('annotation SummarizationSetBy = User',body,(path.stem,name))
-                    if path.stem in {'activity_points','activity_point_segments','segment_trail_associations'} or (path.stem=='segment_efforts' and name in {'activity_key','segment_key'}):
+                    foreign_keys = {
+                        'activities': {'activity_date_key', 'activity_type_key', 'gear_key'},
+                        'segment_efforts': {'activity_key', 'segment_key'},
+                        'gear': {'athlete_id'},
+                        'gear_components': {'gear_key'},
+                        'component_services': {'component_key'},
+                        'component_service_status': {'component_key', 'component_id', 'gear_key', 'latest_service_id', 'service_baseline_date_key'},
+                    }
+                    if path.stem in {'activity_points','activity_point_segments','segment_trail_associations'} or name in foreign_keys.get(path.stem, set()):
                         self.assertIn('isHidden',body,(path.stem,name))
                     else:
                         self.assertNotIn('isHidden',body,(path.stem,name))

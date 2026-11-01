@@ -21,6 +21,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXPORT_DIRECTORY = PROJECT_ROOT / "exports" / "power_bi"
 
 POWER_BI_VIEWS = [
+    "view_gear_components",
+    "view_component_services",
+    "view_component_service_status",
     "view_activity_points",
     "view_activity",
     "view_activity_type",
@@ -36,7 +39,7 @@ POWER_BI_VIEWS = [
 
 LEGACY_VIEWS = [
     "view_segment_effort", "view_activity_stream_summary", "view_official_trail",
-    "view_trail_activity", "view_trail_progress", "view_component_service_status",
+    "view_trail_activity", "view_trail_progress",
 ]
 
 PARQUET_COMPRESSION = "snappy"
@@ -174,6 +177,9 @@ def export_view(
         if columns is not None:
             if set(columns) != set(dataframe.columns):
                 raise ValueError(f'Reporting schema mismatch for {view_name}; update the explicit export contract')
+            for name, declared_type in columns.items():
+                if declared_type == 'dateTime' and name not in {'date', 'activity_date'}:
+                    dataframe[name] = pd.to_datetime(dataframe[name], errors='coerce', utc=True)
             arrow_types = {'string': pa.string(), 'int64': pa.int64(),
                            'double': pa.float64(), 'dateTime': pa.timestamp('us', tz='UTC')}
             schema = pa.schema([

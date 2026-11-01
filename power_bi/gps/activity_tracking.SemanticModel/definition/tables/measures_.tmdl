@@ -311,6 +311,23 @@ table measures_
 		displayFolder: Validation
 		lineageTag: deb0f498-e18e-4295-b80e-9039902ff32e
 
+	measure 'Service Interval Remaining %' = SELECTEDVALUE(component_service_status[service_interval_remaining_percent])
+		formatString: 0.0%
+		displayFolder: Maintenance
+
+	measure 'Service Interval Remaining' = SELECTEDVALUE(component_service_status[service_interval_remaining])
+		formatString: #,0.0
+		displayFolder: Maintenance
+
+	measure 'Service Interval Unit' = SELECTEDVALUE(component_service_status[service_interval_type])
+		displayFolder: Maintenance
+
+	measure 'Next Service Remaining' =
+		VAR Remaining = [Service Interval Remaining]
+		VAR Unit = [Service Interval Unit]
+		RETURN IF(NOT ISBLANK(Remaining), FORMAT(Remaining, "#,0.0") & " " & Unit)
+		displayFolder: Maintenance
+
 	/// Count of observed segment-trail-system combinations in the association bridge.
 	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
 	/// Notes: Despite the name, this is not a distinct segment count. One segment can contribute multiple combinations, including system-only or point-only evidence.
@@ -536,6 +553,7 @@ table measures_
 
 	column Placeholder
 		dataType: int64
+		formatString: #,0
 		isHidden
 		lineageTag: 546e1186-1433-4314-8d22-3e4c4c7d194e
 		summarizeBy: none

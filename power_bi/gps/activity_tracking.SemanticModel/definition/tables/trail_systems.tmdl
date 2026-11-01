@@ -3,6 +3,7 @@ table trail_systems
 
 	column trail_system_key
 		dataType: int64
+		formatString: 0
 		lineageTag: c2af6d20-d43d-487d-bd99-50c8b7915f28
 		summarizeBy: none
 		sourceColumn: trail_system_key
@@ -35,12 +36,14 @@ table trail_systems
 
 	column latitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: 8c0e4f74-091b-408d-b1d0-802ba8312a78
 		summarizeBy: none
 		sourceColumn: latitude
 
 	column longitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: eff990e9-adb8-45f2-858c-27ad03647fc5
 		summarizeBy: none
 		sourceColumn: longitude
@@ -59,6 +62,7 @@ table trail_systems
 
 	column boundary_confirmed
 		dataType: int64
+		formatString: 0
 		lineageTag: 97ebaaa2-8b6c-4463-8e93-5e5a91806962
 		summarizeBy: none
 		sourceColumn: boundary_confirmed
@@ -71,6 +75,7 @@ table trail_systems
 
 	column osm_element_id
 		dataType: int64
+		formatString: 0
 		lineageTag: 50789e79-307c-4db7-b13d-15229bf95c71
 		summarizeBy: none
 		sourceColumn: osm_element_id

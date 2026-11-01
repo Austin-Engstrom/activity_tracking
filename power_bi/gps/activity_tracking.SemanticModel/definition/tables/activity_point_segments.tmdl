@@ -12,6 +12,7 @@ table activity_point_segments
 
 	column segment_effort_key
 		dataType: int64
+		formatString: 0
 		isHidden
 		lineageTag: 10ba16d3-96e5-41b0-a2ba-84e0678ef4ef
 		summarizeBy: none
@@ -21,6 +22,7 @@ table activity_point_segments
 
 	column segment_key
 		dataType: int64
+		formatString: 0
 		isHidden
 		lineageTag: 8a410075-66cf-4970-adea-e5cbee968815
 		summarizeBy: none

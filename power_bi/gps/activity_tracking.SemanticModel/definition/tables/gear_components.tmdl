@@ -1,0 +1,70 @@
+table gear_components
+	lineageTag: 870ffdbd-96f4-4f72-aa9e-60edf119e136
+
+	column component_key
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: component_key
+
+		annotation SummarizationSetBy = User
+
+	column gear_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
+
+	column component_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: component_type
+
+	column manufacturer
+		dataType: string
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column model
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model
+
+	column installed_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: installed_at
+
+	column removed_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: removed_at
+
+	column service_interval_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_interval_type
+
+	column service_interval_value
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: service_interval_value
+
+	column notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: notes
+
+	partition gear_components = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_gear_components.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"component_key", Int64.Type}, {"gear_key", type text}, {"component_type", type text}, {"manufacturer", type text}, {"model", type text}, {"installed_at", type datetime}, {"removed_at", type datetime}, {"service_interval_type", type text}, {"service_interval_value", type number}, {"notes", type text}})
+				in
+				    Typed

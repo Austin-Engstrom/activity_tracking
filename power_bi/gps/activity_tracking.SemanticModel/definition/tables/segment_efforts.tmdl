@@ -3,6 +3,7 @@ table segment_efforts
 
 	column segment_effort_key
 		dataType: int64
+		formatString: 0
 		lineageTag: c4febbb1-6f2e-45dd-9984-74ad19f22215
 		summarizeBy: none
 		sourceColumn: segment_effort_key
@@ -11,6 +12,7 @@ table segment_efforts
 
 	column activity_key
 		dataType: int64
+		formatString: 0
 		isHidden
 		lineageTag: cee43e0b-fd17-43b2-801b-16a20a553c87
 		summarizeBy: none
@@ -20,6 +22,7 @@ table segment_efforts
 
 	column segment_key
 		dataType: int64
+		formatString: 0
 		isHidden
 		lineageTag: 147cbc47-925d-4e1c-9996-49f904d20a96
 		summarizeBy: none
@@ -29,30 +32,35 @@ table segment_efforts
 
 	column start_index
 		dataType: int64
+		formatString: 0
 		lineageTag: dabe7825-8bcc-4e36-8716-9ba7ff4ca6a6
 		summarizeBy: none
 		sourceColumn: start_index
 
 	column end_index
 		dataType: int64
+		formatString: 0
 		lineageTag: 6a0b7731-8952-4354-bbe5-ae09dd9d989a
 		summarizeBy: none
 		sourceColumn: end_index
 
 	column elapsed_time_seconds
 		dataType: double
+		formatString: #,0.0
 		lineageTag: d4e1fa77-7a87-4d8d-a70d-18cfb8865f93
 		summarizeBy: none
 		sourceColumn: elapsed_time_seconds
 
 	column moving_time_seconds
 		dataType: double
+		formatString: #,0.0
 		lineageTag: e1b5eec3-13dd-4c71-a3c8-2b7624f807f2
 		summarizeBy: none
 		sourceColumn: moving_time_seconds
 
 	column distance_miles
 		dataType: double
+		formatString: #,0.00
 		lineageTag: 650c8e69-27bc-4d51-97a5-209c472f388e
 		summarizeBy: none
 		sourceColumn: distance_miles

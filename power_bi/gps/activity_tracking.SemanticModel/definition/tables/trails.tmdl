@@ -3,6 +3,7 @@ table trails
 
 	column trail_key
 		dataType: int64
+		formatString: 0
 		lineageTag: c7709570-2a64-4031-a6ef-557c969a98d0
 		summarizeBy: none
 		sourceColumn: trail_key
@@ -23,6 +24,7 @@ table trails
 
 	column length_miles
 		dataType: double
+		formatString: #,0.00
 		lineageTag: 3632491a-deca-42bf-a587-8c55bda3adee
 		summarizeBy: none
 		sourceColumn: length_miles
