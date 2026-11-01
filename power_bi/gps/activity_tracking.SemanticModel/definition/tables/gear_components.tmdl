@@ -3,6 +3,7 @@ table gear_components
 
 	column component_key
 		dataType: int64
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: component_key
 
@@ -10,6 +11,7 @@ table gear_components
 
 	column gear_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -32,11 +34,13 @@ table gear_components
 
 	column installed_at
 		dataType: dateTime
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: installed_at
 
 	column removed_at
 		dataType: dateTime
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: removed_at
 
@@ -47,6 +51,7 @@ table gear_components
 
 	column service_interval_value
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: service_interval_value
 

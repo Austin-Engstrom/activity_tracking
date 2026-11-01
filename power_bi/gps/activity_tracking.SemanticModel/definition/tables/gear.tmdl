@@ -19,6 +19,8 @@ table gear
 
 	column athlete_id
 		dataType: int64
+		isHidden
+		formatString: 0
 		lineageTag: f4c9801e-f32e-4198-897e-40a224571ec9
 		summarizeBy: none
 		sourceColumn: athlete_id
@@ -51,6 +53,7 @@ table gear
 
 	column distance_miles
 		dataType: double
+		formatString: #,0.00
 		lineageTag: 82fbaade-8ab4-4c5e-8197-632565668c10
 		summarizeBy: sum
 		sourceColumn: distance_miles
@@ -59,42 +62,48 @@ table gear
 
 	column is_primary
 		dataType: int64
+		formatString: 0
 		lineageTag: b3d3925a-9fa4-45fa-8c12-cb1f2465e3bd
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: is_primary
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column is_retired
 		dataType: int64
+		formatString: 0
 		lineageTag: b7144306-c5d0-453c-9db5-a8da5c7d3443
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: is_retired
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column frame_type
 		dataType: int64
+		formatString: 0
 		lineageTag: 3fa4b2c9-0ca6-4a4d-ad62-771a24f05167
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: frame_type
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column detail_loaded_at
 		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
 		lineageTag: b5d7bfec-fa43-4046-99ae-bd103e737aab
 		summarizeBy: none
 		sourceColumn: detail_loaded_at
 
 	column created_at
 		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
 		lineageTag: f9a3950a-9516-4151-a22d-3c0cfa6d0c43
 		summarizeBy: none
 		sourceColumn: created_at
 
 	column updated_at
 		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
 		lineageTag: ca575d78-b285-4726-8607-114a98dd3899
 		summarizeBy: none
 		sourceColumn: updated_at

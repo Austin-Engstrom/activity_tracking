@@ -3,6 +3,8 @@ table component_service_status
 
 	column component_key
 		dataType: int64
+		isHidden
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: component_key
 
@@ -10,6 +12,8 @@ table component_service_status
 
 	column component_id
 		dataType: int64
+		isHidden
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: component_id
 
@@ -17,6 +21,7 @@ table component_service_status
 
 	column gear_key
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: gear_key
 
@@ -24,21 +29,25 @@ table component_service_status
 
 	column gear_name
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: gear_name
 
 	column component_type
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: component_type
 
 	column manufacturer
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: manufacturer
 
 	column model
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: model
 
@@ -49,31 +58,41 @@ table component_service_status
 
 	column installed_at
 		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: installed_at
 
 	column removed_at
 		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: removed_at
 
 	column is_active
 		dataType: int64
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: is_active
 
 	column service_interval_type
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: service_interval_type
 
 	column service_interval_value
 		dataType: double
+		isHidden
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
 	column latest_service_id
 		dataType: int64
+		isHidden
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: latest_service_id
 
@@ -81,6 +100,7 @@ table component_service_status
 
 	column latest_service_date
 		dataType: dateTime
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: latest_service_date
 
@@ -96,11 +116,14 @@ table component_service_status
 
 	column service_baseline_date
 		dataType: dateTime
+		formatString: yyyy-mm-dd
 		summarizeBy: none
 		sourceColumn: service_baseline_date
 
 	column service_baseline_date_key
 		dataType: int64
+		isHidden
+		formatString: 0
 		summarizeBy: none
 		sourceColumn: service_baseline_date_key
 
@@ -108,52 +131,61 @@ table component_service_status
 
 	column hours_since_service
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: hours_since_service
 
 	column miles_since_service
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: miles_since_service
 
 	column lifetime_component_hours
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: lifetime_component_hours
 
 	column lifetime_component_miles
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: lifetime_component_miles
 
 	column usage_since_service
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_since_service
 
 	column usage_remaining
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_remaining
 
 	column usage_overdue
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: usage_overdue
 
 	column service_interval_percent
 		dataType: double
+		formatString: 0.0\%
 		summarizeBy: none
 		sourceColumn: service_interval_percent
 
 	column service_interval_remaining_percent
 		dataType: double
+		formatString: 0.0%
 		summarizeBy: none
 		sourceColumn: service_interval_remaining_percent
-		formatString: 0.0%
 
 	column service_interval_remaining
 		dataType: double
+		formatString: #,0.00
 		summarizeBy: none
 		sourceColumn: service_interval_remaining
 
@@ -164,6 +196,7 @@ table component_service_status
 
 	column component_notes
 		dataType: string
+		isHidden
 		summarizeBy: none
 		sourceColumn: component_notes
 

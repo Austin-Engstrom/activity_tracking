@@ -3,6 +3,7 @@ table segments
 
 	column segment_key
 		dataType: int64
+		formatString: 0
 		lineageTag: 1a87ac65-2ac2-44ff-8b27-61cd9fd00435
 		summarizeBy: none
 		sourceColumn: segment_key
@@ -11,6 +12,7 @@ table segments
 
 	column segment_id
 		dataType: int64
+		formatString: 0
 		lineageTag: dc4235f9-482a-4a29-a067-f992b51ab4be
 		summarizeBy: none
 		sourceColumn: segment_id
@@ -31,60 +33,70 @@ table segments
 
 	column distance_miles
 		dataType: double
+		formatString: #,0.00
 		lineageTag: 14599598-c4c3-48fd-8259-6764776a3b56
 		summarizeBy: none
 		sourceColumn: distance_miles
 
 	column average_grade
 		dataType: double
+		formatString: 0.0\%
 		lineageTag: 04672060-2a14-4ac4-82d4-d04491ef068f
 		summarizeBy: none
 		sourceColumn: average_grade
 
 	column maximum_grade
 		dataType: double
+		formatString: 0.0\%
 		lineageTag: 5fd8b2c4-c524-4c33-89c0-402f6cec60b3
 		summarizeBy: none
 		sourceColumn: maximum_grade
 
 	column elevation_high_feet
 		dataType: double
+		formatString: #,0
 		lineageTag: d0d57a8f-b28a-4811-a005-b16a87bc8ba0
 		summarizeBy: none
 		sourceColumn: elevation_high_feet
 
 	column elevation_low_feet
 		dataType: double
+		formatString: #,0
 		lineageTag: 42fec26d-ef1a-4b6a-9511-396e22455577
 		summarizeBy: none
 		sourceColumn: elevation_low_feet
 
 	column start_latitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: ad5e22bc-3692-4f70-a26f-7431d31c2aa2
 		summarizeBy: none
 		sourceColumn: start_latitude
 
 	column start_longitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: 6f3fbee3-d229-4338-8ca7-9b7acb5a4170
 		summarizeBy: none
 		sourceColumn: start_longitude
 
 	column end_latitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: 12bb773b-ca88-4f6b-95f5-3a544245ffc9
 		summarizeBy: none
 		sourceColumn: end_latitude
 
 	column end_longitude
 		dataType: double
+		formatString: 0.000000
 		lineageTag: bdeef1a8-686a-42a2-a890-a9924d497bd9
 		summarizeBy: none
 		sourceColumn: end_longitude
 
 	column climb_category
 		dataType: int64
+		formatString: 0
 		lineageTag: 9b7d922f-6668-49c0-b76d-d453234a0336
 		summarizeBy: none
 		sourceColumn: climb_category
