@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "table_filter",
   "position": {
-    "x": 348,
+    "x": 496,
     "y": 104.96,
-    "width": 400,
+    "width": 448,
     "height": 115.2,
     "z": 3,
     "tabOrder": 3

@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "daily_activity",
   "position": {
-    "x": 928,
+    "x": 968,
     "y": 409.6,
-    "width": 488,
+    "width": 448,
     "height": 384.0,
     "z": 10,
     "tabOrder": 10

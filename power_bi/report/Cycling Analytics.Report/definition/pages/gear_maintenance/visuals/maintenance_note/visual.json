@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "maintenance_note",
   "position": {
-    "x": 932,
+    "x": 968,
     "y": 108.8,
-    "width": 484,
+    "width": 448,
     "height": 104.96,
     "z": 4,
     "tabOrder": 4

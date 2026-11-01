@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "gear_mix",
   "position": {
-    "x": 928,
+    "x": 968,
     "y": 614.4,
-    "width": 488,
+    "width": 448,
     "height": 179.2,
     "z": 11,
     "tabOrder": 11

@@ -64,3 +64,20 @@ class CyclingReportTests(unittest.TestCase):
                 self.assertTrue(v['visual']['syncGroup']['filterChanges'])
         for path in (REPORT/'definition/pages/data_definitions').glob('visuals/*/visual.json'):
             self.assertNotIn('syncGroup',json.loads(path.read_text())['visual'])
+
+    def test_visuals_share_uniform_grid_and_outer_edges(self):
+        for page in (REPORT/'definition/pages').glob('*/page.json'):
+            cards=[]
+            for path in page.parent.glob('visuals/*/visual.json'):
+                d=json.loads(path.read_text());p=d['position']
+                self.assertAlmostEqual((p['x']-24)%118,0,msg=str(path))
+                self.assertAlmostEqual((p['width']+24)%118,0,msg=str(path))
+                self.assertLessEqual(p['x']+p['width'],1416)
+                if d['visual']['visualType']=='card':cards.append(p)
+            if cards:
+                cards.sort(key=lambda p:p['x'])
+                self.assertEqual(len({p['width'] for p in cards}),1)
+                self.assertEqual(cards[0]['x'],24)
+                self.assertEqual(cards[-1]['x']+cards[-1]['width'],1416)
+                for left,right in zip(cards,cards[1:]):
+                    self.assertEqual(right['x']-left['x']-left['width'],24)

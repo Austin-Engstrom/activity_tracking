@@ -86,3 +86,5 @@ manual checks.
 Cards use their visual title without a duplicate category label below the value. Date charts, date detail tables and date slicers default to newest first.
 
 All pages open Fit to width. Mileage visuals without dates sort by their mileage measure descending; date visuals retain newest-first ordering.
+
+All pages share a 12-column layout with 24px side margins and gutters. Cards use equal three-column widths, slicers use four columns, and chart rows use either 8/4 or 6/6 column splits. All row edges align with the full-width detail tables.

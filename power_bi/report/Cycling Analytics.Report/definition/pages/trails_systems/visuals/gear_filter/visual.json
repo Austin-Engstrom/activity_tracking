@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "gear_filter",
   "position": {
-    "x": 478,
+    "x": 496,
     "y": 104.96,
-    "width": 430,
+    "width": 448,
     "height": 115.2,
     "z": 3,
     "tabOrder": 3

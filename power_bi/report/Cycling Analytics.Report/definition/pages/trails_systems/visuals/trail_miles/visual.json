@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "trail_miles",
   "position": {
-    "x": 728,
+    "x": 732,
     "y": 409.6,
-    "width": 688,
+    "width": 684,
     "height": 384.0,
     "z": 10,
     "tabOrder": 10
