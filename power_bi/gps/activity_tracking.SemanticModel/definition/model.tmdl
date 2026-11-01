@@ -6,7 +6,7 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation PBI_QueryOrder = ["activity_points","activities","gear","activity_types","dates","trails","trail_systems","segments","segment_efforts","activity_point_segments","ExportFolder","segment_trail_associations"]
+annotation PBI_QueryOrder = ["activity_points","activities","gear","activity_types","dates","trails","trail_systems","segments","segment_efforts","activity_point_segments","ExportFolder","segment_trail_associations","gear_components","component_services","component_service_status","data_dictionary"]
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
@@ -26,9 +26,8 @@ ref table activity_point_segments
 ref table segment_trail_associations
 ref table select_measures
 ref table select_dimensions
-
 ref table gear_components
 ref table component_services
 ref table component_service_status
-
 ref table data_dictionary
+

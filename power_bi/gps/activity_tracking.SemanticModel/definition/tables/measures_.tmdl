@@ -315,22 +315,26 @@ table measures_
 	measure 'Service Interval Remaining %' = SELECTEDVALUE(component_service_status[service_interval_remaining_percent])
 		formatString: 0.0%
 		displayFolder: Maintenance
+		lineageTag: a71c6e96-453e-4a78-9f2a-aaef349d1824
 
 	/// Remaining scheduled hours or miles, floored at zero. Uses the single distinct current component-status value in context; returns blank for multiple different values. Read with Service Interval Unit; this is the exported maintenance snapshot, not date-selected GPS usage.
 	measure 'Service Interval Remaining' = SELECTEDVALUE(component_service_status[service_interval_remaining])
 		formatString: #,0.0
 		displayFolder: Maintenance
+		lineageTag: 1040003f-45b9-4fcc-a093-aeb488cd4c31
 
 	/// Schedule unit (hours or miles) when one distinct unit is selected; otherwise blank. Follows the current gear/component status context.
 	measure 'Service Interval Unit' = SELECTEDVALUE(component_service_status[service_interval_type])
 		displayFolder: Maintenance
+		lineageTag: 7eacdfc4-1605-4a4e-ae54-454ce51149ef
 
 	/// Formatted remaining interval plus schedule unit, using the remaining-value and unit measures. Blank when remaining usage is ambiguous or absent; values describe the exported maintenance snapshot.
 	measure 'Next Service Remaining' =
-		VAR Remaining = [Service Interval Remaining]
-		VAR Unit = [Service Interval Unit]
-		RETURN IF(NOT ISBLANK(Remaining), FORMAT(Remaining, "#,0.0") & " " & Unit)
-		displayFolder: Maintenance
+			VAR Remaining = [Service Interval Remaining]
+			VAR Unit = [Service Interval Unit]
+			RETURN IF(NOT ISBLANK(Remaining), FORMAT(Remaining, "#,0.0") & " " & Unit)
+			displayFolder: Maintenance
+		lineageTag: b20a1639-afea-4f54-bf7d-659e36e5a398
 
 	/// Count of observed segment-trail-system combinations in the association bridge.
 	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
@@ -566,14 +570,14 @@ table measures_
 			        "https://www.strava.com/activities/" & FORMAT(ActivityId, "0"),
 			        BLANK()
 			    )
-		dataCategory: WebUrl
 		displayFolder: Activities
 		lineageTag: d085542a-b104-4a6f-b6f8-7250abb769d8
+		dataCategory: WebUrl
 
 	column Placeholder
 		dataType: int64
-		formatString: #,0
 		isHidden
+		formatString: #,0
 		lineageTag: 546e1186-1433-4314-8d22-3e4c4c7d194e
 		summarizeBy: none
 		sourceColumn: [Placeholder]

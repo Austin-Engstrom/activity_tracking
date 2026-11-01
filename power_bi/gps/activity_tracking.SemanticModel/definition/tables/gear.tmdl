@@ -22,8 +22,8 @@ table gear
 	/// Source equipment owner athlete identifier; categorical, never summed.
 	column athlete_id
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: f4c9801e-f32e-4198-897e-40a224571ec9
 		summarizeBy: none
 		sourceColumn: athlete_id

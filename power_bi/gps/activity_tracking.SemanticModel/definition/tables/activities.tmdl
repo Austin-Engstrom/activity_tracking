@@ -14,8 +14,8 @@ table activities
 	/// UTC activity-start date as YYYYMMDD; use dates dimension for local reporting.
 	column activity_date_key
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 8c34d0b9-956b-4f18-90d4-6693503a3bd2
 		summarizeBy: none
 		sourceColumn: activity_date_key

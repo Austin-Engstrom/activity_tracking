@@ -30,7 +30,6 @@ relationship 9f296454-32a7-4d67-8a87-de0ed3192338
 	fromColumn: activity_point_segments.segment_effort_key
 	toColumn: segment_efforts.segment_effort_key
 
-
 relationship d04466bb-b648-45aa-863d-fbcd5524d553
 	fromColumn: gear_components.gear_key
 	toColumn: gear.gear_key
@@ -54,3 +53,4 @@ relationship 5fe9cfde-67b3-43d0-974f-258b7730180e
 relationship f16df384-6157-4c2f-a3a4-1c6587f12fda
 	fromColumn: segment_trail_associations.trail_system_key
 	toColumn: trail_systems.trail_system_key
+
