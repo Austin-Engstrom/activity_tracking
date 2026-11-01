@@ -333,7 +333,7 @@ table measures_
 			VAR Remaining = [Service Interval Remaining]
 			VAR Unit = [Service Interval Unit]
 			RETURN IF(NOT ISBLANK(Remaining), FORMAT(Remaining, "#,0.0") & " " & Unit)
-			displayFolder: Maintenance
+		displayFolder: Maintenance
 		lineageTag: b20a1639-afea-4f54-bf7d-659e36e5a398
 
 	/// Count of observed segment-trail-system combinations in the association bridge.

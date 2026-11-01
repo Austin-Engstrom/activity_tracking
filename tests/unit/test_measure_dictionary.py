@@ -17,7 +17,7 @@ class DataDictionaryTests(unittest.TestCase):
         self.assertIn('ref table data_dictionary', (MODEL / 'model.tmdl').read_text())
         self.assertNotIn('data_dictionary.', (MODEL / 'relationships.tmdl').read_text())
         for field in FIELDS:
-            self.assertIn(f"column '{field}'", content)
+            self.assertRegex(content, r"\n\tcolumn (?:'" + re.escape(field) + r"'|" + re.escape(field) + r")\n")
             self.assertIn(f'sourceColumn: {field}', content)
 
     def test_catalog_covers_all_native_objects_and_descriptions(self):
