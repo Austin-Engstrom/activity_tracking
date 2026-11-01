@@ -28,4 +28,4 @@ calculation. Describe point totals, full-activity totals, whole-effort totals, a
 historical association catalogs distinctly. Avoid describing every difference as
 an error or treating match percentages as accuracy/completion scores.
 
-For definitions inside report table visuals, use the [data dictionary](data-dictionary-pbi.md), which reads this native metadata on model refresh.
+For definitions inside report table visuals, use the [data dictionary](data-dictionary-pbi.md), generated from this native metadata with `python -m src.tools.build_data_dictionary`.

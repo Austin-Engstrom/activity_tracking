@@ -37,7 +37,8 @@ class ReportingTypeTests(unittest.TestCase):
         seen=set()
         for path in model.glob('*.tmdl'):
             content=path.read_text()
-            if re.search(r'partition \w+ = calculated',content):
+            # The embedded metadata catalog has its own schema/source checks.
+            if path.stem == 'data_dictionary' or re.search(r'partition \w+ = calculated',content):
                 continue
             view=re.search(r'ExportFolder & "(view_\w+).parquet"',content)[1]
             seen.add(view)
