@@ -1,0 +1,170 @@
+/// Fastest known stored effort per segment across eligible imported GPS history.
+table segment_personal_bests
+	lineageTag: d5043692-e6aa-4d5b-80bd-6dd54e4254a0
+
+	/// Strava segment identifier. Segment dimension filter key; do not aggregate.
+	column segment_key
+		dataType: int64
+		lineageTag: 09f6b85f-e803-4dae-b024-5d6a7f80c2d9
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	/// Chosen fastest-known stored effort ID. Ties choose earliest UTC effort timestamp, then lowest effort ID.
+	column best_segment_effort_key
+		dataType: int64
+		lineageTag: 05752a46-4404-40d7-a078-2f563be17f8c
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: best_segment_effort_key
+
+		annotation SummarizationSetBy = User
+
+	/// Parent activity of the chosen best effort; this lifetime summary does not respond to activity/date/gear dimension filters.
+	column best_activity_key
+		dataType: int64
+		lineageTag: c06b89ed-69fe-4e5a-9a91-8930c575837f
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: best_activity_key
+
+		annotation SummarizationSetBy = User
+
+	/// UTC start of the chosen best effort.
+	column best_effort_started_at
+		dataType: dateTime
+		lineageTag: ed19fd02-53b4-4fa4-b14b-37e8fa11ea7b
+		formatString: yyyy-mm-dd hh:mm:ss
+		summarizeBy: none
+		sourceColumn: best_effort_started_at
+
+	/// Local calendar date of the chosen effort, falling back to UTC when local timestamp is absent.
+	column best_effort_local_date
+		dataType: dateTime
+		lineageTag: 519312e3-2049-42f6-bf17-7a4eaef0cac2
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: best_effort_local_date
+
+	/// Lowest positive stored elapsed seconds among nonhidden efforts in stored GPS-eligible activities; not a certified Strava lifetime PR.
+	column best_elapsed_time_seconds
+		dataType: int64
+		lineageTag: afaebe3c-b492-4b10-9568-e031566038c1
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: best_elapsed_time_seconds
+
+	/// Source moving seconds of the chosen best effort; selection ranks elapsed time.
+	column best_moving_time_seconds
+		dataType: int64
+		lineageTag: b6bbdacc-f034-4c53-b6fb-e4e957360727
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: best_moving_time_seconds
+
+	/// Full source effort distance in miles for the chosen best.
+	column best_distance_miles
+		dataType: double
+		lineageTag: 2740b3aa-58d7-4dc3-a983-e0fc8dd2e3b4
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: best_distance_miles
+
+	/// All stored GPS-eligible efforts for this segment, including hidden and nonpositive-time entries.
+	column stored_effort_count
+		dataType: int64
+		lineageTag: c66d9284-78c2-4625-91ff-ea0a60e9fb0f
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: stored_effort_count
+
+	/// Stored efforts eligible for the best-time comparison: positive elapsed time and no explicit hidden flag.
+	column eligible_effort_count
+		dataType: int64
+		lineageTag: e1b28976-3ca5-4609-8895-deea9c8f39cf
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: eligible_effort_count
+
+	/// Eligible efforts tied at the lowest elapsed time. Only one deterministic representative appears in this table.
+	column tied_best_effort_count
+		dataType: int64
+		lineageTag: 1c393318-b567-4941-bd18-59de9875bc8a
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: tied_best_effort_count
+
+	/// Source Strava activity URL; access depends on viewer permissions.
+	column activity_url
+		dataType: string
+		lineageTag: e77f2e82-274e-42e9-b674-8507c829dc29
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: activity_url
+
+	/// Source Strava segment URL; not a leaderboard access grant.
+	column segment_url
+		dataType: string
+		lineageTag: 856bacf8-84fa-45c2-9c63-6327e3da8e03
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: segment_url
+
+	/// Latest stored Strava-reported PR rank for this effort; NULL does not mean zero. Use pr_rank_status and retrieval time to assess coverage.
+	column reported_pr_rank
+		dataType: int64
+		lineageTag: 94b70e28-a457-4d13-8a91-ae2e19fa22a6
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_pr_rank
+
+	/// Latest stored Strava-reported leaderboard rank for this effort. Rank 1 is a reported first place, not proof of a current crown or historical leaderboard position on activity day.
+	column reported_kom_rank
+		dataType: int64
+		lineageTag: a1e20920-08af-4fb8-b8e5-0734abab6974
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_kom_rank
+
+	/// UTC response retrieval timestamp for the stored ranks. NULL means a legacy observation without verified retrieval provenance.
+	column ranks_retrieved_at
+		dataType: dateTime
+		lineageTag: 465a139c-32b3-4835-b124-0170fa485e20
+		formatString: yyyy-mm-dd hh:mm:ss
+		summarizeBy: none
+		sourceColumn: ranks_retrieved_at
+
+	/// ranked, no_rank (explicit API null), not_returned (field omitted), or legacy_unobserved (no retrieval metadata).
+	column pr_rank_status
+		dataType: string
+		lineageTag: 73ad085d-43e5-4db4-9acb-c24bf85072d1
+		summarizeBy: none
+		sourceColumn: pr_rank_status
+
+	/// ranked, no_rank (explicit API null), not_returned (field omitted), or legacy_unobserved (no retrieval metadata).
+	column kom_rank_status
+		dataType: string
+		lineageTag: 99934e02-3d79-461a-8875-818cddf15606
+		summarizeBy: none
+		sourceColumn: kom_rank_status
+
+	/// fastest_visible_positive_time_in_stored_gps_history; scope is imported GPS history, not a complete leaderboard or lifetime guarantee.
+	column best_basis
+		dataType: string
+		lineageTag: 9c351bbe-fd5b-4544-be52-ac8525aaaacd
+		summarizeBy: none
+		sourceColumn: best_basis
+
+	partition segment_personal_bests = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment_personal_best.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"best_segment_effort_key", Int64.Type}, {"best_activity_key", Int64.Type}, {"best_effort_started_at", type datetime}, {"best_effort_local_date", type datetime}, {"best_elapsed_time_seconds", Int64.Type}, {"best_moving_time_seconds", Int64.Type}, {"best_distance_miles", type number}, {"stored_effort_count", Int64.Type}, {"eligible_effort_count", Int64.Type}, {"tied_best_effort_count", Int64.Type}, {"activity_url", type text}, {"segment_url", type text}, {"reported_pr_rank", Int64.Type}, {"reported_kom_rank", Int64.Type}, {"ranks_retrieved_at", type datetime}, {"pr_rank_status", type text}, {"kom_rank_status", type text}, {"best_basis", type text}})
+				in
+				    Typed

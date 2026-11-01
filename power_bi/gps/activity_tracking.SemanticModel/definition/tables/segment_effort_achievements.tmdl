@@ -1,0 +1,208 @@
+/// Latest Strava effort rank observations in stored GPS activity history.
+table segment_effort_achievements
+	lineageTag: 61d72489-a62b-4083-978c-eb83a58d88ca
+
+	/// Unique Strava effort ID; one row per stored effort in a GPS-eligible activity.
+	column segment_effort_key
+		dataType: int64
+		lineageTag: 7ae8535d-6d7d-4772-9a82-8d3cd05f3a6e
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: segment_effort_key
+
+		annotation SummarizationSetBy = User
+
+	/// Strava segment identifier. Segment dimension filter key; do not aggregate.
+	column segment_key
+		dataType: int64
+		lineageTag: c55ec01d-64bf-4f9d-92e9-77f74106f8ac
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	/// Parent activity identifier; distinct from the segment-effort ID.
+	column activity_key
+		dataType: int64
+		lineageTag: 187ae06a-f6a6-4da3-b543-a45b8d8fc2a3
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: activity_key
+
+		annotation SummarizationSetBy = User
+
+	/// Known source equipment identifier; NULL for missing/unloaded gear.
+	column gear_key
+		dataType: string
+		lineageTag: fe8d4e31-eea0-48a2-b8ef-f69e840e081c
+		isHidden
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
+
+	/// Parent activity sport type, linked to the activity-type dimension.
+	column activity_type_key
+		dataType: string
+		lineageTag: a893d3f1-a589-44cb-b9ad-3fa866585fa2
+		isHidden
+		summarizeBy: none
+		sourceColumn: activity_type_key
+
+		annotation SummarizationSetBy = User
+
+	/// Source segment effort start timestamp in UTC.
+	column effort_started_at
+		dataType: dateTime
+		lineageTag: ba511cfc-508f-487d-81cf-7e16a12cbec7
+		formatString: yyyy-mm-dd hh:mm:ss
+		summarizeBy: none
+		sourceColumn: effort_started_at
+
+	/// Source effort local calendar date; falls back to UTC if source local timestamp is absent.
+	column effort_local_date
+		dataType: dateTime
+		lineageTag: bad3b2ba-dd6c-4367-b5c7-9246a71ef610
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: effort_local_date
+
+	/// YYYYMMDD from the source effort local start, with UTC fallback. This is an effort-start date, not all dates touched by its GPS points.
+	column date_key
+		dataType: int64
+		lineageTag: f1419ce8-5d3b-41b3-ab10-52bad8ed802d
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
+	/// source_local when Strava supplied the local effort timestamp, otherwise utc_fallback.
+	column date_basis
+		dataType: string
+		lineageTag: c5aeab9f-cdee-49a0-8316-b3a307c6b107
+		summarizeBy: none
+		sourceColumn: date_basis
+
+	/// Source whole-effort elapsed seconds, including stops. Positive values rank stored personal bests; zero/negative values are excluded.
+	column elapsed_time_seconds
+		dataType: int64
+		lineageTag: e9fa9a19-d94c-4d4b-9724-60096e19c0a9
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: elapsed_time_seconds
+
+	/// Source whole-effort moving seconds; not the basis of personal-best ranking.
+	column moving_time_seconds
+		dataType: int64
+		lineageTag: 3e422ba6-5a54-4a08-b3c3-aa24d8da8468
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: moving_time_seconds
+
+	/// Source whole-effort distance converted to miles. Repeated/overlapping efforts are not unique route distance.
+	column distance_miles
+		dataType: double
+		lineageTag: a80af016-db0c-4b88-b857-b2fbded3b2fb
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+	/// Source hidden flag: 1 hidden, 0 visible, NULL unknown. Explicitly hidden efforts do not qualify for stored-best selection.
+	column effort_hidden
+		dataType: int64
+		lineageTag: 4cad57f6-b9c4-4ade-a9cb-f2b6c1bd8bc4
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: effort_hidden
+
+	/// Latest stored Strava-reported PR rank for this effort; NULL does not mean zero. Use pr_rank_status and retrieval time to assess coverage.
+	column reported_pr_rank
+		dataType: int64
+		lineageTag: fbf7154c-1c13-42f6-a4d7-593a5831cf6a
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_pr_rank
+
+	/// Latest stored Strava-reported leaderboard rank for this effort. Rank 1 is a reported first place, not proof of a current crown or historical leaderboard position on activity day.
+	column reported_kom_rank
+		dataType: int64
+		lineageTag: 2522fc7f-d31b-4472-a80a-73eb39c0402a
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_kom_rank
+
+	/// UTC response retrieval timestamp for the stored ranks. NULL means a legacy observation without verified retrieval provenance.
+	column ranks_retrieved_at
+		dataType: dateTime
+		lineageTag: a6e2ac50-a433-4da7-afff-f10ca07305da
+		formatString: yyyy-mm-dd hh:mm:ss
+		summarizeBy: none
+		sourceColumn: ranks_retrieved_at
+
+	/// ranked, no_rank (explicit API null), not_returned (field omitted), or legacy_unobserved (no retrieval metadata).
+	column pr_rank_status
+		dataType: string
+		lineageTag: a2e546b4-c89a-4db8-8638-43c1cf1f5936
+		summarizeBy: none
+		sourceColumn: pr_rank_status
+
+	/// ranked, no_rank (explicit API null), not_returned (field omitted), or legacy_unobserved (no retrieval metadata).
+	column kom_rank_status
+		dataType: string
+		lineageTag: 2580768d-4e10-47ea-893c-c29d3be8dd48
+		summarizeBy: none
+		sourceColumn: kom_rank_status
+
+	/// 1 when an observed API response reports pr_rank=1, 0 for an observed nonfirst/null rank, NULL when the field was omitted or never observed.
+	column reported_pr_first
+		dataType: int64
+		lineageTag: b48f3888-f50c-4e75-acd8-77b7470e31d7
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_pr_first
+
+	/// 1 when an observed API response reports kom_rank=1; 0 for nonfirst/null, NULL for omitted/unobserved. Not a current crown indicator.
+	column reported_kom_first
+		dataType: int64
+		lineageTag: 4c678b9d-2180-4fae-b272-bc872e1054af
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: reported_kom_first
+
+	/// 1 for positive elapsed time and no explicit hidden flag; otherwise 0. Does not certify GPS quality or exclude other source anomalies.
+	column eligible_for_stored_best
+		dataType: int64
+		lineageTag: 7de08ac9-fdc6-4953-a9a6-da214e502015
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: eligible_for_stored_best
+
+	/// Source Strava activity URL; access depends on viewer permissions.
+	column activity_url
+		dataType: string
+		lineageTag: cdb13271-f16e-4722-89df-8ea6fd6aca69
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: activity_url
+
+	/// Source Strava segment URL; not a leaderboard access grant.
+	column segment_url
+		dataType: string
+		lineageTag: e38872a7-2d39-4ef5-b0c8-ade798a36384
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: segment_url
+
+	partition segment_effort_achievements = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment_effort_achievement.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}, {"activity_key", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"effort_started_at", type datetime}, {"effort_local_date", type datetime}, {"date_key", Int64.Type}, {"date_basis", type text}, {"elapsed_time_seconds", Int64.Type}, {"moving_time_seconds", Int64.Type}, {"distance_miles", type number}, {"effort_hidden", Int64.Type}, {"reported_pr_rank", Int64.Type}, {"reported_kom_rank", Int64.Type}, {"ranks_retrieved_at", type datetime}, {"pr_rank_status", type text}, {"kom_rank_status", type text}, {"reported_pr_first", Int64.Type}, {"reported_kom_first", Int64.Type}, {"eligible_for_stored_best", Int64.Type}, {"activity_url", type text}, {"segment_url", type text}})
+				in
+				    Typed

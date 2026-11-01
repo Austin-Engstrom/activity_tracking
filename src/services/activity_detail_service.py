@@ -1,7 +1,6 @@
 """Service for enriching activities with detailed Strava data."""
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
 
 from src.api.client import (
     StravaApiError,
@@ -13,11 +12,11 @@ from src.etl.activity_mapper import (
     ActivityMappingError,
 )
 from src.etl.segment_mapper import (
-    SegmentMapper,
     SegmentMappingError,
 )
 from src.repositories.activity_repository import ActivityRepository
 from src.repositories.segment_repository import SegmentRepository
+from src.services.segment_record_service import load_activity_segments
 
 
 @dataclass
@@ -83,38 +82,8 @@ class ActivityDetailService:
                     result.detail_activities_loaded += 1
 
                 if needs_segments:
-                    raw_efforts = (
-                        detail_data.get("segment_efforts") or []
-                    )
-
-                    segments = []
-                    efforts = []
-
-                    for effort_data in raw_efforts:
-                        segments.append(
-                            SegmentMapper.segment_from_effort(
-                                effort_data
-                            )
-                        )
-                        efforts.append(
-                            SegmentMapper.effort_from_api(
-                                activity_id=activity.activity_id,
-                                effort_data=effort_data,
-                            )
-                        )
-
-                    load_result = (
-                        self.segment_repository
-                        .upsert_activity_segments(
-                            activity_id=activity.activity_id,
-                            segments=segments,
-                            efforts=efforts,
-                        )
-                    )
-
-                    activity.segments_loaded_at = datetime.now(
-                        timezone.utc
-                    ).replace(tzinfo=None)
+                    load_result = load_activity_segments(
+                        self.segment_repository.session, activity, detail_data)
 
                     result.segment_activities_loaded += 1
                     result.segments_inserted += (

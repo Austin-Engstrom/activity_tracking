@@ -74,6 +74,8 @@ class ReportingTypeTests(unittest.TestCase):
                     self.assertIn('summarizeBy: none',body,(path.stem,name))
                     self.assertIn('annotation SummarizationSetBy = User',body,(path.stem,name))
                     foreign_keys = {
+                        'segment_effort_achievements': {'segment_key', 'activity_key', 'gear_key', 'activity_type_key', 'date_key'},
+                        'segment_personal_bests': {'segment_key', 'best_activity_key', 'best_segment_effort_key'},
                         'activities': {'activity_date_key', 'activity_type_key', 'gear_key'},
                         'segment_efforts': {'activity_key', 'segment_key'},
                         'gear': {'athlete_id'},

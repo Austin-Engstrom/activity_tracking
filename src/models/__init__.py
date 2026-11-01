@@ -15,7 +15,11 @@ from src.models.trail_segment_mapping import TrailSegmentMapping
 from src.models.official_trail_activity_match import (OfficialTrailActivityMatch,)  # noqa: F401
 from src.models.official_trail_progress import (OfficialTrailProgress,)  # noqa: F401
 
+from src.models.segment_record_metadata import SegmentEffortRecordMetadata, SegmentRecordRefresh
+
 __all__ = [
+    "SegmentEffortRecordMetadata",
+    "SegmentRecordRefresh",
     "Activity",
     "ActivityStream",
     "Base",

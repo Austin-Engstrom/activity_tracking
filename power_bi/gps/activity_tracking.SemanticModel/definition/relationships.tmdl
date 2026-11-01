@@ -54,3 +54,27 @@ relationship f16df384-6157-4c2f-a3a4-1c6587f12fda
 	fromColumn: segment_trail_associations.trail_system_key
 	toColumn: trail_systems.trail_system_key
 
+
+relationship 79b111a3-230a-4bd9-81fa-a042eec0ac90
+	fromColumn: segment_effort_achievements.segment_key
+	toColumn: segments.segment_key
+
+relationship 1e6e2ee3-3e0c-4d63-b53c-2849fbfac88e
+	fromColumn: segment_effort_achievements.activity_key
+	toColumn: activities.activity_key
+
+relationship 8f2a3e61-16c7-4ae1-a926-17f0d37ac37f
+	fromColumn: segment_effort_achievements.gear_key
+	toColumn: gear.gear_key
+
+relationship 4fcfe097-7af5-49e2-93d2-909dc69f58e9
+	fromColumn: segment_effort_achievements.activity_type_key
+	toColumn: activity_types.activity_type_key
+
+relationship 5f8c7047-f35b-411e-a132-c908b65e4b4a
+	fromColumn: segment_effort_achievements.date_key
+	toColumn: dates.date_key
+
+relationship 3fd61696-f2cf-4fd4-affb-956fc59174c4
+	fromColumn: segment_personal_bests.segment_key
+	toColumn: segments.segment_key

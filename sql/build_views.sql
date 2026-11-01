@@ -96,3 +96,6 @@ order by name;
 .read sql/views/dimensions/view_component_services.sql
 
 .read sql/views/points/view_segment_trail_association.sql
+
+.read sql/views/facts/view_segment_effort_achievement.sql
+.read sql/views/facts/view_segment_personal_best.sql
