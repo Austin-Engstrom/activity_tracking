@@ -215,11 +215,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "GPS Points"
+                  "Property": "Activities"
                 }
               },
-              "queryRef": "measures_.GPS Points",
-              "nativeQueryRef": "GPS Points"
+              "queryRef": "measures_.Activities",
+              "nativeQueryRef": "Distinct activities"
             }
           ]
         },
@@ -233,11 +233,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "GPS Points"
+                  "Property": "Activities"
                 }
               },
-              "queryRef": "measures_.GPS Points",
-              "nativeQueryRef": "GPS Points"
+              "queryRef": "measures_.Activities",
+              "nativeQueryRef": "Activities"
             },
             {
               "field": {
@@ -247,11 +247,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Activities"
+                  "Property": "GPS Points"
                 }
               },
-              "queryRef": "measures_.Activities",
-              "nativeQueryRef": "Activities"
+              "queryRef": "measures_.GPS Points",
+              "nativeQueryRef": "GPS Points"
             },
             {
               "field": {
@@ -285,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'GPS point density | ~100 m cells'"
+                  "Value": "'Activity frequency | ~25 m cells'"
                 }
               }
             },

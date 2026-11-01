@@ -100,18 +100,24 @@ Four map placeholders on Overview, Cycling, Running/Walking/Hiking and Trails &
 Systems now use Azure Maps heat layers. The previous empty shape-map placeholder
 is converted to Azure Maps. The existing manual positions and other visuals are
 preserved. Heatmap locations group the calculated `activity_points[map_latitude]`
-and `[map_longitude]` fields, rounded to 0.001 degrees. Each plotted cell is weighted
-by the existing `GPS Points` measure, with a dark basemap and teal/orange density
-ramp; tooltip measures include GPS points, activities and point miles.
+and `[map_longitude]` fields, snapped to 0.00025-degree cells (about 28 metres
+north/south and roughly 20–30 metres east/west at common mid-latitudes). Each
+plotted cell is weighted by the existing `Activities` distinct-count measure.
+One activity contributes once per cell, regardless of its number of GPS samples
+or repeat loops within that cell. Tooltips retain raw GPS point count and miles.
 
-This is **recorded sample density**, not independent visit counts or a mileage/time
-heatmap. Repeated samples raise the weight, and different sampling rates/slow or
-stationary recording can affect hotspots. Cell size is approximately 111 metres
-north/south and varies east/west by latitude. Azure Maps can reduce large datasets
-(roughly 30,000 plotted locations): inspect data-reduction notices and use a bounded
-date range when reviewing broad history. Rounded grouping reduces cardinality but
-does not guarantee every selection fits that limit. Radius/intensity are visual
-smoothing controls rather than physical distance measurements.
+This is **activity frequency per location**, not independent visit counts within
+one activity or a mileage/time heatmap. Repeated walks/rides on different activities
+raise the weight; stationary sampling within one activity does not. Different
+routes can still share a cell, and smoothing can combine nearby cells. One activity
+crossing multiple cells contributes to each, so summing cell weights is not an
+overall distinct-activity count. Cell widths vary with latitude.
+
+Azure Maps can reduce large datasets (roughly 30,000 plotted locations): inspect
+reduction notices and use a bounded date range when reviewing broad history. Smaller
+cells increase the number of locations; grouping does not guarantee every selection
+fits the limit. Radius/intensity remain visual smoothing controls, not physical
+distance measurements. Existing dark styling and map positions are preserved.
 
 The new **Segment PRs** page contains:
 
@@ -141,8 +147,8 @@ required for these changes. Then reopen `power_bi/report/Activity Analytics.pbip
 Check that Azure Maps is enabled for your signed-in Power BI environment and that
 all four heat layers render under the intended date/category filters.
 
-On a known route, compare point totals for a few cells and check repeat rides
-increase density. On Segment PRs, check coverage against the current exported rank
+On a known route, verify a cell containing many samples from one activity has weight one; repeat
+activities increase its weight. On Segment PRs, check coverage against the current exported rank
 statuses, verify a known effort/link, and confirm the bottom best table is stable
 under date/category changes while the upper history changes. Map rendering,
 DAX execution, smoothing and deployed performance require Desktop/Service review;

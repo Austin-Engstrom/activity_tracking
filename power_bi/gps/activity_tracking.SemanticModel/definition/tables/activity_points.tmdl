@@ -275,16 +275,16 @@ table activity_points
 		summarizeBy: none
 		sourceColumn: date_basis
 
-	/// Latitude rounded to 0.001 degrees for heatmap grouping. A cell spans about 111 metres north/south; east/west size varies by latitude. Weight cells by GPS Points, not by distinct coordinates.
-	column map_latitude = IF(NOT ISBLANK(activity_points[latitude]), ROUND(activity_points[latitude], 3), BLANK())
+	/// Latitude snapped to 0.00025-degree heatmap cells (about 28 metres north/south, longitude-dependent east/west). Weight by Activities to count each distinct activity once per cell; repeated samples within one activity do not increase its weight.
+	column map_latitude = IF(NOT ISBLANK(activity_points[latitude]), ROUND(activity_points[latitude] * 4000, 0) / 4000, BLANK())
 		dataType: double
 		lineageTag: 6244a6a3-a64f-4291-9bd8-8fd3b181e2ea
 		formatString: 0.000
 		dataCategory: Latitude
 		summarizeBy: none
 
-	/// Longitude rounded to 0.001 degrees for heatmap grouping. A cell spans about 111 metres north/south; east/west size varies by latitude. Weight cells by GPS Points, not by distinct coordinates.
-	column map_longitude = IF(NOT ISBLANK(activity_points[longitude]), ROUND(activity_points[longitude], 3), BLANK())
+	/// Longitude snapped to 0.00025-degree heatmap cells (about 28 metres north/south, longitude-dependent east/west). Weight by Activities to count each distinct activity once per cell; repeated samples within one activity do not increase its weight.
+	column map_longitude = IF(NOT ISBLANK(activity_points[longitude]), ROUND(activity_points[longitude] * 4000, 0) / 4000, BLANK())
 		dataType: double
 		lineageTag: d5ae49ef-832f-4ce5-bfe6-5b45b10cafdb
 		formatString: 0.000

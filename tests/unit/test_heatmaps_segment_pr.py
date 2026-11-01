@@ -9,7 +9,7 @@ PAGES=ROOT/'power_bi/report/Activity Analytics.Report/definition/pages'
 
 
 class HeatmapAndPRTests(unittest.TestCase):
-    def test_maps_group_cells_and_weight_by_point_count(self):
+    def test_maps_group_cells_and_weight_by_distinct_activity_count(self):
         maps=[]
         for p in PAGES.glob('*/visuals/*/visual.json'):
             d=json.loads(p.read_text());v=d['visual']
@@ -19,7 +19,7 @@ class HeatmapAndPRTests(unittest.TestCase):
             q=v['query']['queryState']
             self.assertEqual(q['Y']['projections'][0]['field']['Column']['Property'],'map_latitude')
             self.assertEqual(q['X']['projections'][0]['field']['Column']['Property'],'map_longitude')
-            self.assertEqual(q['Size']['projections'][0]['field']['Measure']['Property'],'GPS Points')
+            self.assertEqual(q['Size']['projections'][0]['field']['Measure']['Property'],'Activities')
             self.assertNotIn('Category',q)  # No point-ID grouping that explodes map cardinality.
             self.assertNotIn('Series',q)
             heat=v['objects']['heatMapLayer'][0]['properties']
@@ -30,7 +30,7 @@ class HeatmapAndPRTests(unittest.TestCase):
         content=(MODEL/'tables/activity_points.tmdl').read_text()
         for coordinate in ['latitude','longitude']:
             block=content.split(f'column map_{coordinate} =',1)[1].split('\n\t',1)[0]
-            self.assertIn('ROUND(activity_points['+coordinate+'], 3)',block)
+            self.assertIn('ROUND(activity_points['+coordinate+'] * 4000, 0) / 4000',block)
             self.assertIn('BLANK()',block)
 
     def test_partial_observation_and_lifetime_scopes_are_explicit(self):
