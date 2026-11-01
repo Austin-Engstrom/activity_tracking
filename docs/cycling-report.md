@@ -11,7 +11,7 @@ existing GPS project and Quanta Check are unchanged.
 |---|---|
 | Activity Overview | All GPS activities; activity miles/hours, activity and active-day cards; weekly point-mile trend; activity-type and equipment breakdowns; detail with Strava links |
 | Cycling Overview | Editable cycling page filter; same riding summary and detail |
-| On Foot & Leg-Powered | Editable non-cycling leg-powered filter; mileage, moving hours, active days, type mix, weekly active-day trend and activity links |
+| Running, Walking & Hiking | Editable Walking / Hiking and Running activity-category filter; mileage, moving hours, active days, type mix, weekly active-day trend and activity links |
 | Consistency | All GPS activity types by default; active days/weeks, weekly participation and streaks; weekly/daily trends and detail |
 | Trails & Systems | All GPS activity types by default; matched point mileage, assignment coverage, system/trail breakdowns and route detail |
 | Gear & Maintenance | All GPS activity types for riding usage; separate latest exported component-service snapshot |
@@ -19,14 +19,13 @@ existing GPS project and Quanta Check are unchanged.
 
 There is **no report-wide sport filter**. The cycling filter moved to the Cycling
 Overview page, where it selects Ride, MountainBikeRide, GravelRide, EBikeRide,
-EMountainBikeRide, VirtualRide, Handcycle and Velomobile. The On Foot & Leg-Powered
-page selects Run, TrailRun, VirtualRun, Walk, Hike, Snowshoe, NordicSki,
-BackcountrySki, IceSkate, InlineSkate, RollerSki, StairStepper and Elliptical.
+EMountainBikeRide, VirtualRide, Handcycle and Velomobile. The Running, Walking & Hiking
+page filters `activity_types[activity_category]` to exactly `Walking / Hiking` and
+`Running`, so sports enter the page through their category mapping rather than a
+hardcoded sport whitelist.
 Both filters are visible and unlocked in Filters on this page. Only GPS-eligible
 activities present in the semantic model participate, including indoor sports only
-when they actually have GPS points. Downhill skiing/snowboarding, cycling and
-paddling are excluded from the leg-powered page by default. Adjust the whitelist
-to match the intended interpretation.
+when they actually have GPS points.
 
 Only **date slicers sync** between analysis pages. Sport and equipment slicers are
 page-specific so a bike/sport selection does not silently restrict all-activity

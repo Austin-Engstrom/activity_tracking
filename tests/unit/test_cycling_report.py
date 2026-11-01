@@ -73,9 +73,11 @@ class CyclingReportTests(unittest.TestCase):
         config=json.loads((REPORT/'definition/pages/leg_powered/page.json').read_text())
         f=config['filterConfig']['filters'][0]
         self.assertFalse(f['isLockedInViewMode'])
-        sports={v[0]['Literal']['Value'] for v in f['filter']['Where'][0]['Condition']['In']['Values']}
-        self.assertTrue({"'Run'","'TrailRun'","'Walk'","'Hike'"} <= sports)
-        self.assertNotIn("'Ride'",sports)
+        self.assertEqual(f['field']['Column']['Property'],'activity_category')
+        condition=f['filter']['Where'][0]['Condition']['In']
+        self.assertEqual(condition['Expressions'][0]['Column']['Property'],'activity_category')
+        categories={v[0]['Literal']['Value'] for v in condition['Values']}
+        self.assertEqual(categories,{"'Walking / Hiking'","'Running'"})
 
     def test_visuals_share_uniform_grid_and_outer_edges(self):
         for page in (REPORT/'definition/pages').glob('*/page.json'):
