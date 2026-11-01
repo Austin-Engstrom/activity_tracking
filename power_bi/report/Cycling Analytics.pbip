@@ -4,7 +4,7 @@
   "artifacts": [
     {
       "report": {
-        "path": "cycling_analytics.Report"
+        "path": "Cycling Analytics.Report"
       }
     }
   ],

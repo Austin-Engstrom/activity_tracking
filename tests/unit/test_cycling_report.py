@@ -6,14 +6,14 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'power_bi/report'
-REPORT=BASE/'cycling_analytics.Report'
+REPORT=BASE/'Cycling Analytics.Report'
 MODEL=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition/tables'
 
 
 class CyclingReportTests(unittest.TestCase):
     def test_project_uses_shared_model_and_has_five_pages(self):
-        project=json.loads((BASE/'cycling_analytics.pbip').read_text())
-        self.assertEqual(project['artifacts'][0]['report']['path'],'cycling_analytics.Report')
+        project=json.loads((BASE/'Cycling Analytics.pbip').read_text())
+        self.assertEqual(project['artifacts'][0]['report']['path'],'Cycling Analytics.Report')
         binding=json.loads((REPORT/'definition.pbir').read_text())
         self.assertNotIn('byPath',binding['datasetReference'])
         connection=binding['datasetReference']['byConnection']['connectionString']
