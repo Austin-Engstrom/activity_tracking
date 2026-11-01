@@ -3,7 +3,7 @@ table select_dimensions
 	lineageTag: 3615616a-bddb-4fb6-9d2d-16cf6dfcfd1b
 
 	/// Slicer choices and dynamic visual field. Uses field-parameter metadata on the hidden fields column.
-	column selection
+	column select_dimensions
 		dataType: string
 		lineageTag: 219da8f2-becd-4b41-a913-6e9921dcf7d0
 		summarizeBy: none
@@ -22,8 +22,11 @@ table select_dimensions
 		sourceColumn: [Value2]
 		sortByColumn: sort_order
 
-		extendedProperty ParameterMetadata = {"version":3,"kind":2}
-			type: json
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
 
 	/// Stable display order for parameter choices.
 	column sort_order
@@ -36,18 +39,19 @@ table select_dimensions
 	partition select_dimensions = calculated
 		mode: import
 		source =
-			{
-			    ("Year", NAMEOF('dates'[year]), 0),
-			    ("Quarter Number", NAMEOF('dates'[quarter_number]), 1),
-			    ("Month Number", NAMEOF('dates'[month_number]), 2),
-			    ("Week Starting", NAMEOF('dates'[week_start_date]), 3),
-			    ("Date", NAMEOF('dates'[date]), 4),
-			    ("Activity Type", NAMEOF('activity_types'[activity_type]), 5),
-			    ("Activity Category", NAMEOF('activity_types'[activity_category]), 6),
-			    ("Gear", NAMEOF('gear'[gear_name]), 7),
-			    ("Trail System", NAMEOF('trail_systems'[trail_system_name]), 8),
-			    ("Trail", NAMEOF('trails'[trail_name]), 9),
-			    ("Segment", NAMEOF('segments'[segment_name]), 10),
-			    ("Activity", NAMEOF('activities'[activity_name]), 11),
-			    ("Activity ID", NAMEOF('activities'[activity_id]), 12)
-			}
+				{
+				    ("Year", NAMEOF('dates'[year]), 0),
+				    ("Quarter Number", NAMEOF('dates'[quarter_number]), 1),
+				    ("Month Number", NAMEOF('dates'[month_number]), 2),
+				    ("Week Starting", NAMEOF('dates'[week_start_date]), 3),
+				    ("Date", NAMEOF('dates'[date]), 4),
+				    ("Activity Type", NAMEOF('activity_types'[activity_type]), 5),
+				    ("Activity Category", NAMEOF('activity_types'[activity_category]), 6),
+				    ("Gear", NAMEOF('gear'[gear_name]), 7),
+				    ("Trail System", NAMEOF('trail_systems'[trail_system_name]), 8),
+				    ("Trail", NAMEOF('trails'[trail_name]), 9),
+				    ("Segment", NAMEOF('segments'[segment_name]), 10),
+				    ("Activity", NAMEOF('activities'[activity_name]), 11),
+				    ("Activity ID", NAMEOF('activities'[activity_id]), 12)
+				}
+
