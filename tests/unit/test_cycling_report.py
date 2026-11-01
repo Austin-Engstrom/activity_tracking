@@ -119,11 +119,17 @@ class CyclingReportTests(unittest.TestCase):
             category=q.get('queryState',{}).get('Category',{}).get('projections',[])
             if category and category[0]['field'].get('Column',{}).get('Expression',{}).get('SourceRef',{}).get('Entity')=='dates':
                 date_chart_count+=1
-                self.assertEqual([p['field']['Column']['Property'] for p in category],['year','quarter_number','month_number','date'])
-                self.assertEqual([p['active'] for p in category],[True,False,False,False])
+                self.assertEqual([p['field']['Column']['Property'] for p in category],['year','month_name','week_start_date','date'])
+                self.assertEqual([p['active'] for p in category],[True,True,False,False])
                 self.assertEqual(q['sortDefinition']['sort'][0]['direction'],'Descending')
             if d['name']=='date_filter':
                 props=v['objects']['data'][0]['properties']
                 self.assertEqual(props['start']['expr']['Literal']['Value'],"datetime'2026-01-01T00:00:00'")
                 self.assertNotIn('end',props)
         self.assertGreater(date_chart_count,0)
+
+    def test_month_names_are_calculated_and_chronologically_sorted(self):
+        content=(MODEL/'dates.tmdl').read_text()
+        self.assertIn('column month_name = FORMAT(dates[date], "MMMM", "en-US")',content)
+        block=content.split('column month_name =',1)[1].split('partition dates',1)[0]
+        self.assertIn('sortByColumn: month_number',block)

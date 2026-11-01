@@ -170,6 +170,7 @@ table data_dictionary
 				        {"Column", "dates", "day_of_week", "SQLite numbering: Sunday=0 through Saturday=6.", null, "int64", "0", null, false},
 				        {"Column", "dates", "week_start_date", "Monday of the containing local calendar week.", null, "dateTime", "yyyy-mm-dd", null, false},
 				        {"Column", "dates", "week_end_date", "Sunday of the containing local calendar week.", null, "dateTime", "yyyy-mm-dd", null, false},
+				        {"Column", "dates", "month_name", "English calendar month name for the local reporting date, sorted chronologically by month_number. Use year above this level to distinguish history across years.", null, "string", null, "FORMAT(dates[date], ""MMMM"", ""en-US"")", false},
 				        {"Column", "gear", "gear_key", "Gear key; source identifier or relationship key, not a measure.", null, "string", null, null, false},
 				        {"Column", "gear", "gear_id", "Gear id; source identifier or relationship key, not a measure.", null, "string", null, null, false},
 				        {"Column", "gear", "athlete_id", "Source equipment owner athlete identifier; categorical, never summed.", null, "int64", "0", null, true},

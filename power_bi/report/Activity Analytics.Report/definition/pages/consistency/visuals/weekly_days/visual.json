@@ -39,12 +39,12 @@
                       "Entity": "dates"
                     }
                   },
-                  "Property": "quarter_number"
+                  "Property": "month_name"
                 }
               },
-              "queryRef": "dates.quarter_number",
-              "nativeQueryRef": "Quarter",
-              "active": false
+              "queryRef": "dates.month_name",
+              "nativeQueryRef": "Month",
+              "active": true
             },
             {
               "field": {
@@ -54,11 +54,11 @@
                       "Entity": "dates"
                     }
                   },
-                  "Property": "month_number"
+                  "Property": "week_start_date"
                 }
               },
-              "queryRef": "dates.month_number",
-              "nativeQueryRef": "Month",
+              "queryRef": "dates.week_start_date",
+              "nativeQueryRef": "Week",
               "active": false
             },
             {
@@ -73,7 +73,7 @@
                 }
               },
               "queryRef": "dates.date",
-              "nativeQueryRef": "Date",
+              "nativeQueryRef": "Day",
               "active": false
             }
           ]
@@ -111,6 +111,19 @@
               }
             },
             "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dates"
+                  }
+                },
+                "Property": "month_name"
+              }
+            },
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": true
@@ -130,7 +143,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Active days by date | drill year / quarter / month / date'"
+                  "Value": "'Active days by date | drill year / month / week / day'"
                 }
               }
             },

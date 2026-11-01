@@ -78,12 +78,16 @@ selection. They do not render visuals or execute live queries. One existing
 field-parameter metadata-format test on main remains unrelated to this report.
 
 The Activity Overview category breakdown uses `activity_types[activity_category]`.
-Every date-axis chart has a report-level drill sequence of year, quarter_number,
-month_number and date using existing calendar columns. It opens at Year with
+Every date-axis chart has a report-level drill sequence of year, month_name, week_start_date and date using existing calendar columns. It opens expanded to Month within Year with
 newest-first sorting; use the chart drill/expand controls for finer time detail.
-No model hierarchy, additional calendar fields or dataset publication is required.
+The calculated `dates[month_name]` column is sorted by month_number. Refresh and republish the GPS semantic model before opening this report revision. No Parquet re-export is required.
 Date slicers explicitly persist their displayed start as January 1, 2026 in addition
 to the lower-bound selection; no end value is stored. Desktop rendering remains
 the verification for the displayed date inputs.
 
 Visual subtitles are disabled throughout the report.
+
+The drill order is Year → Month name → Week (Monday start) → Day (full date).
+Year and Month are initially active to keep years distinct when displaying months.
+Weeks crossing month boundaries appear under both months with only that month's
+selected dates; the weekly start date can fall in the prior month.
