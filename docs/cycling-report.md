@@ -94,30 +94,34 @@ selected dates; the weekly start date can fall in the prior month.
 
 Month-name chart axes display January through December, using the model month_number sort; years remain newest first. This overrides descending date order at the month level.
 
-## GPS density maps and Segment PRs
+## Activity frequency maps and Segment PRs
 
-Four map placeholders on Overview, Cycling, Running/Walking/Hiking and Trails &
-Systems now use Azure Maps heat layers. The previous empty shape-map placeholder
-is converted to Azure Maps. The existing manual positions and other visuals are
-preserved. Heatmap locations group the calculated `activity_points[map_latitude]`
-and `[map_longitude]` fields, snapped to 0.00025-degree cells (about 28 metres
-north/south and roughly 20–30 metres east/west at common mid-latitudes). Each
-plotted cell is weighted by the existing `Activities` distinct-count measure.
-One activity contributes once per cell, regardless of its number of GPS samples
-or repeat loops within that cell. Tooltips retain raw GPS point count and miles.
+The four maps on Overview, Cycling, Running/Walking/Hiking and Trails & Systems
+now use unclustered Azure Maps location markers instead of heat layers. The
+existing map positions and dark basemap are retained. Locations use the existing
+0.00025-degree `map_latitude` / `map_longitude` cells (roughly 25 metres), with
+`Activities` as the Size field. GPS Points and Miles remain tooltip context.
 
-This is **activity frequency per location**, not independent visit counts within
-one activity or a mileage/time heatmap. Repeated walks/rides on different activities
-raise the weight; stationary sampling within one activity does not. Different
-routes can still share a cell, and smoothing can combine nearby cells. One activity
-crossing multiple cells contributes to each, so summing cell weights is not an
-overall distinct-activity count. Cell widths vary with latitude.
+Each activity contributes once per cell. Marker radius scales within a small
+2–7 pixel range, relative to the currently displayed activity counts. Colour uses
+**fixed count thresholds** across selections: up to 2 activities stays cool blue,
+10 is teal, and 30 or more is orange. The title displays that key. Marker clustering
+and the heat layer are disabled, so nearby cells do not sum into a density hotspot.
+Markers can still overlap at low zoom; zoom in or hover for the exact activity
+count. Colour is the absolute-frequency reference, not a dynamically normalised
+hot/cold ranking of the current selection.
 
-Azure Maps can reduce large datasets (roughly 30,000 plotted locations): inspect
-reduction notices and use a bounded date range when reviewing broad history. Smaller
-cells increase the number of locations; grouping does not guarantee every selection
-fits the limit. Radius/intensity remain visual smoothing controls, not physical
-distance measurements. Existing dark styling and map positions are preserved.
+This represents activity frequency per location, not mileage or number of
+independent visits during a single activity. Repeated samples and loops within one
+cell on one activity do not increase its count. Different routes can share a cell,
+and the same activity contributes to multiple cells, so summing marker counts is
+not an overall distinct-activity count. Cell dimensions vary by latitude.
+
+Azure Maps may reduce large selections (roughly 30,000 plotted locations). Inspect
+reduction notices and narrow the date range when needed. Smaller cells retain more
+route detail but increase location cardinality. Review the three known low-visit
+locations: their tooltip activity count should be 1 or 2 and their markers cool
+blue. Confirm a genuinely repeated route gets higher counts and warmer colours.
 
 The new **Segment PRs** page contains:
 
@@ -145,13 +149,13 @@ first: this revision adds the two calculated map-coordinate columns and seven
 summary measures. Existing Parquet files suffice; no ETL or additional export is
 required for these changes. Then reopen `power_bi/report/Activity Analytics.pbip`.
 Check that Azure Maps is enabled for your signed-in Power BI environment and that
-all four heat layers render under the intended date/category filters.
+all four marker layers render under the intended date/category filters.
 
-On a known route, verify a cell containing many samples from one activity has weight one; repeat
-activities increase its weight. On Segment PRs, check coverage against the current exported rank
+On a known route, verify a cell containing many samples from one activity has count one; repeat
+activities increase its count. On Segment PRs, check coverage against the current exported rank
 statuses, verify a known effort/link, and confirm the bottom best table is stable
 under date/category changes while the upper history changes. Map rendering,
-DAX execution, smoothing and deployed performance require Desktop/Service review;
+DAX execution, marker scaling and deployed performance require Desktop/Service review;
 repository schema and binding checks cannot establish those results.
 
 Validation for this revision: 18 targeted report/model/export/dictionary checks

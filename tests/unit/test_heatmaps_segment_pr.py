@@ -9,7 +9,7 @@ PAGES=ROOT/'power_bi/report/Activity Analytics.Report/definition/pages'
 
 
 class HeatmapAndPRTests(unittest.TestCase):
-    def test_maps_group_cells_and_weight_by_distinct_activity_count(self):
+    def test_markers_use_activity_counts_without_heat_smoothing(self):
         maps=[]
         for p in PAGES.glob('*/visuals/*/visual.json'):
             d=json.loads(p.read_text());v=d['visual']
@@ -23,9 +23,14 @@ class HeatmapAndPRTests(unittest.TestCase):
             self.assertNotIn('Category',q)  # No point-ID grouping that explodes map cardinality.
             self.assertNotIn('Series',q)
             heat=v['objects']['heatMapLayer'][0]['properties']
-            self.assertEqual(heat['show']['expr']['Literal']['Value'],'true')
-            self.assertEqual(heat['heatMapUseSize']['expr']['Literal']['Value'],'true')
-            self.assertEqual(v['objects']['bubbleLayer'][0]['properties']['show']['expr']['Literal']['Value'],'false')
+            self.assertEqual(heat['show']['expr']['Literal']['Value'],'false')
+            markers=v['objects']['bubbleLayer'][0]['properties']
+            self.assertEqual(markers['show']['expr']['Literal']['Value'],'true')
+            self.assertEqual(markers['clusteringEnabled']['expr']['Literal']['Value'],'false')
+            self.assertEqual(markers['sizeByValue']['expr']['Literal']['Value'],'true')
+            self.assertEqual(markers['maxRadius']['expr']['Literal']['Value'],'7D')
+            gradient=v['objects']['bubbleLayer'][1]['properties']['fillColor']['solid']['color']['expr']['FillRule']['FillRule']['linearGradient3']
+            self.assertEqual([gradient[k]['value']['Literal']['Value'] for k in ['min','mid','max']],['2D','10D','30D'])
         self.assertEqual(len(maps),4)
         content=(MODEL/'tables/activity_points.tmdl').read_text()
         for coordinate in ['latitude','longitude']:

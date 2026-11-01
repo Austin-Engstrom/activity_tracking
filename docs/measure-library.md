@@ -133,5 +133,5 @@ KOM Firsts and Segments With Stored Best. Effort summaries follow effort-start
 dates and the effort table's dimension filters. Coverage requires both API rank
 fields to be returned, including explicit nulls; legacy/omitted fields remain
 unobserved. Segments With Stored Best is an all-history, segment-only summary.
-See [report and heatmap notes](cycling-report.md#gps-density-maps-and-segment-prs)
+See [report and location-map notes](cycling-report.md#activity-frequency-maps-and-segment-prs)
 for the PR page and interpretation limits.

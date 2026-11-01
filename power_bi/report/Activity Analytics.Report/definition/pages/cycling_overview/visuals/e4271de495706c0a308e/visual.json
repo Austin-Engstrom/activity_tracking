@@ -38,75 +38,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "heatMapUseSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "heatMapRadius": {
-              "expr": {
-                "Literal": {
-                  "Value": "22D"
-                }
-              }
-            },
-            "heatMapRadiusUnit": {
-              "expr": {
-                "Literal": {
-                  "Value": "'pixels'"
-                }
-              }
-            },
-            "heatMapIntensity": {
-              "expr": {
-                "Literal": {
-                  "Value": "0.55D"
-                }
-              }
-            },
-            "mapTransparency": {
-              "expr": {
-                "Literal": {
-                  "Value": "15D"
-                }
-              }
-            },
-            "heatMapColorLow": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#193759'"
-                    }
-                  }
-                }
-              }
-            },
-            "heatMapColorCenter": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#62C5CF'"
-                    }
-                  }
-                }
-              }
-            },
-            "heatMapColorHigh": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#F4A261'"
-                    }
-                  }
+                  "Value": "false"
                 }
               }
             }
@@ -119,10 +51,139 @@
             "show": {
               "expr": {
                 "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "sizeByValue": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "minBubbleRadius": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "maxRadius": {
+              "expr": {
+                "Literal": {
+                  "Value": "7D"
+                }
+              }
+            },
+            "bubbleRadius": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            },
+            "clusteringEnabled": {
+              "expr": {
+                "Literal": {
                   "Value": "false"
                 }
               }
+            },
+            "mapTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "25D"
+                }
+              }
+            },
+            "bubbleStrokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "fillColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "FillRule": {
+                      "Input": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "measures_"
+                            }
+                          },
+                          "Property": "Activities"
+                        }
+                      },
+                      "FillRule": {
+                        "linearGradient3": {
+                          "min": {
+                            "value": {
+                              "Literal": {
+                                "Value": "2D"
+                              }
+                            },
+                            "color": {
+                              "Literal": {
+                                "Value": "'#668AB3'"
+                              }
+                            }
+                          },
+                          "mid": {
+                            "value": {
+                              "Literal": {
+                                "Value": "10D"
+                              }
+                            },
+                            "color": {
+                              "Literal": {
+                                "Value": "'#62C5CF'"
+                              }
+                            }
+                          },
+                          "max": {
+                            "value": {
+                              "Literal": {
+                                "Value": "30D"
+                              }
+                            },
+                            "color": {
+                              "Literal": {
+                                "Value": "'#F4A261'"
+                              }
+                            }
+                          },
+                          "nullColoringStrategy": {
+                            "strategy": {
+                              "Literal": {
+                                "Value": "'asZero'"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ]
           }
         }
       ],
@@ -285,7 +346,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Activity frequency | ~25 m cells'"
+                  "Value": "'Activity visits | blue: 1–2 · teal: 10 · orange: 30+'"
                 }
               }
             },
