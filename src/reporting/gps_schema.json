@@ -76,7 +76,9 @@
     "day_of_week": "int64",
     "month_number": "int64",
     "quarter_number": "int64",
+    "week_end_date": "dateTime",
     "week_number": "int64",
+    "week_start_date": "dateTime",
     "year": "int64"
   },
   "view_gear": {
@@ -123,6 +125,20 @@
     "start_latitude": "double",
     "start_longitude": "double",
     "state": "string"
+  },
+  "view_segment_trail_association": {
+    "association_basis": "string",
+    "evidence_status": "string",
+    "first_observed_at": "dateTime",
+    "last_observed_at": "dateTime",
+    "observed_distance_miles": "double",
+    "observed_distance_share": "double",
+    "point_memberships": "int64",
+    "segment_key": "int64",
+    "supporting_activities": "int64",
+    "supporting_efforts": "int64",
+    "trail_key": "int64",
+    "trail_system_key": "int64"
   },
   "view_trail": {
     "bicycle_access": "string",

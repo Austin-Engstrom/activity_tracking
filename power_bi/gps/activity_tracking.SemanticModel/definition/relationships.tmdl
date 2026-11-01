@@ -42,3 +42,15 @@ relationship 56a24f79-7062-4b33-971e-516f42ab9fca
 relationship f8b40caa-2528-4f56-b3c0-2dc799d8c66e
 	fromColumn: component_service_status.component_key
 	toColumn: gear_components.component_key
+
+relationship b057551a-b50c-43eb-ab52-2e7289b289d1
+	fromColumn: segment_trail_associations.segment_key
+	toColumn: segments.segment_key
+
+relationship 5fe9cfde-67b3-43d0-974f-258b7730180e
+	fromColumn: segment_trail_associations.trail_key
+	toColumn: trails.trail_key
+
+relationship f16df384-6157-4c2f-a3a4-1c6587f12fda
+	fromColumn: segment_trail_associations.trail_system_key
+	toColumn: trail_systems.trail_system_key

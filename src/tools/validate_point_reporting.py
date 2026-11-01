@@ -45,21 +45,53 @@ def verify_alignment(stored, payload):
     return True, 'original_arrays_match'
 
 
-def backfill(limit):
-    from src.api.authenticate import StravaAuthenticator
-    from src.api.client import StravaClient, StravaApiError, StravaRateLimitError
-    client = StravaClient(StravaAuthenticator().get_access_token())
+def select_verification_activities(conn, limit, candidate_file=None):
+    rows = conn.execute(text("""SELECT a.activity_id, checks.checked_at FROM activities a
+        LEFT JOIN stream_index_alignment m ON m.activity_id=a.activity_id
+        LEFT JOIN stream_alignment_checks checks ON checks.activity_id=a.activity_id
+        WHERE coalesce(m.verified,0)=0
+        AND EXISTS (SELECT 1 FROM activity_points p WHERE p.activity_id=a.activity_id)
+        AND EXISTS (SELECT 1 FROM segment_efforts e WHERE e.activity_id=a.activity_id)
+        ORDER BY checks.checked_at IS NOT NULL, checks.checked_at, a.activity_id DESC""")).mappings().all()
+    if candidate_file is None:
+        return [row['activity_id'] for row in rows[:limit]]
+    with Path(candidate_file).open(encoding='utf-8-sig', newline='') as f:
+        reader = csv.DictReader(f)
+        if 'activity_id' not in (reader.fieldnames or []):
+            raise ValueError('Candidate CSV must contain activity_id')
+        ordered = []
+        for row in reader:
+            activity_id = int(row['activity_id'])
+            if activity_id <= 0:
+                raise ValueError('Candidate activity IDs must be positive integers')
+            if activity_id not in ordered:
+                ordered.append(activity_id)
+    eligible = {row['activity_id']: row['checked_at'] for row in rows}
+    ranks = {activity_id: rank for rank, activity_id in enumerate(ordered)}
+    selected = [activity_id for activity_id in ordered if activity_id in eligible]
+    # Unattempted candidates first, then older failed attempts. Within each group,
+    # preserve audit ranking; successful verification is always skipped.
+    selected.sort(key=lambda activity_id: (eligible[activity_id] is not None,
+                  eligible[activity_id] or '', ranks[activity_id]))
+    return selected[:limit]
+
+
+def backfill(limit, candidate_file=None):
+    # Check the local file before making any authenticated requests.
+    if candidate_file is not None and not Path(candidate_file).is_file():
+        raise FileNotFoundError(candidate_file)
     with engine.begin() as conn:
         conn.exec_driver_sql("""CREATE TABLE IF NOT EXISTS stream_alignment_checks (
             activity_id INTEGER PRIMARY KEY REFERENCES activities(activity_id),
             checked_at TEXT NOT NULL, reason TEXT NOT NULL)""")
-        ids = conn.execute(text('''SELECT a.activity_id FROM activities a
-            LEFT JOIN stream_index_alignment m ON m.activity_id=a.activity_id
-            LEFT JOIN stream_alignment_checks checks ON checks.activity_id=a.activity_id
-            WHERE coalesce(m.verified,0)=0
-            AND EXISTS (SELECT 1 FROM activity_points p WHERE p.activity_id=a.activity_id)
-            AND EXISTS (SELECT 1 FROM segment_efforts e WHERE e.activity_id=a.activity_id)
-            ORDER BY checks.checked_at IS NOT NULL, checks.checked_at, a.activity_id DESC LIMIT :limit'''), {'limit':limit}).scalars().all()
+        ids = select_verification_activities(conn, limit, candidate_file)
+    if not ids:
+        print('No eligible unverified candidates remain in this selection.', flush=True)
+        return
+    from src.api.authenticate import StravaAuthenticator
+    from src.api.client import StravaClient, StravaApiError, StravaRateLimitError
+    client = StravaClient(StravaAuthenticator().get_access_token())
+    print(f'Verifying {len(ids)} activities'+(' in coverage-priority order.' if candidate_file else '.'),flush=True)
     for activity_id in ids:
         if not client.has_read_capacity():
             print('Stopped: Strava read capacity reserved. Rerun later to resume.')
@@ -239,8 +271,10 @@ if __name__ == '__main__':
     parser.add_argument('--explain', action='store_true', help='Save SQLite query plans alongside audit timings')
     parser.add_argument('--verify-streams',action='store_true',help='Read original arrays from Strava and update alignment metadata only')
     parser.add_argument('--limit',type=int,default=5,help='Maximum activities to verify per run; repeat to resume')
+    parser.add_argument('--candidate-file',type=Path,help='Prioritize eligible activities using coverage audit CSV order')
     parser.add_argument('--output',type=Path,default=ROOT/'exports'/'validation')
     args=parser.parse_args()
     if args.limit<1: parser.error('--limit must be positive')
-    if args.verify_streams: backfill(args.limit)
+    if args.candidate_file and not args.verify_streams: parser.error('--candidate-file requires --verify-streams')
+    if args.verify_streams: backfill(args.limit,args.candidate_file)
     audit(args.output, explain=args.explain)

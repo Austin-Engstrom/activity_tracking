@@ -108,7 +108,7 @@
                 "Property": "year"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ]
       }

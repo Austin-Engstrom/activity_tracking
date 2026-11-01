@@ -11,8 +11,8 @@ table component_services
 
 	column component_key
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		summarizeBy: none
 		sourceColumn: component_key
 

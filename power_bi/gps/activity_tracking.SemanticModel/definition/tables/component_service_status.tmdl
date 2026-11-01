@@ -3,8 +3,8 @@ table component_service_status
 
 	column component_key
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		summarizeBy: none
 		sourceColumn: component_key
 
@@ -12,8 +12,8 @@ table component_service_status
 
 	column component_id
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		summarizeBy: none
 		sourceColumn: component_id
 
@@ -58,15 +58,15 @@ table component_service_status
 
 	column installed_at
 		dataType: dateTime
-		isHidden
 		formatString: yyyy-mm-dd
+		isHidden
 		summarizeBy: none
 		sourceColumn: installed_at
 
 	column removed_at
 		dataType: dateTime
-		isHidden
 		formatString: yyyy-mm-dd
+		isHidden
 		summarizeBy: none
 		sourceColumn: removed_at
 
@@ -84,15 +84,15 @@ table component_service_status
 
 	column service_interval_value
 		dataType: double
-		isHidden
 		formatString: #,0.00
+		isHidden
 		summarizeBy: none
 		sourceColumn: service_interval_value
 
 	column latest_service_id
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		summarizeBy: none
 		sourceColumn: latest_service_id
 
@@ -122,8 +122,8 @@ table component_service_status
 
 	column service_baseline_date_key
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		summarizeBy: none
 		sourceColumn: service_baseline_date_key
 

@@ -1,0 +1,54 @@
+/// Field parameter for choosing grouping columns in visuals. It changes the grouping field without creating relationships or converting ordinary measures into segment-aware measures.
+table select_dimensions
+	lineageTag: 3615616a-bddb-4fb6-9d2d-16cf6dfcfd1b
+
+	/// Slicer choices and dynamic visual field. Uses field-parameter metadata on the hidden fields column.
+	column select_dimensions
+		dataType: string
+		lineageTag: 219da8f2-becd-4b41-a913-6e9921dcf7d0
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: sort_order
+
+		relatedColumnDetails
+			groupByColumn: fields
+
+	/// Fully qualified model field reference used by Power BI to expand the parameter.
+	column fields
+		dataType: string
+		isHidden
+		lineageTag: 4eeca7cc-1e58-4d21-87d9-1d0916dc9ee0
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: sort_order
+
+		extendedProperty ParameterMetadata = {"version":3,"kind":2}
+			type: json
+
+	/// Stable display order for parameter choices.
+	column sort_order
+		dataType: int64
+		formatString: #,0
+		isHidden
+		lineageTag: 936d42bd-6a28-4ca4-9b24-bc8b8f950b5c
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition select_dimensions = calculated
+		mode: import
+		source =
+				{
+				    ("Year", NAMEOF('dates'[year]), 0),
+				    ("Quarter Number", NAMEOF('dates'[quarter_number]), 1),
+				    ("Month Number", NAMEOF('dates'[month_number]), 2),
+				    ("Week Starting", NAMEOF('dates'[week_start_date]), 3),
+				    ("Date", NAMEOF('dates'[date]), 4),
+				    ("Activity Type", NAMEOF('activity_types'[activity_type]), 5),
+				    ("Activity Category", NAMEOF('activity_types'[activity_category]), 6),
+				    ("Gear", NAMEOF('gear'[gear_name]), 7),
+				    ("Trail System", NAMEOF('trail_systems'[trail_system_name]), 8),
+				    ("Trail", NAMEOF('trails'[trail_name]), 9),
+				    ("Segment", NAMEOF('segments'[segment_name]), 10),
+				    ("Activity", NAMEOF('activities'[activity_name]), 11),
+				    ("Activity ID", NAMEOF('activities'[activity_id]), 12)
+				}

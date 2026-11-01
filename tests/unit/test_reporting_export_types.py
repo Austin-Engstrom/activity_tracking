@@ -37,7 +37,7 @@ class ReportingTypeTests(unittest.TestCase):
         seen=set()
         for path in model.glob('*.tmdl'):
             content=path.read_text()
-            if path.stem == 'measures_':
+            if re.search(r'partition \w+ = calculated',content):
                 continue
             view=re.search(r'ExportFolder & "(view_\w+).parquet"',content)[1]
             seen.add(view)
@@ -51,8 +51,8 @@ class ReportingTypeTests(unittest.TestCase):
     def test_measures_are_centralized_and_organized(self):
         base=ROOT/'power_bi/gps/activity_tracking.SemanticModel/definition'
         measures=(base/'tables/measures_.tmdl').read_text()
-        names=re.findall(r"\n\tmeasure '([^']+)'",measures)
-        self.assertTrue({'Miles Ridden','Point Moving Hours','Activity Moving Hours','Activities Ridden',
+        names=[a or b for a,b in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*))",measures)]
+        self.assertTrue({'Miles','Point Moving Hours','Moving Time','Activities',
                                     'Miles in Selected Segments','Whole Activity Miles'}.issubset(set(names)))
         self.assertEqual(len(names),len(set(names)))
         self.assertEqual(measures.count('displayFolder:'),len(names))
@@ -80,7 +80,7 @@ class ReportingTypeTests(unittest.TestCase):
                         'component_services': {'component_key'},
                         'component_service_status': {'component_key', 'component_id', 'gear_key', 'latest_service_id', 'service_baseline_date_key'},
                     }
-                    if path.stem in {'activity_points','activity_point_segments'} or name in foreign_keys.get(path.stem, set()):
+                    if path.stem in {'activity_points','activity_point_segments','segment_trail_associations'} or name in foreign_keys.get(path.stem, set()):
                         self.assertIn('isHidden',body,(path.stem,name))
                     else:
                         self.assertNotIn('isHidden',body,(path.stem,name))

@@ -14,7 +14,7 @@ class MeasureLibraryTests(unittest.TestCase):
     def setUp(self):
         self.columns={p.stem:set(re.findall(r'\n\tcolumn (\w+)',p.read_text())) for p in MODEL.glob('*.tmdl')}
         source=(MODEL/'measures_.tmdl').read_text()
-        self.measures=dict(re.findall(r"\n\tmeasure '([^']+)' =(.*?)(?=\n\tmeasure |\n\tcolumn |\Z)",source,re.S))
+        self.measures={quoted or plain: body for quoted,plain,body in re.findall(r"\n\tmeasure (?:'([^']+)'|([A-Za-z_]\w*)) =(.*?)(?=\n\tmeasure |\n\tcolumn |\Z)",source,re.S)}
 
     def test_all_measure_and_column_dependencies_exist(self):
         for name,body in self.measures.items():
@@ -24,7 +24,9 @@ class MeasureLibraryTests(unittest.TestCase):
                 self.assertIn(table,self.columns,(name,table))
                 self.assertIn(column,self.columns[table],(name,table,column))
             for measure in re.findall(r'(?<![\w])\[([^\]]+)\]',expression):
-                self.assertIn(measure,self.measures,(name,measure))
+                virtual_columns=set(re.findall(r'"(__\w+)"',expression))
+                if measure not in virtual_columns:
+                    self.assertIn(measure,self.measures,(name,measure))
 
     def test_measure_dependencies_have_no_cycles(self):
         dependencies={name:set(re.findall(r'(?<![\w])\[([^\]]+)\]',body.split('\n\t\tformatString:')[0])) for name,body in self.measures.items()}
@@ -32,6 +34,7 @@ class MeasureLibraryTests(unittest.TestCase):
         def visit(name,path):
             self.assertNotIn(name,path,' -> '.join([*path,name]))
             if name in done:return
-            for child in dependencies[name]:visit(child,[*path,name])
+            for child in dependencies[name]:
+                if child in self.measures: visit(child,[*path,name])
             done.add(name)
         for name in dependencies:visit(name,[])

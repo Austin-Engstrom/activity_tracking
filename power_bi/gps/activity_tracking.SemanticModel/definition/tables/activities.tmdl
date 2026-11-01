@@ -12,8 +12,8 @@ table activities
 
 	column activity_date_key
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		lineageTag: 8c34d0b9-956b-4f18-90d4-6693503a3bd2
 		summarizeBy: none
 		sourceColumn: activity_date_key

@@ -19,8 +19,8 @@ table gear
 
 	column athlete_id
 		dataType: int64
-		isHidden
 		formatString: 0
+		isHidden
 		lineageTag: f4c9801e-f32e-4198-897e-40a224571ec9
 		summarizeBy: none
 		sourceColumn: athlete_id

@@ -29,3 +29,15 @@ The new point-grain Power BI semantic model is in `power_bi/gps`.
 See the [dataset measure library](docs/measure-library.md) for adapted measures,
 filter behavior and Power BI validation steps, and [Quanta Check](docs/quanta-check.md)
 for the dataset's single-page validation report.
+
+[Observed segment associations](docs/segment-trail-associations.md) explains the
+segment/trail/system bridge, local installation and Power BI usage.
+
+[Weekly consistency measures](docs/activity-consistency.md) cover active weeks,
+local active days and slicer-aware consecutive-week streaks.
+
+All dataset measures include [native Power BI descriptions](docs/measure-descriptions.md)
+with their meaning, filter behavior and interpretation notes.
+
+[Selection field parameters](docs/selection-parameters.md) provide dynamic measure
+and dimension choices for visuals without changing the star-schema relationships.
