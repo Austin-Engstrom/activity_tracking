@@ -40,3 +40,22 @@ class SegmentPRTrailTests(unittest.TestCase):
         self.assertIn('VALUES(segment_effort_achievements[segment_key])',matcher)
         self.assertIn('VALUES(segment_personal_bests[segment_key])',matcher)
         self.assertIn('NOT TrailSelection || MatchingRows > 0',matcher)
+
+    def test_single_row_slicers_and_hidden_key_projections(self):
+        positions=[]
+        for name in ['date_filter','category_filter','trail_system_filter','trail_filter','segment_filter']:
+            d=json.loads((PAGE/f'visuals/{name}/visual.json').read_text())
+            positions.append(d['position'])
+        self.assertEqual(len({p['y'] for p in positions}),1)
+        self.assertEqual(len({p['width'] for p in positions}),1)
+        self.assertEqual(positions[0]['x'],24)
+        self.assertAlmostEqual(positions[-1]['x']+positions[-1]['width'],1416)
+        for left,right in zip(positions,positions[1:]):
+            self.assertAlmostEqual(right['x']-left['x']-left['width'],24)
+        for path in PAGE.parent.glob('*/visuals/*/visual.json'):
+            d=json.loads(path.read_text())
+            if d['visual']['visualType'] not in ['tableEx','pivotTable']:continue
+            for role in d['visual'].get('query',{}).get('queryState',{}).values():
+                for projection in role.get('projections',[]):
+                    name=projection.get('field',{}).get('Column',{}).get('Property','')
+                    if name.endswith(('_key','_id')):self.assertTrue(projection.get('hidden'),str(path))

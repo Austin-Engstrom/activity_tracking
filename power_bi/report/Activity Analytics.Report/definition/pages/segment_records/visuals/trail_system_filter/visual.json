@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "trail_system_filter",
   "position": {
-    "x": 24,
-    "y": 408,
-    "width": 684,
-    "height": 100,
+    "x": 590.4,
+    "y": 104.96,
+    "width": 259.2,
+    "height": 115.2,
     "z": 20,
     "tabOrder": 20
   },

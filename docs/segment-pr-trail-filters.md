@@ -4,7 +4,7 @@ This is a separate report/model change following the field-name/local-time updat
 The branch is based on the merged naming/local-time update on `main`. It introduces no ETL, Parquet fields or relationships.
 
 The Segment PRs page adds searchable **Trail system** and **Trail** dropdowns.
-Choose a system, then optionally a named trail. The segment dropdown, effort history,
+The five compact slicers share one row: date, category, system, trail and segment. Choose a system, then optionally a named trail. The segment dropdown, effort history,
 all-history best table, PR/KOM first counts, observed-rank coverage and trend follow
 the matching segment set. Clearing both geographic selectors restores all segments,
 including segments that have no association evidence.
@@ -34,8 +34,7 @@ filters. Explicit source-rank coverage is separate from association completeness
 `Segments With Stored Best` use the selected association IDs with KEEPFILTERS/TREATAS.
 Coverage, pending counts and KOM Top 10 inherit this through the base effort count.
 The `Segment Matches Trail Selection` measure gates rows on both tables and segment
-slicer; preserve that visual filter when editing/copying these visuals. Keep effort
-IDs in detail rows and a segment ID in the best table to distinguish duplicate names.
+slicer; preserve that visual filter when editing/copying these visuals. Effort and segment keys stay as hidden query projections to distinguish duplicate names and preserve row grain; key columns are not displayed.
 
 Refresh/recalculate and republish the GPS model for the updated/helper measures,
 then reopen Activity Analytics. No additional export is needed after the prerequisite

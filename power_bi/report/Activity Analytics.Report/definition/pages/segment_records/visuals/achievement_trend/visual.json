@@ -3,9 +3,9 @@
   "name": "achievement_trend",
   "position": {
     "x": 24,
-    "y": 532,
+    "y": 408,
     "width": 920,
-    "height": 208,
+    "height": 300,
     "z": 9,
     "tabOrder": 9
   },

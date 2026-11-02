@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "date_filter",
   "position": {
-    "x": 24,
+    "x": 24.0,
     "y": 104.96,
     "z": 2,
     "height": 115.2,
-    "width": 448,
+    "width": 259.2,
     "tabOrder": 2
   },
   "visual": {

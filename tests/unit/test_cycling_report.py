@@ -89,6 +89,7 @@ class CyclingReportTests(unittest.TestCase):
             cards=[]
             for path in page.parent.glob('visuals/*/visual.json'):
                 d=json.loads(path.read_text());p=d['position']
+                if d['visual']['visualType']=='slicer':continue  # Compact five-column selector row.
                 self.assertAlmostEqual((p['x']-24)%118,0,msg=str(path))
                 self.assertAlmostEqual((p['width']+24)%118,0,msg=str(path))
                 self.assertLessEqual(p['x']+p['width'],1416)

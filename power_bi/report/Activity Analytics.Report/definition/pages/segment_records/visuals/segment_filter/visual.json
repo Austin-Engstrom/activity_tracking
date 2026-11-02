@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "segment_filter",
   "position": {
-    "x": 968,
+    "x": 1156.8,
     "y": 104.96,
-    "width": 448,
+    "width": 259.2,
     "height": 115.2,
     "z": 4,
     "tabOrder": 4

@@ -3,9 +3,9 @@
   "name": "effort_history",
   "position": {
     "x": 24,
-    "y": 764,
+    "y": 732,
     "width": 1392,
-    "height": 252,
+    "height": 260,
     "z": 11,
     "tabOrder": 11
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "segment_effort_achievements.segment_effort_key",
-              "nativeQueryRef": "Effort ID"
+              "nativeQueryRef": "Effort ID",
+              "hidden": true
             },
             {
               "field": {
