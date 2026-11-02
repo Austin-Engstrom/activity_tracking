@@ -135,3 +135,23 @@ fields to be returned, including explicit nulls; legacy/omitted fields remain
 unobserved. Segments With Stored Best is an all-history, segment-only summary.
 See [report and location-map notes](cycling-report.md#activity-frequency-maps-and-segment-prs)
 for the PR page and interpretation limits.
+
+## Seconds behind the segment PR
+
+`Seconds Behind Segment PR` compares one selected eligible effort's elapsed seconds
+with the fastest eligible stored effort for its segment across all imported GPS
+history. It is blank for ambiguous/no effort, hidden or nonpositive-time efforts,
+or a missing baseline. Date/category/equipment selections do not change the PR
+baseline. The lookup transfers the current effort's segment key explicitly; an
+effort row does not rely on a bidirectional segment relationship.
+
+A 75-second effort with a 60-second best shows **+15**. The 60-second best and ties
+show **0**. A negative result means the effort beats the loaded best snapshot;
+check that both tables were exported/refreshed together. This is not an official
+Strava lifetime-PR guarantee and works before rank backfill is complete.
+
+The measure is included in the Segment PRs effort-history table, measure selector
+and dictionary. Reopen/refresh and republish the GPS model before using this report
+revision. No Parquet re-export is needed if both tables are already current.
+In Desktop verify a best effort, a slower effort, a tie, date-filter changes,
+a hidden/invalid effort and a multi-effort total. Repository tests do not execute DAX.

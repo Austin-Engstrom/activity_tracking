@@ -73,6 +73,20 @@
             },
             {
               "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Seconds Behind Segment PR"
+                }
+              },
+              "queryRef": "measures_.Seconds Behind Segment PR",
+              "nativeQueryRef": "Behind stored PR (sec)"
+            },
+            {
+              "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
