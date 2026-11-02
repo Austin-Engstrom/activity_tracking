@@ -112,6 +112,8 @@ table select_measures
 				    ("Reported PR Firsts", NAMEOF('measures_'[Reported PR Firsts]), 68),
 				    ("Reported KOM Firsts", NAMEOF('measures_'[Reported KOM Firsts]), 69),
 				    ("Segments With Stored Best", NAMEOF('measures_'[Segments With Stored Best]), 70),
-				    ("Seconds Behind Segment PR", NAMEOF('measures_'[Seconds Behind Segment PR]), 71)
+				    ("Seconds Behind Segment PR", NAMEOF('measures_'[Seconds Behind Segment PR]), 71),
+				    ("Segment Effort Rank All Time", NAMEOF('measures_'[Segment Effort Rank All Time]), 72),
+				    ("Segment Effort Time", NAMEOF('measures_'[Segment Effort Time]), 73)
 				}
 

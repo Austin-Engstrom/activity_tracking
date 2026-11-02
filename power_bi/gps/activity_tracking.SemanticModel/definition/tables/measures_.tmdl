@@ -642,6 +642,54 @@ table measures_
 		displayFolder: Segments\Records
 		lineageTag: 913dffae-7476-4ae2-883d-80c3116df486
 
+	/// Personal competition rank of one eligible effort against every eligible stored effort on the same segment. Lowest elapsed time ranks 1; ties share rank and skip later positions (1, 1, 3).
+	/// Filters: Captures the current effort before clearing query filters for the comparison pool. Dates, activities, gear, sport and current effort rows do not narrow the all-history pool. Row-level security still applies.
+	/// Notes: Blank for multiple/no efforts, hidden efforts or nonpositive time. This is imported GPS-history rank, not Strava PR/KOM rank or a guaranteed lifetime record; independent of API rank-observation coverage.
+	measure 'Segment Effort Rank All Time' =
+			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
+			VAR SegmentKey = SELECTEDVALUE(segment_effort_achievements[segment_key])
+			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
+			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_stored_best])
+			VAR ComparisonPool =
+			    CALCULATETABLE(segment_effort_achievements, REMOVEFILTERS())
+			VAR FasterEfforts =
+			    COUNTROWS(
+			        FILTER(
+			            ComparisonPool,
+			            segment_effort_achievements[segment_key] = SegmentKey
+			                && segment_effort_achievements[eligible_for_stored_best] = 1
+			                && segment_effort_achievements[elapsed_time_seconds] < EffortSeconds
+			        )
+			    )
+			RETURN
+			    IF(
+			        NOT ISBLANK(EffortKey) && NOT ISBLANK(SegmentKey)
+			            && Eligible = 1 && EffortSeconds > 0,
+			        1 + COALESCE(FasterEfforts, 0),
+			        BLANK()
+			    )
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: fd065133-a01e-4f2b-8dd5-5c2c2a8561e8
+
+	/// Elapsed time for exactly one selected effort, displayed as total minutes:seconds (MM:SS). Source effort durations are stored in whole seconds.
+	/// Filters: Uses the current effort context and is blank for multiple/no efforts or nonpositive/missing duration. Hidden efforts may still display their source time for inspection, although they do not receive a personal rank.
+	/// Notes: Returns text. Minutes do not wrap after one hour (3600 seconds displays 60:00). Sort visuals by the numeric elapsed_time_seconds column, not this formatted label. Uses the source whole-second precision.
+	measure 'Segment Effort Time' =
+			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
+			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
+			VAR TotalMinutes = QUOTIENT(EffortSeconds, 60)
+			VAR WholeSeconds = MOD(EffortSeconds, 60)
+			RETURN
+			    IF(
+			        NOT ISBLANK(EffortKey) && NOT ISBLANK(EffortSeconds) && EffortSeconds > 0,
+			        FORMAT(TotalMinutes, "00") & ":"
+			            & FORMAT(WholeSeconds, "00"),
+			        BLANK()
+			    )
+		displayFolder: Segments\Records
+		lineageTag: d0fbf914-64e0-437e-af06-8cc4b16837af
+
 	column Placeholder
 		dataType: int64
 		isHidden

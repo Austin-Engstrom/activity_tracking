@@ -157,3 +157,40 @@ In Desktop verify a best effort, a slower effort, a tie, date-filter changes,
 a hidden/invalid effort and a multi-effort total. Repository tests do not execute DAX.
 
 Both PR tables display the existing `segments[distance_miles]` catalog attribute directly; no separate segment-length measure is needed.
+
+## Personal effort rank and formatted duration
+
+Two measures in Segments / Records support manual report authoring:
+
+| Measure | Meaning |
+|---|---|
+| Segment Effort Rank All Time | One eligible effort's competition rank across all eligible stored efforts on the same segment |
+| Segment Effort Time | One effort's source elapsed duration as total minutes:seconds |
+
+Ranking counts strictly faster efforts and adds one. Times of 60, 60, 65 and 70
+seconds rank 1, 1, 3 and 4. The comparison pool clears date, activity, gear, sport
+and row filters after capturing the selected effort; row-level security still
+applies. Hidden/nonpositive-time efforts are excluded, consistent with the stored
+best-time view. Results reflect imported GPS history, independent of Strava's
+reported achievement ranks and partial API backfill coverage. Totals containing
+multiple efforts return blank.
+
+Duration examples: 5 seconds → 00:05, 75 seconds → 01:15, and 3600 seconds →
+60:00. Minutes do not wrap at an hour. Source times are whole seconds and the display retains that precision. Missing
+or nonpositive durations return blank; a hidden effort can still show its source
+time even though it has no eligible personal rank.
+
+The duration measure returns **text**. Keep the numeric elapsed_time_seconds field
+for sorting, arithmetic and chart axes. Include the effort ID in table rows to
+identify individual efforts, especially for duplicate names or tied times.
+
+Both measures are in the field parameter and embedded dictionary. Report files
+are unchanged so manual layout work can continue. Refresh/recalculate and republish
+the GPS dataset, then add the measures in the connected report. No ETL or Parquet
+re-export is required.
+
+Desktop validation: inspect a fastest effort, a slower effort, a tie pair and a
+multi-effort total; filter the visible dates and confirm individual ranks stay
+all-history ranks. Inspect a hidden/invalid effort and verify duration formatting
+for short efforts and efforts lasting over an hour. Repository checks validate
+metadata and bindings; they do not evaluate DAX.
