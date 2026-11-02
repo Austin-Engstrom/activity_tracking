@@ -616,6 +616,32 @@ table measures_
 		displayFolder: Segments\Records
 		lineageTag: 3ea2d9d1-c95d-457a-bbb3-28345703c47e
 
+	/// Elapsed seconds for one eligible effort minus the segment's current fastest known stored elapsed time. Positive is slower, zero ties the stored PR, negative is faster than the loaded baseline and warrants a snapshot consistency check.
+	/// Filters: Requires exactly one segment_effort_achievements effort in context. The baseline is all imported GPS history for that effort's segment and ignores date, category, equipment and best-table row filters.
+	/// Notes: Blank for multiple/no efforts, hidden or nonpositive-time efforts, or a missing baseline. This compares against the fastest eligible stored effort, not a guaranteed official Strava lifetime PR; does not depend on rank backfill coverage.
+	measure 'Seconds Behind Segment PR' =
+			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
+			VAR SegmentKey = SELECTEDVALUE(segment_effort_achievements[segment_key])
+			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
+			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_stored_best])
+			VAR BaselineSeconds =
+			    CALCULATE(
+			        MAX(segment_personal_bests[best_elapsed_time_seconds]),
+			        REMOVEFILTERS(segment_personal_bests),
+			        TREATAS({SegmentKey}, segment_personal_bests[segment_key])
+			    )
+			RETURN
+			    IF(
+			        NOT ISBLANK(EffortKey) && NOT ISBLANK(SegmentKey)
+			            && Eligible = 1 && EffortSeconds > 0
+			            && NOT ISBLANK(BaselineSeconds) && BaselineSeconds > 0,
+			        EffortSeconds - BaselineSeconds,
+			        BLANK()
+			    )
+		formatString: +#,0;-#,0;0
+		displayFolder: Segments\Records
+		lineageTag: 913dffae-7476-4ae2-883d-80c3116df486
+
 	column Placeholder
 		dataType: int64
 		isHidden

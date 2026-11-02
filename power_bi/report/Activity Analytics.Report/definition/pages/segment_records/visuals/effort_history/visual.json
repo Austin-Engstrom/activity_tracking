@@ -48,6 +48,20 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
+                      "Entity": "segments"
+                    }
+                  },
+                  "Property": "distance_miles"
+                }
+              },
+              "queryRef": "segments.distance_miles",
+              "nativeQueryRef": "Segment length (mi)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
                       "Entity": "segment_effort_achievements"
                     }
                   },
@@ -70,6 +84,20 @@
               },
               "queryRef": "segment_effort_achievements.elapsed_time_seconds",
               "nativeQueryRef": "Elapsed (sec)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Seconds Behind Segment PR"
+                }
+              },
+              "queryRef": "measures_.Seconds Behind Segment PR",
+              "nativeQueryRef": "Behind stored PR (sec)"
             },
             {
               "field": {

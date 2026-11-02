@@ -48,6 +48,20 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
+                      "Entity": "segments"
+                    }
+                  },
+                  "Property": "distance_miles"
+                }
+              },
+              "queryRef": "segments.distance_miles",
+              "nativeQueryRef": "Segment length (mi)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
                       "Entity": "segment_personal_bests"
                     }
                   },

@@ -54,8 +54,10 @@ class HeatmapAndPRTests(unittest.TestCase):
         for name in ['effort_history','stored_bests']:
             d=json.loads((PAGES/f'segment_records/visuals/{name}/visual.json').read_text())
             q=d['visual']['query'];self.assertEqual(q['sortDefinition']['sort'][0]['direction'],'Descending')
-            fields=[p['field']['Column']['Property'] for p in q['queryState']['Values']['projections']]
+            fields=[p['field']['Column']['Property'] for p in q['queryState']['Values']['projections'] if 'Column' in p['field']]
             if name=='effort_history':
+                measures=[p['field']['Measure']['Property'] for p in q['queryState']['Values']['projections'] if 'Measure' in p['field']]
+                self.assertIn('Seconds Behind Segment PR',measures)
                 self.assertIn('segment_effort_key',fields)
                 self.assertIn('pr_rank_status',fields)
                 self.assertIn('kom_rank_status',fields)
