@@ -104,6 +104,13 @@ table select_measures
 				    ("Service Interval Remaining", NAMEOF('measures_'[Service Interval Remaining]), 60),
 				    ("Service Interval Unit", NAMEOF('measures_'[Service Interval Unit]), 61),
 				    ("Next Service Remaining", NAMEOF('measures_'[Next Service Remaining]), 62),
-				    ("Activity URL", NAMEOF('measures_'[Activity URL]), 63)
+				    ("Activity URL", NAMEOF('measures_'[Activity URL]), 63),
+				    ("Recorded Segment Efforts", NAMEOF('measures_'[Recorded Segment Efforts]), 64),
+				    ("Rank Observed Efforts", NAMEOF('measures_'[Rank Observed Efforts]), 65),
+				    ("Rank Observation Coverage %", NAMEOF('measures_'[Rank Observation Coverage %]), 66),
+				    ("Unobserved Rank Efforts", NAMEOF('measures_'[Unobserved Rank Efforts]), 67),
+				    ("Reported PR Firsts", NAMEOF('measures_'[Reported PR Firsts]), 68),
+				    ("Reported KOM Firsts", NAMEOF('measures_'[Reported KOM Firsts]), 69),
+				    ("Segments With Stored Best", NAMEOF('measures_'[Segments With Stored Best]), 70)
 				}
 

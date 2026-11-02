@@ -37,7 +37,7 @@ the date inputs remain visible.
 
 ## Layout and interpretation
 
-All seven pages use a dark theme, 1440 × 1280 canvas, middle alignment and Fit to
+All eight pages use a dark theme, 1440 × 1280 canvas, middle alignment and Fit to
 width. A twelve-column grid gives 24px outer margins and gutters: equal cards span
 three columns, slicers span four, and chart rows use 8/4 or 6/6 splits. Titles replace
 duplicate card category labels. Date visuals sort newest first; mileage visuals
@@ -58,7 +58,7 @@ intervals per component with their hours/miles units; do not sum mixed units.
 ## Desktop review
 
 Close Desktop before switching branches, then open `Activity Analytics.pbip` and
-sign in with access to the published model. Verify all seven pages render, the
+sign in with access to the published model. Verify all eight pages render, the
 model includes the published Activity URL/dictionary/maintenance fixes, and renamed
 report paths load. No dataset refresh or republication is needed for these
 report-only scope/layout changes.
@@ -93,3 +93,74 @@ Weeks crossing month boundaries appear under both months with only that month's
 selected dates; the weekly start date can fall in the prior month.
 
 Month-name chart axes display January through December, using the model month_number sort; years remain newest first. This overrides descending date order at the month level.
+
+## Activity frequency maps and Segment PRs
+
+The four maps on Overview, Cycling, Running/Walking/Hiking and Trails & Systems
+now use unclustered Azure Maps location markers instead of heat layers. The
+existing map positions and dark basemap are retained. Locations use the existing
+0.00025-degree `map_latitude` / `map_longitude` cells (roughly 25 metres), with
+`Activities` as the Size field. GPS Points and Miles remain tooltip context.
+
+Each activity contributes once per cell. Marker radius scales within a small
+2–7 pixel range, relative to the currently displayed activity counts. Colour uses
+**fixed count thresholds** across selections: up to 2 activities stays cool blue,
+10 is teal, and 30 or more is orange. The title displays that key. Marker clustering
+and the heat layer are disabled, so nearby cells do not sum into a density hotspot.
+Markers can still overlap at low zoom; zoom in or hover for the exact activity
+count. Colour is the absolute-frequency reference, not a dynamically normalised
+hot/cold ranking of the current selection.
+
+This represents activity frequency per location, not mileage or number of
+independent visits during a single activity. Repeated samples and loops within one
+cell on one activity do not increase its count. Different routes can share a cell,
+and the same activity contributes to multiple cells, so summing marker counts is
+not an overall distinct-activity count. Cell dimensions vary by latitude.
+
+Azure Maps may reduce large selections (roughly 30,000 plotted locations). Inspect
+reduction notices and narrow the date range when needed. Smaller cells retain more
+route detail but increase location cardinality. Review the three known low-visit
+locations: their tooltip activity count should be 1 or 2 and their markers cool
+blue. Confirm a genuinely repeated route gets higher counts and warmer colours.
+
+The new **Segment PRs** page contains:
+
+- Synced effort-start date selection, plus page-local category and segment slicers.
+- Reported PR firsts, reported KOM firsts, observation coverage and unobserved counts.
+- A year/month/week/day trend of observed firsts.
+- Effort history with rank statuses, retrieval timestamps, elapsed seconds and
+  source activity links, sorted newest first.
+- A separate fastest-known stored effort table across all imported GPS history,
+  filtered by segment only. Date/category selections do not recompute these bests;
+  chart/effort selections do not cross-filter that table.
+
+Coverage requires **both** rank fields to be returned; explicit null fields count
+as observed while omitted fields/legacy data do not. Zero reported firsts under
+partial coverage is not evidence that none occurred. KOM firsts are retrieval-time
+API observations, not current crowns or certified historical leaderboard positions.
+Stored bests are based on imported eligible effort history, not official lifetime
+records. All new measures are in `measures_` under Segments / Records and are
+included in the embedded dictionary and measure-selection field parameter.
+
+### Apply this revision
+
+Open the GPS dataset project, refresh/recalculate and republish `activity_tracking`
+first: this revision adds the two calculated map-coordinate columns and seven
+summary measures. Existing Parquet files suffice; no ETL or additional export is
+required for these changes. Then reopen `power_bi/report/Activity Analytics.pbip`.
+Check that Azure Maps is enabled for your signed-in Power BI environment and that
+all four marker layers render under the intended date/category filters.
+
+On a known route, verify a cell containing many samples from one activity has count one; repeat
+activities increase its count. On Segment PRs, check coverage against the current exported rank
+statuses, verify a known effort/link, and confirm the bottom best table is stable
+under date/category changes while the upper history changes. Map rendering,
+DAX execution, marker scaling and deployed performance require Desktop/Service review;
+repository schema and binding checks cannot establish those results.
+
+Validation for this revision: 18 targeted report/model/export/dictionary checks
+pass. The full suite has 88 passes and one existing field-parameter metadata-format
+failure. New page and changed maps pass public PBIR structure validation; ten
+Desktop-authored 2.14 containers were checked against the common public 2.12
+structure because the public repository does not yet publish that newer version.
+Azure-specific layer properties still need Desktop render verification.

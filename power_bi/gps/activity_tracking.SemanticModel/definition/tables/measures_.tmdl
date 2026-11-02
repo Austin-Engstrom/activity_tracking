@@ -574,6 +574,48 @@ table measures_
 		lineageTag: d085542a-b104-4a6f-b6f8-7250abb769d8
 		dataCategory: WebUrl
 
+	/// Count of stored efforts in GPS-eligible activities under current effort-start date, activity, sport, equipment and segment filters. These are whole efforts; trail filters do not apply.
+	measure 'Recorded Segment Efforts' = COALESCE(COUNTROWS(segment_effort_achievements), 0)
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: d389e2a0-82b3-4f5b-b921-43e438ae71bb
+
+	/// Selected efforts for which both PR and KOM rank fields were returned, including explicit null ranks. Legacy observations and omitted fields are excluded. Uses effort-start date, sport, activity, equipment and segment filters.
+	measure 'Rank Observed Efforts' = CALCULATE([Recorded Segment Efforts], KEEPFILTERS(segment_effort_achievements[pr_rank_status] IN {"ranked", "no_rank"}), KEEPFILTERS(segment_effort_achievements[kom_rank_status] IN {"ranked", "no_rank"}))
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 054e0b6b-9d2c-409d-a310-1df453c8a24a
+
+	/// Fraction of selected stored efforts with both rank fields observed, including explicit nulls. Blank for no efforts. Coverage is API observation completeness, not achievement rate or crown ownership.
+	measure 'Rank Observation Coverage %' = DIVIDE([Rank Observed Efforts], [Recorded Segment Efforts])
+		formatString: 0.0%
+		displayFolder: Segments\Records
+		lineageTag: 7907cf0c-0153-4bc1-ae21-cb1653045297
+
+	/// Selected efforts still lacking a known observation of one or both rank fields. Includes legacy data and omitted fields; another refresh may not make unavailable fields appear.
+	measure 'Unobserved Rank Efforts' = [Recorded Segment Efforts] - [Rank Observed Efforts]
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 8405a53b-7130-4865-a43c-51bd2b9c07cd
+
+	/// Count of selected efforts whose observed Strava pr_rank was 1. Uses effort-start date, activity, sport, equipment and segment filters. Unknown observations contribute no counted firsts; inspect coverage before interpreting zero.
+	measure 'Reported PR Firsts' = COALESCE(SUM(segment_effort_achievements[reported_pr_first]), 0)
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 0fb3ca92-180b-4c52-b202-9eb8b49cb2da
+
+	/// Count of selected efforts whose observed Strava kom_rank was 1. Not current KOM ownership or proof of leaderboard position on activity day. Unknown observations contribute no counted firsts; inspect coverage.
+	measure 'Reported KOM Firsts' = COALESCE(SUM(segment_effort_achievements[reported_kom_first]), 0)
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 6b247f35-3bb2-4fc1-8cfe-6ba264b2c75e
+
+	/// Segments with an eligible fastest-known effort in all imported GPS history. Responds to segment filters only; date, activity, sport and equipment filters do not recompute the lifetime summary.
+	measure 'Segments With Stored Best' = COALESCE(COUNTROWS(segment_personal_bests), 0)
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 3ea2d9d1-c95d-457a-bbb3-28345703c47e
+
 	column Placeholder
 		dataType: int64
 		isHidden

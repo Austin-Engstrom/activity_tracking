@@ -57,3 +57,5 @@ Open `power_bi/report/Activity Analytics.pbip` for the seven-page activity repor
 published semantic model. See the [layout and Desktop review notes](docs/cycling-report.md).
 
 [Segment PR and KOM ETL](docs/segment-records.md) adds bounded historical refresh, effort achievement observations and fastest-known segment summaries for a future PR report page.
+
+The report also includes activity-frequency location maps and a Segment PRs page with explicit rank-observation coverage. See the report notes for the required shared-model refresh.
