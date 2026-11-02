@@ -574,8 +574,17 @@ table measures_
 		lineageTag: d085542a-b104-4a6f-b6f8-7250abb769d8
 		dataCategory: WebUrl
 
-	/// Count of stored efforts in GPS-eligible activities under current effort-start date, activity, sport, equipment and segment filters. These are whole efforts; trail filters do not apply.
-	measure 'Recorded Segment Efforts' = COALESCE(COUNTROWS(segment_effort_achievements), 0)
+	/// Count of stored efforts in GPS-eligible activities under current effort-start date, activity, sport, equipment and segment filters. These are whole efforts. Trail/system selections restrict to historically associated segments, not allocated route portions.
+	measure 'Recorded Segment Efforts' =
+			VAR TrailSelection = ISCROSSFILTERED(trails[trail_key]) || ISCROSSFILTERED(trail_systems[trail_system_key])
+			VAR AssociatedSegments = VALUES(segment_trail_associations[segment_key])
+			RETURN
+			    COALESCE(
+			        IF(TrailSelection,
+			            CALCULATE(COUNTROWS(segment_effort_achievements), KEEPFILTERS(TREATAS(AssociatedSegments, segment_effort_achievements[segment_key]))),
+			            COUNTROWS(segment_effort_achievements)
+			        ), 0
+			    )
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: d389e2a0-82b3-4f5b-b921-43e438ae71bb
@@ -599,19 +608,46 @@ table measures_
 		lineageTag: 8405a53b-7130-4865-a43c-51bd2b9c07cd
 
 	/// Count of selected efforts whose observed Strava pr_rank was 1. Uses effort-start date, activity, sport, equipment and segment filters. Unknown observations contribute no counted firsts; inspect coverage before interpreting zero.
-	measure 'Reported PR Firsts' = COALESCE(SUM(segment_effort_achievements[reported_pr_first]), 0)
+	measure 'Reported PR Firsts' =
+			VAR TrailSelection = ISCROSSFILTERED(trails[trail_key]) || ISCROSSFILTERED(trail_systems[trail_system_key])
+			VAR AssociatedSegments = VALUES(segment_trail_associations[segment_key])
+			RETURN
+			    COALESCE(
+			        IF(TrailSelection,
+			            CALCULATE(SUM(segment_effort_achievements[reported_pr_first]), KEEPFILTERS(TREATAS(AssociatedSegments, segment_effort_achievements[segment_key]))),
+			            SUM(segment_effort_achievements[reported_pr_first])
+			        ), 0
+			    )
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: 0fb3ca92-180b-4c52-b202-9eb8b49cb2da
 
 	/// Count of selected efforts whose observed Strava kom_rank was 1. Not current KOM ownership or proof of leaderboard position on activity day. Unknown observations contribute no counted firsts; inspect coverage.
-	measure 'Reported KOM Firsts' = COALESCE(SUM(segment_effort_achievements[reported_kom_first]), 0)
+	measure 'Reported KOM Firsts' =
+			VAR TrailSelection = ISCROSSFILTERED(trails[trail_key]) || ISCROSSFILTERED(trail_systems[trail_system_key])
+			VAR AssociatedSegments = VALUES(segment_trail_associations[segment_key])
+			RETURN
+			    COALESCE(
+			        IF(TrailSelection,
+			            CALCULATE(SUM(segment_effort_achievements[reported_kom_first]), KEEPFILTERS(TREATAS(AssociatedSegments, segment_effort_achievements[segment_key]))),
+			            SUM(segment_effort_achievements[reported_kom_first])
+			        ), 0
+			    )
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: 6b247f35-3bb2-4fc1-8cfe-6ba264b2c75e
 
-	/// Segments with an eligible fastest-known effort in all imported GPS history. Responds to segment filters only; date, activity, sport and equipment filters do not recompute the lifetime summary.
-	measure 'Segments With Stored Best' = COALESCE(COUNTROWS(segment_personal_bests), 0)
+	/// Segments with an eligible fastest-known effort in all imported GPS history. Responds to segment filters and historical trail/system associations; date, activity, sport and equipment filters do not recompute the lifetime summary.
+	measure 'Segments With Stored Best' =
+			VAR TrailSelection = ISCROSSFILTERED(trails[trail_key]) || ISCROSSFILTERED(trail_systems[trail_system_key])
+			VAR AssociatedSegments = VALUES(segment_trail_associations[segment_key])
+			RETURN
+			    COALESCE(
+			        IF(TrailSelection,
+			            CALCULATE(COUNTROWS(segment_personal_bests), KEEPFILTERS(TREATAS(AssociatedSegments, segment_personal_bests[segment_key]))),
+			            COUNTROWS(segment_personal_bests)
+			        ), 0
+			    )
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: 3ea2d9d1-c95d-457a-bbb3-28345703c47e
@@ -853,6 +889,25 @@ table measures_
 		formatString: #,0
 		displayFolder: Validation
 		lineageTag: 536a59f9-69e2-415c-b3f4-9fce45789c5e
+
+	/// Visual row filter: 1 if the current segment has an observed association under the selected trail/system, otherwise 0. With no trail/system selection, all segment rows remain eligible.
+	/// Filters: Uses verified historical association rows, including system-only observations. Effort/best rows transfer their actual segment key explicitly; segment-name slicers can match multiple segment IDs. This does not allocate effort distance/time to a trail or certify complete matching coverage.
+	measure 'Segment Matches Trail Selection' =
+			VAR TrailSelection = ISCROSSFILTERED(trails[trail_key]) || ISCROSSFILTERED(trail_systems[trail_system_key])
+			VAR MatchingRows =
+			    SWITCH(TRUE(),
+			        ISINSCOPE(segment_effort_achievements[segment_effort_key]),
+			            CALCULATE(COUNTROWS(segment_trail_associations),
+			                KEEPFILTERS(TREATAS(VALUES(segment_effort_achievements[segment_key]), segment_trail_associations[segment_key]))),
+			        ISINSCOPE(segment_personal_bests[pr_date]),
+			            CALCULATE(COUNTROWS(segment_trail_associations),
+			                KEEPFILTERS(TREATAS(VALUES(segment_personal_bests[segment_key]), segment_trail_associations[segment_key]))),
+			        COUNTROWS(segment_trail_associations)
+			    )
+			RETURN IF(NOT TrailSelection || MatchingRows > 0, 1, 0)
+		formatString: 0
+		displayFolder: Segments\Records\Filters
+		lineageTag: 5c0b2d10-28ab-4def-893e-4185ef958546
 
 	column Placeholder
 		dataType: int64

@@ -3,7 +3,7 @@
   "name": "coverage_note",
   "position": {
     "x": 968,
-    "y": 408,
+    "y": 532,
     "width": 448,
     "height": 208,
     "z": 10,
@@ -43,7 +43,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Ranks are a partial API snapshot. Coverage includes explicit null ranks. The bottom best-effort table uses all imported history and ignores date/category filters.'"
+                  "Value": "'Trail/system filters select associated segments. Bests and ranks stay all-history for those segments; date/category filters apply to upper effort history. Missing associations do not prove a segment was never ridden there.'"
                 }
               }
             },

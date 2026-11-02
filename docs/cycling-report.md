@@ -164,3 +164,5 @@ failure. New page and changed maps pass public PBIR structure validation; ten
 Desktop-authored 2.14 containers were checked against the common public 2.12
 structure because the public repository does not yet publish that newer version.
 Azure-specific layer properties still need Desktop render verification.
+
+The Segment PRs page now supports [historical trail and trail-system selectors](segment-pr-trail-filters.md). They filter associated segment IDs while preserving all-history personal rank and PR baselines.

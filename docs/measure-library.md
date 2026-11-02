@@ -213,3 +213,5 @@ and republish the GPS model to expose it; no ETL or Parquet export is required.
 Desktop checks should include ranks 1, 10, 11, null and unobserved legacy rows.
 
 For current field aliases and duration/local-time display conventions, see [reporting field names](reporting-field-renames.md).
+
+PR counts, rank-observation coverage and stored-best segment counts now respond to trail/system selections through the verified historical segment-association bridge. See [PR trail filtering](segment-pr-trail-filters.md).
