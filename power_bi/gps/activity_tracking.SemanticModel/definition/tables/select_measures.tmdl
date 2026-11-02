@@ -125,6 +125,9 @@ table select_measures
 				    ("Point Elapsed Time", NAMEOF('measures_'[Point Elapsed Time]), 81),
 				    ("Average Activity Moving Time", NAMEOF('measures_'[Average Activity Moving Time]), 82),
 				    ("Total Segment Moving Time", NAMEOF('measures_'[Total Segment Moving Time]), 83),
-				    ("Unresolved Local Time Points", NAMEOF('measures_'[Unresolved Local Time Points]), 84)
+				    ("Unresolved Local Time Points", NAMEOF('measures_'[Unresolved Local Time Points]), 84),
+				    ("Segment Matches Trail Selection", NAMEOF('measures_'[Segment Matches Trail Selection]), 85),
+				    ("Selected Segment GPS Points", NAMEOF('measures_'[Selected Segment GPS Points]), 86),
+				    ("Segment Efforts All Time", NAMEOF('measures_'[Segment Efforts All Time]), 87)
 				}
 

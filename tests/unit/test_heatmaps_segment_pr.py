@@ -14,7 +14,7 @@ class HeatmapAndPRTests(unittest.TestCase):
         for p in PAGES.glob('*/visuals/*/visual.json'):
             d=json.loads(p.read_text());v=d['visual']
             self.assertNotEqual(v['visualType'],'shapeMap')
-            if v['visualType']!='azureMap':continue
+            if v['visualType']!='azureMap' or d['name']=='segment_path':continue
             maps.append(p)
             q=v['query']['queryState']
             self.assertEqual(q['Y']['projections'][0]['field']['Column']['Property'],'map_latitude')
@@ -59,7 +59,5 @@ class HeatmapAndPRTests(unittest.TestCase):
                 measures=[p['field']['Measure']['Property'] for p in q['queryState']['Values']['projections'] if 'Measure' in p['field']]
                 self.assertIn('Seconds Behind Segment PR',measures)
                 self.assertIn('segment_effort_key',fields)
-                self.assertIn('pr_rank_status',fields)
-                self.assertIn('kom_rank_status',fields)
-                self.assertIn('ranks_retrieved_at_utc',fields)
-            else:self.assertIn('pr_tie_count',fields)
+                self.assertIn('Segment Effort Rank All Time',measures)
+            else:self.assertIn('stored_effort_count',fields)

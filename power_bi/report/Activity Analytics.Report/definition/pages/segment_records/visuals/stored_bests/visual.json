@@ -3,9 +3,9 @@
   "name": "stored_bests",
   "position": {
     "x": 24,
-    "y": 964,
+    "y": 1016,
     "width": 1392,
-    "height": 284,
+    "height": 232,
     "z": 12,
     "tabOrder": 12
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "segments.segment_key",
-              "nativeQueryRef": "Segment ID"
+              "nativeQueryRef": "segment_key",
+              "hidden": true
             },
             {
               "field": {
@@ -41,7 +42,7 @@
                 }
               },
               "queryRef": "segments.segment_name",
-              "nativeQueryRef": "Segment"
+              "nativeQueryRef": "segment_name"
             },
             {
               "field": {
@@ -55,7 +56,7 @@
                 }
               },
               "queryRef": "segments.distance",
-              "nativeQueryRef": "Segment length (mi)"
+              "nativeQueryRef": "distance"
             },
             {
               "field": {
@@ -69,7 +70,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.pr_date",
-              "nativeQueryRef": "Best date"
+              "nativeQueryRef": "pr_date"
             },
             {
               "field": {
@@ -87,6 +88,20 @@
             },
             {
               "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Segment Efforts All Time"
+                }
+              },
+              "queryRef": "measures_.Segment Efforts All Time",
+              "nativeQueryRef": "Recorded Segment Efforts"
+            },
+            {
+              "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
@@ -97,35 +112,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.stored_effort_count",
-              "nativeQueryRef": "Stored efforts"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_personal_bests"
-                    }
-                  },
-                  "Property": "eligible_effort_count"
-                }
-              },
-              "queryRef": "segment_personal_bests.eligible_effort_count",
-              "nativeQueryRef": "Eligible efforts"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_personal_bests"
-                    }
-                  },
-                  "Property": "pr_tie_count"
-                }
-              },
-              "queryRef": "segment_personal_bests.pr_tie_count",
-              "nativeQueryRef": "Tied best efforts"
+              "nativeQueryRef": "stored_effort_count"
             },
             {
               "field": {
@@ -139,7 +126,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.activity_url",
-              "nativeQueryRef": "Activity"
+              "nativeQueryRef": "activity_url"
             }
           ]
         }
@@ -387,5 +374,58 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "segment_pr_stored_bests_trail_match",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "measures_"
+              }
+            },
+            "Property": "Segment Matches Trail Selection"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "m",
+              "Entity": "measures_",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 0,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "m"
+                        }
+                      },
+                      "Property": "Segment Matches Trail Selection"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "1L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

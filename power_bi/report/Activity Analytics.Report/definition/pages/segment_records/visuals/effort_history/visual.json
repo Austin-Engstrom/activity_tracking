@@ -3,9 +3,9 @@
   "name": "effort_history",
   "position": {
     "x": 24,
-    "y": 640,
+    "y": 732,
     "width": 1392,
-    "height": 300,
+    "height": 260,
     "z": 11,
     "tabOrder": 11
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "segment_effort_achievements.segment_effort_key",
-              "nativeQueryRef": "Effort ID"
+              "nativeQueryRef": "segment_effort_key",
+              "hidden": true
             },
             {
               "field": {
@@ -41,7 +42,7 @@
                 }
               },
               "queryRef": "segments.segment_name",
-              "nativeQueryRef": "Segment"
+              "nativeQueryRef": "segment_name"
             },
             {
               "field": {
@@ -55,7 +56,7 @@
                 }
               },
               "queryRef": "segments.distance",
-              "nativeQueryRef": "Segment length (mi)"
+              "nativeQueryRef": "distance"
             },
             {
               "field": {
@@ -69,7 +70,7 @@
                 }
               },
               "queryRef": "segment_effort_achievements.date",
-              "nativeQueryRef": "Effort date"
+              "nativeQueryRef": "date"
             },
             {
               "field": {
@@ -97,77 +98,21 @@
                 }
               },
               "queryRef": "measures_.Seconds Behind Segment PR",
-              "nativeQueryRef": "Behind stored PR (sec)"
+              "nativeQueryRef": "Seconds Behind Segment PR"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "segment_effort_achievements"
+                      "Entity": "measures_"
                     }
                   },
-                  "Property": "reported_pr_rank"
+                  "Property": "Segment Effort Rank All Time"
                 }
               },
-              "queryRef": "segment_effort_achievements.reported_pr_rank",
-              "nativeQueryRef": "PR rank"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_effort_achievements"
-                    }
-                  },
-                  "Property": "reported_kom_rank"
-                }
-              },
-              "queryRef": "segment_effort_achievements.reported_kom_rank",
-              "nativeQueryRef": "KOM rank"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_effort_achievements"
-                    }
-                  },
-                  "Property": "pr_rank_status"
-                }
-              },
-              "queryRef": "segment_effort_achievements.pr_rank_status",
-              "nativeQueryRef": "PR observation"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_effort_achievements"
-                    }
-                  },
-                  "Property": "kom_rank_status"
-                }
-              },
-              "queryRef": "segment_effort_achievements.kom_rank_status",
-              "nativeQueryRef": "KOM observation"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_effort_achievements"
-                    }
-                  },
-                  "Property": "ranks_retrieved_at_utc"
-                }
-              },
-              "queryRef": "segment_effort_achievements.ranks_retrieved_at_utc",
-              "nativeQueryRef": "Retrieved (UTC)"
+              "queryRef": "measures_.Segment Effort Rank All Time",
+              "nativeQueryRef": "Segment Effort Rank All Time"
             },
             {
               "field": {
@@ -181,7 +126,7 @@
                 }
               },
               "queryRef": "segment_effort_achievements.activity_url",
-              "nativeQueryRef": "Activity"
+              "nativeQueryRef": "activity_url"
             }
           ]
         }
@@ -358,7 +303,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Segment efforts | selected dates / category / segment | seconds'"
+                  "Value": "'Segment efforts | selected dates / category / segment'"
                 }
               }
             },
@@ -429,5 +374,58 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "segment_pr_effort_history_trail_match",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "measures_"
+              }
+            },
+            "Property": "Segment Matches Trail Selection"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "m",
+              "Entity": "measures_",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 0,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "m"
+                        }
+                      },
+                      "Property": "Segment Matches Trail Selection"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "1L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

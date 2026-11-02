@@ -43,7 +43,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Reported achievements from observed API data | not current crown ownership'"
+                  "Value": "'Trail filters use historical associations. Select one segment for its verified point path; missing links leave the map blank.'"
                 }
               }
             },

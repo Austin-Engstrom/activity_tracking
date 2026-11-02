@@ -28,15 +28,18 @@ class CyclingReportTests(unittest.TestCase):
         columns={t:{a or b for a,b in names} for t,names in columns.items()}
         measures=set(re.findall(r"\n\tmeasure (?:'([^']+)'|([^\s]+))",(MODEL/'measures_.tmdl').read_text()))
         measures={a or b for a,b in measures}
-        def verify(obj):
+        def verify(obj,aliases=None):
+            aliases=dict(aliases or {})
             if isinstance(obj,dict):
+                for source in obj.get('From',[]):
+                    if 'Name' in source and 'Entity' in source:aliases[source['Name']]=source['Entity']
                 for kind in ['Column','Measure']:
                     if kind in obj:
-                        field=obj[kind]; table=field['Expression']['SourceRef'].get('Entity','dates')
+                        field=obj[kind]; source=field['Expression']['SourceRef']; table=source.get('Entity') or aliases.get(source.get('Source'))
                         self.assertIn(field['Property'],measures if kind=='Measure' else columns[table])
-                for v in obj.values():verify(v)
+                for v in obj.values():verify(v,aliases)
             elif isinstance(obj,list):
-                for v in obj:verify(v)
+                for v in obj:verify(v,aliases)
         for page in (REPORT/'definition/pages').glob('*/page.json'):
             size=json.loads(page.read_text());names=set()
             for path in page.parent.glob('visuals/*/visual.json'):
@@ -86,6 +89,7 @@ class CyclingReportTests(unittest.TestCase):
             cards=[]
             for path in page.parent.glob('visuals/*/visual.json'):
                 d=json.loads(path.read_text());p=d['position']
+                if d['visual']['visualType']=='slicer':continue  # Compact five-column selector row.
                 self.assertAlmostEqual((p['x']-24)%118,0,msg=str(path))
                 self.assertAlmostEqual((p['width']+24)%118,0,msg=str(path))
                 self.assertLessEqual(p['x']+p['width'],1416)
