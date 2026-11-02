@@ -49,3 +49,23 @@ selector fields, membership gates, DAX reference targets and layout; they do not
 execute DAX or validate the quality/completeness of spatial associations.
 
 Validation: 30 targeted checks pass. The full suite has 100 passes and the existing field-parameter metadata-format failure. Desktop interaction and DAX evaluation remain manual validation.
+
+## Segment path and table layout
+
+A map beside the trend chart replaces the note panel. Select a single segment in
+the segment slicer or a segment table row to display exact GPS coordinates linked
+through the verified activity_point_segments membership bridge. It shows small
+fixed markers following the sampled route, preserving gaps instead of drawing
+invented connecting lines. Date/category/equipment/trail point filters still apply.
+No verified memberships or no unique identifiable segment means a blank map; a
+Strava rank observation by itself does not establish verified point alignment.
+Large point sets remain subject to Azure Maps reduction; narrow dates if needed.
+
+The upper full-width table shows segment name, distance, date, formatted effort
+time, seconds behind PR, all-history personal rank and activity link. The lower
+full-width table shows segment name, distance, PR date, formatted PR time,
+Recorded Segment Efforts, stored_effort_count and activity link. The recorded
+count here uses Segment Efforts All Time, so it agrees with the all-history stored
+count and does not manufacture zero-valued blank rows under a date filter. Internal
+key projections remain hidden for row identity. Refresh/recalculate and republish
+the model for the two new measures; no additional Parquet export is needed.

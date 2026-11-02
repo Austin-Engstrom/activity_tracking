@@ -59,3 +59,18 @@ class SegmentPRTrailTests(unittest.TestCase):
                 for projection in role.get('projections',[]):
                     name=projection.get('field',{}).get('Column',{}).get('Property','')
                     if name.endswith(('_key','_id')):self.assertTrue(projection.get('hidden'),str(path))
+
+    def test_selected_segment_map_uses_verified_membership_and_exact_coordinates(self):
+        d=json.loads((PAGE/'visuals/segment_path/visual.json').read_text());v=d['visual'];q=v['query']['queryState']
+        self.assertEqual(q['Y']['projections'][0]['field']['Column']['Property'],'latitude')
+        self.assertEqual(q['X']['projections'][0]['field']['Column']['Property'],'longitude')
+        self.assertEqual(q['Size']['projections'][0]['field']['Measure']['Property'],'Selected Segment GPS Points')
+        measures={r[2]:r[7] for r in metadata_rows() if r[0]=='Measure'}
+        expr=measures['Selected Segment GPS Points']
+        self.assertIn('VALUES(activity_point_segments[activity_point_key])',expr)
+        self.assertIn('TREATAS({SegmentKey}, activity_point_segments[segment_key])',expr)
+        self.assertIn('KEEPFILTERS(TREATAS(LinkedPoints, activity_points[activity_point_key]))',expr)
+        for name in ['effort_history','stored_bests']:
+            table=json.loads((PAGE/f'visuals/{name}/visual.json').read_text())
+            self.assertEqual(table['position']['width'],1392)
+            self.assertTrue(all(not p['field'].get('Column',{}).get('Property','').endswith(('_key','_id')) for p in table['visual']['query']['queryState']['Values']['projections'] if not p.get('hidden')))

@@ -909,6 +909,22 @@ table measures_
 		displayFolder: Segments\Records\Filters
 		lineageTag: 5c0b2d10-28ab-4def-893e-4185ef958546
 
+	/// Count of selected GPS samples linked to one segment through verified original effort indexes. Blank for multiple/no identifiable segments or missing links. Date, equipment, category and trail/system point filters remain active. This is the recorded sample path, not an inferred line or complete segment geometry.
+	measure 'Selected Segment GPS Points' =
+			VAR SegmentKey = COALESCE(SELECTEDVALUE(segments[segment_key]), SELECTEDVALUE(segment_effort_achievements[segment_key]))
+			VAR LinkedPoints = CALCULATETABLE(VALUES(activity_point_segments[activity_point_key]), TREATAS({SegmentKey}, activity_point_segments[segment_key]))
+			RETURN IF(NOT ISBLANK(SegmentKey), CALCULATE([GPS Points], KEEPFILTERS(TREATAS(LinkedPoints, activity_points[activity_point_key]))), BLANK())
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 67fe24cb-0a6e-4705-8aff-35f9323d1d30
+
+	/// All stored GPS effort count for one segment represented in the best table. Ignores date/category selections through the all-history summary; blank for absent/ambiguous best rows. Includes hidden/invalid-time stored efforts, like stored_effort_count.
+	measure 'Segment Efforts All Time' =
+			IF(HASONEVALUE(segment_personal_bests[segment_key]), SELECTEDVALUE(segment_personal_bests[stored_effort_count]), BLANK())
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: 7ef0918b-b273-4236-970c-fcbb6343fe1a
+
 	column Placeholder
 		dataType: int64
 		isHidden

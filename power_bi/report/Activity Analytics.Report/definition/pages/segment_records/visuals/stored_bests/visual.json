@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "segments.segment_key",
-              "nativeQueryRef": "Segment ID",
+              "nativeQueryRef": "segment_key",
               "hidden": true
             },
             {
@@ -42,7 +42,7 @@
                 }
               },
               "queryRef": "segments.segment_name",
-              "nativeQueryRef": "Segment"
+              "nativeQueryRef": "segment_name"
             },
             {
               "field": {
@@ -56,7 +56,7 @@
                 }
               },
               "queryRef": "segments.distance",
-              "nativeQueryRef": "Segment length (mi)"
+              "nativeQueryRef": "distance"
             },
             {
               "field": {
@@ -70,7 +70,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.pr_date",
-              "nativeQueryRef": "Best date"
+              "nativeQueryRef": "pr_date"
             },
             {
               "field": {
@@ -88,6 +88,20 @@
             },
             {
               "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "measures_"
+                    }
+                  },
+                  "Property": "Segment Efforts All Time"
+                }
+              },
+              "queryRef": "measures_.Segment Efforts All Time",
+              "nativeQueryRef": "Recorded Segment Efforts"
+            },
+            {
+              "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
@@ -98,35 +112,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.stored_effort_count",
-              "nativeQueryRef": "Stored efforts"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_personal_bests"
-                    }
-                  },
-                  "Property": "eligible_effort_count"
-                }
-              },
-              "queryRef": "segment_personal_bests.eligible_effort_count",
-              "nativeQueryRef": "Eligible efforts"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "segment_personal_bests"
-                    }
-                  },
-                  "Property": "pr_tie_count"
-                }
-              },
-              "queryRef": "segment_personal_bests.pr_tie_count",
-              "nativeQueryRef": "Tied best efforts"
+              "nativeQueryRef": "stored_effort_count"
             },
             {
               "field": {
@@ -140,7 +126,7 @@
                 }
               },
               "queryRef": "segment_personal_bests.activity_url",
-              "nativeQueryRef": "Activity"
+              "nativeQueryRef": "activity_url"
             }
           ]
         }

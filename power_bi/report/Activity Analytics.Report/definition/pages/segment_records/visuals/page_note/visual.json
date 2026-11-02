@@ -43,7 +43,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Trail/system selections use verified historical segment associations; rank data may be partial'"
+                  "Value": "'Trail filters use historical associations. Select one segment for its verified point path; missing links leave the map blank.'"
                 }
               }
             },
