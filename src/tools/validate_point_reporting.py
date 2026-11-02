@@ -128,6 +128,7 @@ KEY_COUNTS_SQL = """SELECT activity_key, gear_key, activity_type_key, date_key,
     trail_key, trail_system_key, count(*) AS points,
     sum(incremental_distance_miles) AS miles,
     sum(date_basis='utc_fallback') AS utc_fallback_points,
+    sum(date_basis='unresolved' OR recorded_at IS NULL) AS unresolved_local_points,
     sum(quality_status NOT IN ('valid','first_point')) AS uncertain_intervals
     FROM view_activity_points
     GROUP BY activity_key, gear_key, activity_type_key, date_key,
@@ -211,6 +212,8 @@ def audit(output, explain=False):
                      lambda: conn.exec_driver_sql('CREATE TEMP TABLE audit_key_counts AS '+KEY_COUNTS_SQL), KEY_COUNTS_SQL)
         summary['utc_fallback_points'] = scalar('Count UTC fallback points',
             'SELECT coalesce(sum(utc_fallback_points),0) FROM audit_key_counts')
+        summary['unresolved_local_points'] = scalar('Count unresolved local timestamps',
+            'SELECT coalesce(sum(unresolved_local_points),0) FROM audit_key_counts')
         summary['duplicate_point_keys'] = scalar('Check reporting point uniqueness',
             'SELECT count(*) FROM (SELECT activity_point_key FROM view_activity_points GROUP BY activity_point_key HAVING count(*)>1)')
         missing = {}

@@ -1,22 +1,20 @@
 table trail_systems
 	lineageTag: 33d0a9dc-3da0-46f9-bb5a-fbed68669540
 
-	/// Trail system key; source identifier or relationship key, not a measure.
-	column trail_system_key
+	/// 1 confirmed boundary, 0 unconfirmed; only confirmed polygons assign points.
+	column boundary_confirmed
 		dataType: int64
 		formatString: 0
-		lineageTag: c2af6d20-d43d-487d-bd99-50c8b7915f28
+		lineageTag: 97ebaaa2-8b6c-4463-8e93-5e5a91806962
 		summarizeBy: none
-		sourceColumn: trail_system_key
+		sourceColumn: boundary_confirmed
 
-		annotation SummarizationSetBy = User
-
-	/// Catalog trail-system display name; use trail_system_key for identity.
-	column trail_system_name
+	/// Provenance label for the stored trail-system boundary.
+	column boundary_source
 		dataType: string
-		lineageTag: 5735c9d2-63c1-41d7-bfec-cad612d27f7a
+		lineageTag: e4f17c28-1a9f-486c-9f93-2789fb549445
 		summarizeBy: none
-		sourceColumn: trail_system_name
+		sourceColumn: boundary_source
 
 	/// Catalog/source city label for this entity; not inferred from selected points.
 	column city
@@ -25,19 +23,19 @@ table trail_systems
 		summarizeBy: none
 		sourceColumn: city
 
-	/// Source segment state/region label.
-	column state
-		dataType: string
-		lineageTag: 0d8572bf-f7fa-4d5a-bcc1-fe7268fa43a1
-		summarizeBy: none
-		sourceColumn: state
-
 	/// Catalog/source country label for this entity.
 	column country
 		dataType: string
 		lineageTag: 144cc85d-1af0-48e1-b3d1-4a3d557c796d
 		summarizeBy: none
 		sourceColumn: country
+
+	/// Source free-text description for the row entity; may be missing.
+	column description
+		dataType: string
+		lineageTag: 93a5803c-20b4-4df9-b946-c9e356001262
+		summarizeBy: none
+		sourceColumn: description
 
 	/// Catalog system representative latitude in WGS84 decimal degrees; not a GPS fact sample.
 	column latitude
@@ -55,35 +53,6 @@ table trail_systems
 		summarizeBy: none
 		sourceColumn: longitude
 
-	/// Source free-text description for the row entity; may be missing.
-	column description
-		dataType: string
-		lineageTag: 93a5803c-20b4-4df9-b946-c9e356001262
-		summarizeBy: none
-		sourceColumn: description
-
-	/// Provenance label for the stored trail-system boundary.
-	column boundary_source
-		dataType: string
-		lineageTag: e4f17c28-1a9f-486c-9f93-2789fb549445
-		summarizeBy: none
-		sourceColumn: boundary_source
-
-	/// 1 confirmed boundary, 0 unconfirmed; only confirmed polygons assign points.
-	column boundary_confirmed
-		dataType: int64
-		formatString: 0
-		lineageTag: 97ebaaa2-8b6c-4463-8e93-5e5a91806962
-		summarizeBy: none
-		sourceColumn: boundary_confirmed
-
-	/// OpenStreetMap source element type associated with osm_element_id.
-	column osm_element_type
-		dataType: string
-		lineageTag: 2571dff4-5df1-4621-9cc6-b9490fac7b1f
-		summarizeBy: none
-		sourceColumn: osm_element_type
-
 	/// Source OpenStreetMap element identifier; interpret with osm_element_type.
 	column osm_element_id
 		dataType: int64
@@ -94,12 +63,42 @@ table trail_systems
 
 		annotation SummarizationSetBy = User
 
+	/// OpenStreetMap source element type associated with osm_element_id.
+	column osm_element_type
+		dataType: string
+		lineageTag: 2571dff4-5df1-4621-9cc6-b9490fac7b1f
+		summarizeBy: none
+		sourceColumn: osm_element_type
+
+	/// Source segment state/region label.
+	column state
+		dataType: string
+		lineageTag: 0d8572bf-f7fa-4d5a-bcc1-fe7268fa43a1
+		summarizeBy: none
+		sourceColumn: state
+
+	/// Trail system key; source identifier or relationship key, not a measure.
+	column trail_system_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c2af6d20-d43d-487d-bd99-50c8b7915f28
+		summarizeBy: none
+		sourceColumn: trail_system_key
+
+		annotation SummarizationSetBy = User
+
+	/// Catalog trail-system display name; use trail_system_key for identity.
+	column trail_system_name
+		dataType: string
+		lineageTag: 5735c9d2-63c1-41d7-bfec-cad612d27f7a
+		summarizeBy: none
+		sourceColumn: trail_system_name
+
 	partition trail_systems = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_trail_system.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"trail_system_key", Int64.Type}, {"trail_system_name", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"latitude", type number}, {"longitude", type number}, {"description", type text}, {"boundary_source", type text}, {"boundary_confirmed", Int64.Type}, {"osm_element_type", type text}, {"osm_element_id", Int64.Type}})
+				    Typed = Table.TransformColumnTypes(Source, {{"boundary_confirmed", Int64.Type}, {"boundary_source", type text}, {"city", type text}, {"country", type text}, {"description", type text}, {"latitude", type number}, {"longitude", type number}, {"osm_element_id", Int64.Type}, {"osm_element_type", type text}, {"state", type text}, {"trail_system_key", Int64.Type}, {"trail_system_name", type text}})
 				in
 				    Typed
-

@@ -1,6 +1,20 @@
 table activity_types
 	lineageTag: 0485eec2-0f56-48e4-a082-2c82e67f113c
 
+	/// Locally mapped activity category; review unmapped source sport types before grouping.
+	column activity_category
+		dataType: string
+		lineageTag: 875f4e0c-528c-4d94-abd5-f7ed28414276
+		summarizeBy: none
+		sourceColumn: activity_category
+
+	/// Source sport/type label for this dimension row.
+	column activity_type
+		dataType: string
+		lineageTag: ce819998-bd4f-4560-bede-f45aba57c624
+		summarizeBy: none
+		sourceColumn: activity_type
+
 	/// Activity type key; source identifier or relationship key, not a measure.
 	column activity_type_key
 		dataType: string
@@ -10,26 +24,11 @@ table activity_types
 
 		annotation SummarizationSetBy = User
 
-	/// Source sport/type label for this dimension row.
-	column activity_type
-		dataType: string
-		lineageTag: ce819998-bd4f-4560-bede-f45aba57c624
-		summarizeBy: none
-		sourceColumn: activity_type
-
-	/// Locally mapped activity category; review unmapped source sport types before grouping.
-	column activity_category
-		dataType: string
-		lineageTag: 875f4e0c-528c-4d94-abd5-f7ed28414276
-		summarizeBy: none
-		sourceColumn: activity_category
-
 	partition activity_types = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_type.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"activity_type_key", type text}, {"activity_type", type text}, {"activity_category", type text}})
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_category", type text}, {"activity_type", type text}, {"activity_type_key", type text}})
 				in
 				    Typed
-

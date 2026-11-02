@@ -103,8 +103,8 @@ class PointReportingTests(unittest.TestCase):
     def test_failed_rebuild_rolls_back_derived_rows(self):
         self.streams([(0,0,0,41)])
         rebuild_points(self.c)
-        self.c.exec_driver_sql("UPDATE point_reporting_metadata SET timezone_name='Invalid/Zone'")
-        with self.assertRaises(Exception):
+        from unittest.mock import patch
+        with self.assertRaises(RuntimeError), patch('src.services.point_reporting_service.valid_point', side_effect=RuntimeError('injected rebuild failure')):
             with self.c.begin_nested():
                 rebuild_points(self.c)
         self.assertEqual(self.c.exec_driver_sql('SELECT count(*) FROM activity_points').scalar(),1)
@@ -211,8 +211,10 @@ class PointReportingTests(unittest.TestCase):
                 self.assertTrue(result.success,result.error)
             activity=pq.read_table(Path(folder)/'view_activity.parquet')
             timestamp=activity['start_date'][0].as_py()
-            self.assertEqual((timestamp.hour,timestamp.minute,timestamp.second),(13,14,15))
-            self.assertEqual(str(activity.schema.field('start_date').type),'timestamp[us, tz=UTC]')
+            self.assertEqual((timestamp.hour,timestamp.minute,timestamp.second),(7,14,15))
+            utc=activity['start_date_utc'][0].as_py()
+            self.assertEqual((utc.hour,utc.minute,utc.second),(13,14,15))
+            self.assertEqual(str(activity.schema.field('start_date').type),'timestamp[us]')
             self.assertEqual(str(activity.schema.field('activity_date').type),'date32[day]')
             segment=pq.read_table(Path(folder)/'view_segment.parquet')
             self.assertEqual(segment['climb_category'][0].as_py(),2)
@@ -224,7 +226,8 @@ class PointReportingTests(unittest.TestCase):
         self.c.exec_driver_sql('DELETE FROM point_reporting_metadata')
         rebuild_points(self.c)
         before=self.c.exec_driver_sql('SELECT point_index,trail_key,trail_system_key,incremental_distance_meters,recorded_at_utc FROM activity_points ORDER BY point_index').all()
-        self.assertEqual(self.c.exec_driver_sql('SELECT min(date_key) FROM activity_points').scalar(),20260102)
+        self.assertEqual(self.c.exec_driver_sql('SELECT min(date_key) FROM activity_points').scalar(),20260101)
+        self.assertEqual(self.c.exec_driver_sql('SELECT timezone_source FROM reporting_activity_timezones WHERE activity_id=1').scalar(),'first_gps')
         payload=[{'id':1,'timezone':'(GMT-06:00) America/Chicago'}]
         self.assertEqual(apply_timezones(self.c,payload),1)
         self.assertEqual(self.c.exec_driver_sql('SELECT min(date_key) FROM activity_points').scalar(),20260101)

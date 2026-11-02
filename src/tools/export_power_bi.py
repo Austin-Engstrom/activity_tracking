@@ -112,7 +112,15 @@ def validate_view_exists(connection, view_name: str) -> None:
         )
 
 
-def prepare_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
+LOCAL_TIMESTAMPS = {
+    'view_activity': {'start_date'},
+    'view_activity_points': {'recorded_at'},
+    'view_segment_effort_achievement': {'effort_started_at'},
+    'view_segment_personal_best': {'best_effort_started_at'},
+}
+
+
+def prepare_dataframe(dataframe: pd.DataFrame, view_name: str | None = None) -> pd.DataFrame:
     """
     Prepare SQLite data for Parquet export.
 
@@ -127,9 +135,14 @@ def prepare_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
     for column in dataframe.columns:
         column_lower = column.lower()
 
+        if column in LOCAL_TIMESTAMPS.get(view_name, set()):
+            dataframe[column] = pd.to_datetime(dataframe[column], errors="coerce")
+            continue
         # Strava calls timestamps start_date: handle them before date suffixes.
         if (
             column_lower.endswith("_at")
+            or column_lower.endswith("_at_utc")
+            or column_lower == "start_date_utc"
             or column_lower == "recorded_at_utc"
             or column_lower in {"start_date", "start_date_local"}
         ):
@@ -165,7 +178,7 @@ def export_view(
             connection,
         )
 
-        dataframe = prepare_dataframe(dataframe)
+        dataframe = prepare_dataframe(dataframe, view_name)
 
         output_path = export_directory / f"{view_name}.parquet"
         temporary_path = export_directory / f"{view_name}.parquet.tmp"
@@ -185,7 +198,7 @@ def export_view(
             arrow_types = {'string': pa.string(), 'int64': pa.int64(),
                            'double': pa.float64(), 'dateTime': pa.timestamp('us', tz='UTC')}
             schema = pa.schema([
-                pa.field(name, pa.date32() if (name == 'date' or (name.endswith('_date') and name != 'start_date')) else arrow_types[columns[name]])
+                pa.field(name, pa.timestamp('us') if name in LOCAL_TIMESTAMPS.get(view_name, set()) else (pa.date32() if (name == 'date' or (name.endswith('_date') and name != 'start_date')) else arrow_types[columns[name]]))
                 for name in dataframe.columns
             ])
             table = pa.Table.from_pandas(dataframe, schema=schema, preserve_index=False, safe=True)
@@ -323,6 +336,13 @@ def run(
     print_header(len(selected_views))
 
     results: list[ExportResult] = []
+
+    from src.services.reporting_local_time import refresh_local_times
+    with SessionLocal() as preparation:
+        from sqlalchemy import inspect
+        if inspect(preparation.connection()).has_table('activities'):
+            print('Reporting timezones:', refresh_local_times(preparation.connection()), flush=True)
+            preparation.commit()
 
     with SessionLocal() as session:
         connection = session.connection()

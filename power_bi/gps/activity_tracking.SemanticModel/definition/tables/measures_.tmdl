@@ -4,7 +4,7 @@ table measures_
 	/// Sum of eligible GPS interval distance, in miles.
 	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
 	/// Notes: Excludes recording gaps and invalid intervals under the current reporting rules. Can differ from Strava's activity total.
-	measure Miles = SUM(activity_points[incremental_distance_miles])
+	measure Miles = SUM(activity_points[incremental_distance])
 		formatString: #,0.00
 		displayFolder: Distance
 		lineageTag: 96853276-ecd4-4ab7-8c99-b9fb0abb8de3
@@ -12,7 +12,7 @@ table measures_
 	/// Hours from eligible GPS intervals whose ending sample is marked moving.
 	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
 	/// Notes: Excludes invalid/gap intervals. This is point-derived moving time, not Strava's activity-summary moving time.
-	measure 'Point Moving Hours' = DIVIDE(SUM(activity_points[moving_time_seconds]),3600)
+	measure 'Point Moving Hours' = DIVIDE(SUM(activity_points[moving_time]),3600)
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: b51f347f-a612-4bde-bfb9-5f766d1ba76b
@@ -36,7 +36,7 @@ table measures_
 	/// Sum of full Strava activity-summary distances, in miles.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Not mileage allocated to the selected trail or day. Source-view rounding and GPS exclusions can explain differences from Miles.
-	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance_miles]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+	measure 'Whole Activity Miles' = CALCULATE(SUM(activities[distance]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Activities
 		lineageTag: 74879486-609b-4cf6-81fa-f291974c87fb
@@ -44,7 +44,7 @@ table measures_
 	/// Full Strava activity-summary moving time, in hours.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Not allocated to individual points or trails. Compare with Point Moving Hours to understand the two calculation grains.
-	measure 'Moving Time' = CALCULATE(DIVIDE(SUM(activities[moving_time_minutes]),60), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+	measure 'Moving Time' = CALCULATE(DIVIDE(SUM(activities[moving_time]),3600), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: 9ea5c44c-e78c-4764-ad42-56d18f4de9f3
@@ -116,7 +116,7 @@ table measures_
 	/// Full Strava activity-summary elapsed time, in hours.
 	/// Filters: Uses each activity represented by the selected GPS points once. A partial trail or date selection includes that activity's full summary.
 	/// Notes: Includes elapsed time rather than only movement. Partial point selections still include full activity durations.
-	measure 'Activity Time' = CALCULATE(DIVIDE(SUM(activities[elapsed_time_minutes]), 60), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
+	measure 'Activity Time' = CALCULATE(DIVIDE(SUM(activities[elapsed_time]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), activities[activity_key])))
 		formatString: #,0.00
 		displayFolder: Time
 		lineageTag: df8d2f65-a36f-497e-8511-701a937878d9
@@ -179,7 +179,7 @@ table measures_
 
 	/// Distinct nonblank reporting dates containing selected GPS points.
 	/// Filters: Follows the selected GPS points, including date, activity, gear, sport, trail and system filters. A segment selection alone does not filter this measure.
-	/// Notes: Dates are local when timezone metadata is available, otherwise UTC fallback. An activity spanning midnight can contribute to multiple days; no qualifying rows can display blank.
+	/// Notes: Dates are local when timezone metadata is available, otherwise unresolved local dates remain blank. An activity spanning midnight can contribute to multiple days; no qualifying rows can display blank.
 	measure 'Activity Days' = DISTINCTCOUNTNOBLANK(activity_points[date_key])
 		formatString: #,0
 		displayFolder: Activities
@@ -204,7 +204,7 @@ table measures_
 	/// Sum of Strava segment-effort distances, in miles.
 	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
 	/// Notes: Repeated and overlapping efforts are additive. This can exceed the activity distance; use Miles in Selected Segments for linked-point union mileage.
-	measure 'Segment Miles' = CALCULATE(SUM(segment_efforts[distance_miles]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	measure 'Segment Miles' = CALCULATE(SUM(segment_efforts[distance]), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: ec577024-1235-476c-a7b2-ce9609d9b6b4
@@ -212,7 +212,7 @@ table measures_
 	/// Sum of full Strava segment-effort moving times, in hours.
 	/// Filters: Follows segment filters and includes whole efforts from point-selected activities. A partial route/date selection does not trim the effort.
 	/// Notes: Repeated and overlapping efforts can count the same activity time more than once. Does not require verified point memberships.
-	measure 'Segment Effort Moving Hours' = CALCULATE(DIVIDE(SUM(segment_efforts[moving_time_seconds]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
+	measure 'Segment Effort Moving Hours' = CALCULATE(DIVIDE(SUM(segment_efforts[moving_time]), 3600), KEEPFILTERS(TREATAS(VALUES(activity_points[activity_key]), segment_efforts[activity_key])))
 		formatString: #,0.00
 		displayFolder: Segments
 		lineageTag: f65e01aa-7de0-4a8a-ae0d-ec60ff78fc5c
@@ -272,7 +272,7 @@ table measures_
 	/// Notes: Each touched trail contributes its whole catalog length once. Does not measure traveled distance, unique distance covered or completion.
 	measure 'Visited Trail Length Miles' =
 			CALCULATE(
-			    SUM(trails[length_miles]),
+			    SUM(trails[length]),
 			    KEEPFILTERS(TREATAS(VALUES(activity_points[trail_key]), trails[trail_key]))
 			)
 		formatString: #,0.00
@@ -363,7 +363,7 @@ table measures_
 	/// Sum of eligible observed interval miles per associated segment effort.
 	/// Filters: Follows segment, trail and system dimension filters across all verified history. Filters from activities, dates, gear and activity_types do not restrict this catalog.
 	/// Notes: Repeated and overlapping efforts are additive. Excludes intervals ending at effort start indexes; not unique segment length or a confidence score.
-	measure 'Observed Segment Association Miles' = SUM(segment_trail_associations[observed_distance_miles])
+	measure 'Observed Segment Association Miles' = SUM(segment_trail_associations[distance])
 		formatString: #,0.00
 		displayFolder: Segments\Associations
 		lineageTag: d9ca6283-4e21-46d0-87c2-de88fcdb3e56
@@ -469,7 +469,7 @@ table measures_
 
 	/// Count of selected nonblank reporting dates with qualifying GPS points.
 	/// Filters: Follows the selected reporting dates and other GPS-point filters. Segment-only filters do not apply.
-	/// Notes: Reuses Activity Days, displaying zero rather than blank when none qualify. Local dates use timezone metadata, otherwise UTC fallback.
+	/// Notes: Reuses Activity Days, displaying zero rather than blank when none qualify. Local dates use timezone metadata, otherwise unresolved local dates remain blank.
 	measure 'Active Days' = COALESCE([Activity Days], 0)
 		formatString: #,0
 		displayFolder: Consistency\Days
@@ -622,11 +622,11 @@ table measures_
 	measure 'Seconds Behind Segment PR' =
 			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
 			VAR SegmentKey = SELECTEDVALUE(segment_effort_achievements[segment_key])
-			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
-			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_stored_best])
+			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[time])
+			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_pr])
 			VAR BaselineSeconds =
 			    CALCULATE(
-			        MAX(segment_personal_bests[best_elapsed_time_seconds]),
+			        MAX(segment_personal_bests[pr_time]),
 			        REMOVEFILTERS(segment_personal_bests),
 			        TREATAS({SegmentKey}, segment_personal_bests[segment_key])
 			    )
@@ -648,8 +648,8 @@ table measures_
 	measure 'Segment Effort Rank All Time' =
 			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
 			VAR SegmentKey = SELECTEDVALUE(segment_effort_achievements[segment_key])
-			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
-			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_stored_best])
+			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[time])
+			VAR Eligible = SELECTEDVALUE(segment_effort_achievements[eligible_for_pr])
 			VAR ComparisonPool =
 			    CALCULATETABLE(segment_effort_achievements, REMOVEFILTERS())
 			VAR FasterEfforts =
@@ -657,8 +657,8 @@ table measures_
 			        FILTER(
 			            ComparisonPool,
 			            segment_effort_achievements[segment_key] = SegmentKey
-			                && segment_effort_achievements[eligible_for_stored_best] = 1
-			                && segment_effort_achievements[elapsed_time_seconds] < EffortSeconds
+			                && segment_effort_achievements[eligible_for_pr] = 1
+			                && segment_effort_achievements[time] < EffortSeconds
 			        )
 			    )
 			RETURN
@@ -671,24 +671,6 @@ table measures_
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: fd065133-a01e-4f2b-8dd5-5c2c2a8561e8
-
-	/// Elapsed time for exactly one selected effort, displayed as total minutes:seconds (MM:SS). Source effort durations are stored in whole seconds.
-	/// Filters: Uses the current effort context and is blank for multiple/no efforts or nonpositive/missing duration. Hidden efforts may still display their source time for inspection, although they do not receive a personal rank.
-	/// Notes: Returns text. Minutes do not wrap after one hour (3600 seconds displays 60:00). Sort visuals by the numeric elapsed_time_seconds column, not this formatted label. Uses the source whole-second precision.
-	measure 'Segment Effort Time' =
-			VAR EffortKey = SELECTEDVALUE(segment_effort_achievements[segment_effort_key])
-			VAR EffortSeconds = SELECTEDVALUE(segment_effort_achievements[elapsed_time_seconds])
-			VAR TotalMinutes = QUOTIENT(EffortSeconds, 60)
-			VAR WholeSeconds = MOD(EffortSeconds, 60)
-			RETURN
-			    IF(
-			        NOT ISBLANK(EffortKey) && NOT ISBLANK(EffortSeconds) && EffortSeconds > 0,
-			        FORMAT(TotalMinutes, "00") & ":"
-			            & FORMAT(WholeSeconds, "00"),
-			        BLANK()
-			    )
-		displayFolder: Segments\Records
-		lineageTag: d0fbf914-64e0-437e-af06-8cc4b16837af
 
 	/// Count of selected efforts with an observed Strava-reported KOM rank from 1 through 10, inclusive. Includes first-place efforts; counts efforts, not distinct segments.
 	/// Filters: Follows effort-start date, activity, equipment, sport and segment filters, preserving existing rank/status selections. Only ranked observations qualify; legacy or omitted rank fields are not counted.
@@ -705,6 +687,172 @@ table measures_
 		formatString: #,0
 		displayFolder: Segments\Records
 		lineageTag: b445d81d-63fc-4c2d-99ae-9240879ef426
+
+	/// Selected effort duration. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Segment Effort Time' =
+			VAR DurationSeconds = IF(HASONEVALUE(segment_effort_achievements[segment_effort_key]), SELECTEDVALUE(segment_effort_achievements[time]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds > 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Segments\Records
+		lineageTag: d0fbf914-64e0-437e-af06-8cc4b16837af
+
+	/// Selected effort duration. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Segment Effort Moving Time' =
+			VAR DurationSeconds = IF(HASONEVALUE(segment_effort_achievements[segment_effort_key]), SELECTEDVALUE(segment_effort_achievements[moving_time]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Segments\Records
+		lineageTag: 38ae890f-738b-4ef0-bfde-e11dacde0987
+
+	/// Selected current stored PR duration across imported history. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Segment PR Time' =
+			VAR DurationSeconds = IF(HASONEVALUE(segment_personal_bests[segment_key]), SELECTEDVALUE(segment_personal_bests[pr_time]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds > 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Segments\Records
+		lineageTag: 00eacd11-236e-4b2e-9b3c-4f2ae5bb9c1e
+
+	/// Selected current stored PR duration across imported history. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Segment PR Moving Time' =
+			VAR DurationSeconds = IF(HASONEVALUE(segment_personal_bests[segment_key]), SELECTEDVALUE(segment_personal_bests[pr_moving_time]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Segments\Records
+		lineageTag: a9fc8dbd-8f9b-4af4-856f-a8a6371d8c60
+
+	/// Duration at this measure's existing activity/point selection grain. Whole-activity duration includes the complete source summary for each point-selected activity. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Activity Moving Time' =
+			VAR DurationSeconds = CALCULATE(SUM(activities[moving_time]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: 96ab72f9-97d3-4da4-a432-86d3c919d5bd
+
+	/// Duration at this measure's existing activity/point selection grain. Whole-activity duration includes the complete source summary for each point-selected activity. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Activity Elapsed Time' =
+			VAR DurationSeconds = CALCULATE(SUM(activities[elapsed_time]), TREATAS(VALUES(activity_points[activity_key]), activities[activity_key]))
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: bff56e6d-e053-4fd9-b698-b0bcaaf208f7
+
+	/// Duration at this measure's existing activity/point selection grain. Includes only eligible selected point intervals. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Point Moving Time' =
+			VAR DurationSeconds = SUM(activity_points[moving_time])
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: cff97d12-7e75-49cf-8183-617c4881cbaa
+
+	/// Duration at this measure's existing activity/point selection grain. Includes only eligible selected point intervals. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Point Elapsed Time' =
+			VAR DurationSeconds = SUM(activity_points[incremental_time])
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: 2e93ff78-82bd-44fc-8957-add30bd83052
+
+	/// Duration at this measure's existing activity/point selection grain. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Average Activity Moving Time' =
+			VAR DurationSeconds = [Average Moving Time] * 3600
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: cc9c60e2-a573-4ce2-88be-ac0b80b46d3f
+
+	/// Duration at this measure's existing activity/point selection grain. Displays MM:SS below one hour and HH:MM:SS from one hour onward. Returns text; retain numeric seconds columns for sorting and arithmetic. Service hours are unaffected.
+	measure 'Total Segment Moving Time' =
+			VAR DurationSeconds = [Segment Effort Moving Hours] * 3600
+			VAR RoundedSeconds = ROUND(DurationSeconds, 0)
+			VAR HoursPart = QUOTIENT(RoundedSeconds, 3600)
+			VAR MinutesPart = QUOTIENT(MOD(RoundedSeconds, 3600), 60)
+			VAR SecondsPart = MOD(RoundedSeconds, 60)
+			RETURN
+			    IF(NOT ISBLANK(DurationSeconds) && DurationSeconds >= 0,
+			        IF(HoursPart > 0, FORMAT(HoursPart, "00") & ":", "")
+			            & FORMAT(MinutesPart, "00") & ":" & FORMAT(SecondsPart, "00"),
+			        BLANK()
+			    )
+		displayFolder: Time\Display
+		lineageTag: 9e902891-de7c-4d80-a497-17903787b142
+
+	/// GPS points without a resolved local timestamp, including unknown timezone or missing source time. Inspect date_basis and the retained UTC timestamp before relying on local-date coverage.
+	measure 'Unresolved Local Time Points' = COALESCE(CALCULATE([GPS Points], KEEPFILTERS(ISBLANK(activity_points[recorded_at]))), 0)
+		formatString: #,0
+		displayFolder: Validation
+		lineageTag: 536a59f9-69e2-415c-b3f4-9fce45789c5e
 
 	column Placeholder
 		dataType: int64

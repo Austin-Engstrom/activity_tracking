@@ -176,7 +176,7 @@ reported achievement ranks and partial API backfill coverage. Totals containing
 multiple efforts return blank.
 
 Duration examples: 5 seconds → 00:05, 75 seconds → 01:15, and 3600 seconds →
-60:00. Minutes do not wrap at an hour. Source times are whole seconds and the display retains that precision. Missing
+01:00:00. Display switches from MM:SS to HH:MM:SS at one hour. Source times are whole seconds and the display retains that precision. Missing
 or nonpositive durations return blank; a hidden effort can still show its source
 time even though it has no eligible personal rank.
 
@@ -211,3 +211,5 @@ does not certify current leaderboard position or crown ownership. It is availabl
 in Segments / Records, the measure selector and the embedded dictionary. Refresh
 and republish the GPS model to expose it; no ETL or Parquet export is required.
 Desktop checks should include ranks 1, 10, 11, null and unobserved legacy rows.
+
+For current field aliases and duration/local-time display conventions, see [reporting field names](reporting-field-renames.md).

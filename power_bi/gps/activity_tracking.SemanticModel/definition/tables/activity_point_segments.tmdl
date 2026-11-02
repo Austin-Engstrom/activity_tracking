@@ -41,4 +41,3 @@ table activity_point_segments
 				    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}})
 				in
 				    Typed
-

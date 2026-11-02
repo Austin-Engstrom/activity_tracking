@@ -59,3 +59,5 @@ published semantic model. See the [layout and Desktop review notes](docs/cycling
 [Segment PR and KOM ETL](docs/segment-records.md) adds bounded historical refresh, effort achievement observations and fastest-known segment summaries for a future PR report page.
 
 The report also includes activity-frequency location maps and a Segment PRs page with explicit rank-observation coverage. See the report notes for the required shared-model refresh.
+
+[Reporting field names and local time](docs/reporting-field-renames.md) documents the concise PR/distance fields, duration display measures and offline timezone conversion workflow.

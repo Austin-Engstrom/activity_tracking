@@ -88,4 +88,3 @@ table gear_components
 				    Typed = Table.TransformColumnTypes(Source, {{"component_key", Int64.Type}, {"gear_key", type text}, {"component_type", type text}, {"manufacturer", type text}, {"model", type text}, {"installed_at", type datetime}, {"removed_at", type datetime}, {"service_interval_type", type text}, {"service_interval_value", type number}, {"notes", type text}})
 				in
 				    Typed
-

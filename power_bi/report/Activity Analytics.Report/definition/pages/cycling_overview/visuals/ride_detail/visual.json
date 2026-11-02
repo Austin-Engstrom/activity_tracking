@@ -23,11 +23,11 @@
                       "Entity": "activities"
                     }
                   },
-                  "Property": "activity_date"
+                  "Property": "date"
                 }
               },
-              "queryRef": "activities.activity_date",
-              "nativeQueryRef": "activity_date"
+              "queryRef": "activities.date",
+              "nativeQueryRef": "date"
             },
             {
               "field": {
@@ -79,11 +79,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Moving Time"
+                  "Property": "Activity Moving Time"
                 }
               },
-              "queryRef": "measures_.Moving Time",
-              "nativeQueryRef": "Moving Time"
+              "queryRef": "measures_.Activity Moving Time",
+              "nativeQueryRef": "Activity Moving Time"
             },
             {
               "field": {
@@ -112,7 +112,7 @@
                     "Entity": "activities"
                   }
                 },
-                "Property": "activity_date"
+                "Property": "date"
               }
             },
             "direction": "Descending"
@@ -274,7 +274,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Activity detail | source start date is UTC | Strava link opens activity'"
+                  "Value": "'Activity detail | local activity date | Strava link opens activity'"
                 }
               }
             },

@@ -1,47 +1,12 @@
 table segments
 	lineageTag: 3ce2e806-6308-43a7-882e-6614243f4f5f
 
-	/// Segment key; source identifier or relationship key, not a measure.
-	column segment_key
-		dataType: int64
-		formatString: 0
-		lineageTag: 1a87ac65-2ac2-44ff-8b27-61cd9fd00435
-		summarizeBy: none
-		sourceColumn: segment_key
-
-		annotation SummarizationSetBy = User
-
-	/// Segment id; source identifier or relationship key, not a measure.
-	column segment_id
-		dataType: int64
-		formatString: 0
-		lineageTag: dc4235f9-482a-4a29-a067-f992b51ab4be
-		summarizeBy: none
-		sourceColumn: segment_id
-
-		annotation SummarizationSetBy = User
-
-	/// Source Strava segment display name; names need not be unique.
-	column segment_name
-		dataType: string
-		lineageTag: 6fe53d58-8bb9-48db-96b7-0f56d9c2ca1a
-		summarizeBy: none
-		sourceColumn: segment_name
-
 	/// Source sport/type label for this dimension row.
 	column activity_type
 		dataType: string
 		lineageTag: c64bb334-9492-405f-994b-6da8ae3e30b1
 		summarizeBy: none
 		sourceColumn: activity_type
-
-	/// Source segment catalog length converted to miles; not traversed activity distance.
-	column distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 14599598-c4c3-48fd-8259-6764776a3b56
-		summarizeBy: none
-		sourceColumn: distance_miles
 
 	/// Source segment average grade in percent.
 	column average_grade
@@ -51,13 +16,35 @@ table segments
 		summarizeBy: none
 		sourceColumn: average_grade
 
-	/// Source segment maximum grade in percent.
-	column maximum_grade
-		dataType: double
-		formatString: 0.0\%
-		lineageTag: 5fd8b2c4-c524-4c33-89c0-402f6cec60b3
+	/// Catalog/source city label for this entity; not inferred from selected points.
+	column city
+		dataType: string
+		lineageTag: e01d3e0e-e67c-49c6-bd20-1b30c7e1c759
 		summarizeBy: none
-		sourceColumn: maximum_grade
+		sourceColumn: city
+
+	/// Strava segment climb-category code.
+	column climb_category
+		dataType: int64
+		formatString: 0
+		lineageTag: 9b7d922f-6668-49c0-b76d-d453234a0336
+		summarizeBy: none
+		sourceColumn: climb_category
+
+	/// Catalog/source country label for this entity.
+	column country
+		dataType: string
+		lineageTag: 45773733-494b-49ee-9d0d-07e12ba34d33
+		summarizeBy: none
+		sourceColumn: country
+
+	/// Source segment catalog length converted to miles; not traversed activity distance.
+	column distance
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 14599598-c4c3-48fd-8259-6764776a3b56
+		summarizeBy: none
+		sourceColumn: distance
 
 	/// Source segment highest elevation converted to feet.
 	column elevation_high_feet
@@ -75,22 +62,6 @@ table segments
 		summarizeBy: none
 		sourceColumn: elevation_low_feet
 
-	/// Source segment start latitude in WGS84 decimal degrees.
-	column start_latitude
-		dataType: double
-		formatString: 0.000000
-		lineageTag: ad5e22bc-3692-4f70-a26f-7431d31c2aa2
-		summarizeBy: none
-		sourceColumn: start_latitude
-
-	/// Source segment start longitude in WGS84 decimal degrees.
-	column start_longitude
-		dataType: double
-		formatString: 0.000000
-		lineageTag: 6f3fbee3-d229-4338-8ca7-9b7acb5a4170
-		summarizeBy: none
-		sourceColumn: start_longitude
-
 	/// Source segment end latitude in WGS84 decimal degrees.
 	column end_latitude
 		dataType: double
@@ -107,20 +78,56 @@ table segments
 		summarizeBy: none
 		sourceColumn: end_longitude
 
-	/// Strava segment climb-category code.
-	column climb_category
+	/// Source segment maximum grade in percent.
+	column maximum_grade
+		dataType: double
+		formatString: 0.0\%
+		lineageTag: 5fd8b2c4-c524-4c33-89c0-402f6cec60b3
+		summarizeBy: none
+		sourceColumn: maximum_grade
+
+	/// Segment id; source identifier or relationship key, not a measure.
+	column segment_id
 		dataType: int64
 		formatString: 0
-		lineageTag: 9b7d922f-6668-49c0-b76d-d453234a0336
+		lineageTag: dc4235f9-482a-4a29-a067-f992b51ab4be
 		summarizeBy: none
-		sourceColumn: climb_category
+		sourceColumn: segment_id
 
-	/// Catalog/source city label for this entity; not inferred from selected points.
-	column city
-		dataType: string
-		lineageTag: e01d3e0e-e67c-49c6-bd20-1b30c7e1c759
+		annotation SummarizationSetBy = User
+
+	/// Segment key; source identifier or relationship key, not a measure.
+	column segment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a87ac65-2ac2-44ff-8b27-61cd9fd00435
 		summarizeBy: none
-		sourceColumn: city
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	/// Source Strava segment display name; names need not be unique.
+	column segment_name
+		dataType: string
+		lineageTag: 6fe53d58-8bb9-48db-96b7-0f56d9c2ca1a
+		summarizeBy: none
+		sourceColumn: segment_name
+
+	/// Source segment start latitude in WGS84 decimal degrees.
+	column start_latitude
+		dataType: double
+		formatString: 0.000000
+		lineageTag: ad5e22bc-3692-4f70-a26f-7431d31c2aa2
+		summarizeBy: none
+		sourceColumn: start_latitude
+
+	/// Source segment start longitude in WGS84 decimal degrees.
+	column start_longitude
+		dataType: double
+		formatString: 0.000000
+		lineageTag: 6f3fbee3-d229-4338-8ca7-9b7acb5a4170
+		summarizeBy: none
+		sourceColumn: start_longitude
 
 	/// Source segment state/region label.
 	column state
@@ -129,19 +136,12 @@ table segments
 		summarizeBy: none
 		sourceColumn: state
 
-	/// Catalog/source country label for this entity.
-	column country
-		dataType: string
-		lineageTag: 45773733-494b-49ee-9d0d-07e12ba34d33
-		summarizeBy: none
-		sourceColumn: country
-
 	partition segments = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"segment_id", Int64.Type}, {"segment_name", type text}, {"activity_type", type text}, {"distance_miles", type number}, {"average_grade", type number}, {"maximum_grade", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"start_latitude", type number}, {"start_longitude", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"climb_category", Int64.Type}, {"city", type text}, {"state", type text}, {"country", type text}})
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_type", type text}, {"average_grade", type number}, {"city", type text}, {"climb_category", Int64.Type}, {"country", type text}, {"distance_miles", type number}, {"elevation_high_feet", type number}, {"elevation_low_feet", type number}, {"end_latitude", type number}, {"end_longitude", type number}, {"maximum_grade", type number}, {"segment_id", Int64.Type}, {"segment_key", Int64.Type}, {"segment_name", type text}, {"start_latitude", type number}, {"start_longitude", type number}, {"state", type text}}),
+				    Renamed = Table.RenameColumns(Typed, {{"distance_miles", "distance"}})
 				in
-				    Typed
-
+				    Renamed

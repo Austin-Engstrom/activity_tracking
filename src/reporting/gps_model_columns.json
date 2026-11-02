@@ -1,0 +1,63 @@
+{
+  "activities": {
+    "activity_date": "date",
+    "activity_date_key": "date_key",
+    "start_date": "started_at",
+    "start_date_utc": "started_at_utc",
+    "distance_miles": "distance",
+    "moving_time_seconds": "moving_time",
+    "elapsed_time_seconds": "elapsed_time"
+  },
+  "activity_points": {
+    "elapsed_time_seconds": "elapsed_time",
+    "cumulative_distance_miles": "cumulative_distance",
+    "incremental_distance_miles": "incremental_distance",
+    "incremental_time_seconds": "incremental_time",
+    "moving_time_seconds": "moving_time"
+  },
+  "gear": {
+    "distance_miles": "distance",
+    "created_at": "created_at_utc",
+    "updated_at": "updated_at_utc",
+    "detail_loaded_at": "detail_loaded_at_utc"
+  },
+  "segments": {
+    "distance_miles": "distance"
+  },
+  "trails": {
+    "length_miles": "length"
+  },
+  "segment_efforts": {
+    "elapsed_time_seconds": "time",
+    "moving_time_seconds": "moving_time",
+    "distance_miles": "distance"
+  },
+  "segment_effort_achievements": {
+    "effort_started_at": "started_at",
+    "effort_started_at_utc": "started_at_utc",
+    "effort_local_date": "date",
+    "elapsed_time_seconds": "time",
+    "moving_time_seconds": "moving_time",
+    "distance_miles": "distance",
+    "ranks_retrieved_at": "ranks_retrieved_at_utc",
+    "eligible_for_stored_best": "eligible_for_pr"
+  },
+  "segment_personal_bests": {
+    "best_segment_effort_key": "pr_effort_key",
+    "best_activity_key": "pr_activity_key",
+    "best_effort_started_at": "pr_started_at",
+    "best_effort_started_at_utc": "pr_started_at_utc",
+    "best_effort_local_date": "pr_date",
+    "best_elapsed_time_seconds": "pr_time",
+    "best_moving_time_seconds": "pr_moving_time",
+    "best_distance_miles": "pr_distance",
+    "tied_best_effort_count": "pr_tie_count",
+    "best_basis": "pr_basis",
+    "ranks_retrieved_at": "ranks_retrieved_at_utc"
+  },
+  "segment_trail_associations": {
+    "observed_distance_miles": "distance",
+    "first_observed_at": "first_observed_at_utc",
+    "last_observed_at": "last_observed_at_utc"
+  }
+}

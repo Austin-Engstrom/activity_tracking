@@ -1,6 +1,62 @@
 table segment_trail_associations
 	lineageTag: 495be822-4aca-4e19-bb49-919457277519
 
+	/// verified_point_assignments; inferred observation, not ownership.
+	column association_basis
+		dataType: string
+		lineageTag: d090b386-e90b-450e-8c5b-180239b6687a
+		summarizeBy: none
+		sourceColumn: association_basis
+
+	/// distance_supported for positive eligible distance; otherwise point_only.
+	column evidence_status
+		dataType: string
+		lineageTag: 74dd9137-492f-4a8f-bf8f-9ca91bcb6729
+		summarizeBy: none
+		sourceColumn: evidence_status
+
+	/// Earliest observed membership timestamp in UTC.
+	column first_observed_at_utc
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
+		lineageTag: 4d334e92-bf85-48a9-ae42-369049fd24d4
+		isHidden
+		summarizeBy: none
+		sourceColumn: first_observed_at_utc
+
+	/// Latest observed membership timestamp in UTC.
+	column last_observed_at_utc
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
+		lineageTag: a63f745a-ab12-479c-85ac-02ee74a6b01b
+		isHidden
+		summarizeBy: none
+		sourceColumn: last_observed_at_utc
+
+	/// Observed eligible effort traversal miles; excludes interval ending at effort start, repeated traversals accumulate.
+	column distance
+		dataType: double
+		formatString: #,0.00
+		lineageTag: dcce750d-08eb-422a-a0a0-5ac5fa796e28
+		summarizeBy: none
+		sourceColumn: distance
+
+	/// 0–1 fraction of segment eligible observed distance including unmatched denominator; not confidence or geographic coverage.
+	column observed_distance_share
+		dataType: double
+		formatString: 0.0%
+		lineageTag: c084be92-252a-494a-a1bc-6b2d0bd89872
+		summarizeBy: none
+		sourceColumn: observed_distance_share
+
+	/// Sample/effort pair count; repeated memberships are not unique physical points.
+	column point_memberships
+		dataType: int64
+		formatString: #,0
+		lineageTag: ae270d3f-98d8-47a1-a0ed-d24d981ba6db
+		summarizeBy: none
+		sourceColumn: point_memberships
+
 	/// Segment key; source identifier or relationship key, not a measure.
 	column segment_key
 		dataType: int64
@@ -11,6 +67,22 @@ table segment_trail_associations
 		sourceColumn: segment_key
 
 		annotation SummarizationSetBy = User
+
+	/// Distinct supporting activities for this association; not additive across associations.
+	column supporting_activities
+		dataType: int64
+		formatString: #,0
+		lineageTag: d58356af-76e2-4971-a84d-d18da0c3aee1
+		summarizeBy: none
+		sourceColumn: supporting_activities
+
+	/// Distinct supporting efforts for this association; not additive across associations.
+	column supporting_efforts
+		dataType: int64
+		formatString: #,0
+		lineageTag: ab54bfd1-23ac-4993-a70c-d1d30fc8cde5
+		summarizeBy: none
+		sourceColumn: supporting_efforts
 
 	/// Trail key; source identifier or relationship key, not a measure.
 	column trail_key
@@ -34,82 +106,12 @@ table segment_trail_associations
 
 		annotation SummarizationSetBy = User
 
-	/// Distinct supporting efforts for this association; not additive across associations.
-	column supporting_efforts
-		dataType: int64
-		formatString: #,0
-		lineageTag: ab54bfd1-23ac-4993-a70c-d1d30fc8cde5
-		summarizeBy: none
-		sourceColumn: supporting_efforts
-
-	/// Distinct supporting activities for this association; not additive across associations.
-	column supporting_activities
-		dataType: int64
-		formatString: #,0
-		lineageTag: d58356af-76e2-4971-a84d-d18da0c3aee1
-		summarizeBy: none
-		sourceColumn: supporting_activities
-
-	/// Sample/effort pair count; repeated memberships are not unique physical points.
-	column point_memberships
-		dataType: int64
-		formatString: #,0
-		lineageTag: ae270d3f-98d8-47a1-a0ed-d24d981ba6db
-		summarizeBy: none
-		sourceColumn: point_memberships
-
-	/// Observed eligible effort traversal miles; excludes interval ending at effort start, repeated traversals accumulate.
-	column observed_distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: dcce750d-08eb-422a-a0a0-5ac5fa796e28
-		summarizeBy: none
-		sourceColumn: observed_distance_miles
-
-	/// 0–1 fraction of segment eligible observed distance including unmatched denominator; not confidence or geographic coverage.
-	column observed_distance_share
-		dataType: double
-		formatString: 0.0%
-		lineageTag: c084be92-252a-494a-a1bc-6b2d0bd89872
-		summarizeBy: none
-		sourceColumn: observed_distance_share
-
-	/// Earliest observed membership timestamp in UTC.
-	column first_observed_at
-		dataType: dateTime
-		formatString: yyyy-mm-dd hh:mm:ss
-		lineageTag: 4d334e92-bf85-48a9-ae42-369049fd24d4
-		summarizeBy: none
-		sourceColumn: first_observed_at
-
-	/// Latest observed membership timestamp in UTC.
-	column last_observed_at
-		dataType: dateTime
-		formatString: yyyy-mm-dd hh:mm:ss
-		lineageTag: a63f745a-ab12-479c-85ac-02ee74a6b01b
-		summarizeBy: none
-		sourceColumn: last_observed_at
-
-	/// verified_point_assignments; inferred observation, not ownership.
-	column association_basis
-		dataType: string
-		lineageTag: d090b386-e90b-450e-8c5b-180239b6687a
-		summarizeBy: none
-		sourceColumn: association_basis
-
-	/// distance_supported for positive eligible distance; otherwise point_only.
-	column evidence_status
-		dataType: string
-		lineageTag: 74dd9137-492f-4a8f-bf8f-9ca91bcb6729
-		summarizeBy: none
-		sourceColumn: evidence_status
-
 	partition segment_trail_associations = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment_trail_association.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"trail_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"supporting_efforts", Int64.Type}, {"supporting_activities", Int64.Type}, {"point_memberships", Int64.Type}, {"observed_distance_miles", type number}, {"observed_distance_share", type number}, {"first_observed_at", type datetime}, {"last_observed_at", type datetime}, {"association_basis", type text}, {"evidence_status", type text}})
+				    Typed = Table.TransformColumnTypes(Source, {{"association_basis", type text}, {"evidence_status", type text}, {"first_observed_at", type datetime}, {"last_observed_at", type datetime}, {"observed_distance_miles", type number}, {"observed_distance_share", type number}, {"point_memberships", Int64.Type}, {"segment_key", Int64.Type}, {"supporting_activities", Int64.Type}, {"supporting_efforts", Int64.Type}, {"trail_key", Int64.Type}, {"trail_system_key", Int64.Type}}),
+				    Renamed = Table.RenameColumns(Typed, {{"first_observed_at", "first_observed_at_utc"}, {"last_observed_at", "last_observed_at_utc"}, {"observed_distance_miles", "distance"}})
 				in
-				    Typed
-
+				    Renamed

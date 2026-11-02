@@ -54,23 +54,23 @@ table segment_effort_achievements
 
 		annotation SummarizationSetBy = User
 
-	/// Source segment effort start timestamp in UTC.
-	column effort_started_at
+	/// Effort start in the resolved activity timezone, or the source local effort timestamp. NULL when neither is available.
+	column started_at
 		dataType: dateTime
 		lineageTag: ba511cfc-508f-487d-81cf-7e16a12cbec7
 		formatString: yyyy-mm-dd hh:mm:ss
 		summarizeBy: none
-		sourceColumn: effort_started_at
+		sourceColumn: started_at
 
-	/// Source effort local calendar date; falls back to UTC if source local timestamp is absent.
-	column effort_local_date
+	/// Local effort-start calendar date. No silent UTC fallback; inspect date_basis for provenance.
+	column date
 		dataType: dateTime
 		lineageTag: bad3b2ba-dd6c-4367-b5c7-9246a71ef610
 		formatString: yyyy-mm-dd
 		summarizeBy: none
-		sourceColumn: effort_local_date
+		sourceColumn: date
 
-	/// YYYYMMDD from the source effort local start, with UTC fallback. This is an effort-start date, not all dates touched by its GPS points.
+	/// YYYYMMDD local effort-start date key, NULL if local time is unresolved.
 	column date_key
 		dataType: int64
 		lineageTag: f1419ce8-5d3b-41b3-ab10-52bad8ed802d
@@ -81,7 +81,7 @@ table segment_effort_achievements
 
 		annotation SummarizationSetBy = User
 
-	/// source_local when Strava supplied the local effort timestamp, otherwise utc_fallback.
+	/// Timezone provenance: strava, first_gps, source_local or unresolved. No UTC instant is silently presented as local.
 	column date_basis
 		dataType: string
 		lineageTag: c5aeab9f-cdee-49a0-8316-b3a307c6b107
@@ -89,28 +89,30 @@ table segment_effort_achievements
 		sourceColumn: date_basis
 
 	/// Source whole-effort elapsed seconds, including stops. Positive values rank stored personal bests; zero/negative values are excluded.
-	column elapsed_time_seconds
+	column time
 		dataType: int64
 		lineageTag: e9fa9a19-d94c-4d4b-9724-60096e19c0a9
-		formatString: 0
+		formatString: #,0
+		isHidden
 		summarizeBy: none
-		sourceColumn: elapsed_time_seconds
+		sourceColumn: time
 
 	/// Source whole-effort moving seconds; not the basis of personal-best ranking.
-	column moving_time_seconds
+	column moving_time
 		dataType: int64
 		lineageTag: 3e422ba6-5a54-4a08-b3c3-aa24d8da8468
-		formatString: 0
+		formatString: #,0
+		isHidden
 		summarizeBy: none
-		sourceColumn: moving_time_seconds
+		sourceColumn: moving_time
 
 	/// Source whole-effort distance converted to miles. Repeated/overlapping efforts are not unique route distance.
-	column distance_miles
+	column distance
 		dataType: double
 		lineageTag: a80af016-db0c-4b88-b857-b2fbded3b2fb
 		formatString: #,0.00
 		summarizeBy: none
-		sourceColumn: distance_miles
+		sourceColumn: distance
 
 	/// Source hidden flag: 1 hidden, 0 visible, NULL unknown. Explicitly hidden efforts do not qualify for stored-best selection.
 	column effort_hidden
@@ -137,12 +139,13 @@ table segment_effort_achievements
 		sourceColumn: reported_kom_rank
 
 	/// UTC response retrieval timestamp for the stored ranks. NULL means a legacy observation without verified retrieval provenance.
-	column ranks_retrieved_at
+	column ranks_retrieved_at_utc
 		dataType: dateTime
 		lineageTag: a6e2ac50-a433-4da7-afff-f10ca07305da
 		formatString: yyyy-mm-dd hh:mm:ss
+		isHidden
 		summarizeBy: none
-		sourceColumn: ranks_retrieved_at
+		sourceColumn: ranks_retrieved_at_utc
 
 	/// ranked, no_rank (explicit API null), not_returned (field omitted), or legacy_unobserved (no retrieval metadata).
 	column pr_rank_status
@@ -175,12 +178,12 @@ table segment_effort_achievements
 		sourceColumn: reported_kom_first
 
 	/// 1 for positive elapsed time and no explicit hidden flag; otherwise 0. Does not certify GPS quality or exclude other source anomalies.
-	column eligible_for_stored_best
+	column eligible_for_pr
 		dataType: int64
 		lineageTag: 7de08ac9-fdc6-4953-a9a6-da214e502015
 		formatString: 0
 		summarizeBy: none
-		sourceColumn: eligible_for_stored_best
+		sourceColumn: eligible_for_pr
 
 	/// Source Strava activity URL; access depends on viewer permissions.
 	column activity_url
@@ -198,11 +201,27 @@ table segment_effort_achievements
 		summarizeBy: none
 		sourceColumn: segment_url
 
+	/// Original UTC timestamp retained for audit.
+	column started_at_utc
+		dataType: dateTime
+		lineageTag: 589fe77c-9a13-47c7-830d-372b4e747249
+		isHidden
+		summarizeBy: none
+		sourceColumn: started_at_utc
+
+	/// IANA timezone used for local event reporting.
+	column timezone_name
+		dataType: string
+		lineageTag: 2b437706-c454-4eb4-92eb-50e31fac5147
+		summarizeBy: none
+		sourceColumn: timezone_name
+
 	partition segment_effort_achievements = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_segment_effort_achievement.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}, {"activity_key", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"effort_started_at", type datetime}, {"effort_local_date", type datetime}, {"date_key", Int64.Type}, {"date_basis", type text}, {"elapsed_time_seconds", Int64.Type}, {"moving_time_seconds", Int64.Type}, {"distance_miles", type number}, {"effort_hidden", Int64.Type}, {"reported_pr_rank", Int64.Type}, {"reported_kom_rank", Int64.Type}, {"ranks_retrieved_at", type datetime}, {"pr_rank_status", type text}, {"kom_rank_status", type text}, {"reported_pr_first", Int64.Type}, {"reported_kom_first", Int64.Type}, {"eligible_for_stored_best", Int64.Type}, {"activity_url", type text}, {"segment_url", type text}})
+				    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}, {"activity_key", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"effort_started_at", type datetime}, {"effort_local_date", type datetime}, {"date_key", Int64.Type}, {"date_basis", type text}, {"elapsed_time_seconds", Int64.Type}, {"moving_time_seconds", Int64.Type}, {"distance_miles", type number}, {"effort_hidden", Int64.Type}, {"reported_pr_rank", Int64.Type}, {"reported_kom_rank", Int64.Type}, {"ranks_retrieved_at", type datetime}, {"pr_rank_status", type text}, {"kom_rank_status", type text}, {"reported_pr_first", Int64.Type}, {"reported_kom_first", Int64.Type}, {"eligible_for_stored_best", Int64.Type}, {"activity_url", type text}, {"segment_url", type text}, {"effort_started_at_utc", type datetime}, {"timezone_name", type text}}),
+				    Renamed = Table.RenameColumns(Typed, {{"effort_started_at", "started_at"}, {"effort_local_date", "date"}, {"elapsed_time_seconds", "time"}, {"moving_time_seconds", "moving_time"}, {"distance_miles", "distance"}, {"ranks_retrieved_at", "ranks_retrieved_at_utc"}, {"eligible_for_stored_best", "eligible_for_pr"}, {"effort_started_at_utc", "started_at_utc"}})
 				in
-				    Typed
+				    Renamed
