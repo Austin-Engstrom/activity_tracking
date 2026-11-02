@@ -642,26 +642,6 @@ table measures_
 		displayFolder: Segments\Records
 		lineageTag: 913dffae-7476-4ae2-883d-80c3116df486
 
-	/// Catalog length in miles for one segment, rather than accumulated effort mileage. Blank when no single segment can be identified or the source length is unknown.
-	/// Filters: Uses the segment dimension selection, or the actual segment key on an effort-detail row. Date and equipment filters do not alter a segment's catalog length.
-	/// Notes: Distinct from Segment Miles, which sums effort distance and can count repeats. Multi-segment totals are blank; this is not unique traversed trail distance.
-	measure 'Segment Length Miles' =
-			VAR SegmentKey =
-			    IF(
-			        ISINSCOPE(segment_effort_achievements[segment_effort_key]),
-			        SELECTEDVALUE(segment_effort_achievements[segment_key]),
-			        SELECTEDVALUE(segments[segment_key])
-			    )
-			RETURN
-			    IF(
-			        NOT ISBLANK(SegmentKey),
-			        LOOKUPVALUE(segments[distance_miles], segments[segment_key], SegmentKey),
-			        BLANK()
-			    )
-		formatString: #,0.00
-		displayFolder: Segments\Records
-		lineageTag: 304f3162-cba2-4c82-be5b-27d1df63fee1
-
 	column Placeholder
 		dataType: int64
 		isHidden

@@ -45,16 +45,16 @@
             },
             {
               "field": {
-                "Measure": {
+                "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "measures_"
+                      "Entity": "segments"
                     }
                   },
-                  "Property": "Segment Length Miles"
+                  "Property": "distance_miles"
                 }
               },
-              "queryRef": "measures_.Segment Length Miles",
+              "queryRef": "segments.distance_miles",
               "nativeQueryRef": "Segment length (mi)"
             },
             {
