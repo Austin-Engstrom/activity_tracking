@@ -36,7 +36,7 @@ class DataDictionaryTests(unittest.TestCase):
         objects = {row[2]: row for row in rows if row[0] == 'Measure'}
         self.assertIn('RETURN', objects['Next Service Remaining'][7])
         self.assertIn('MAXX(', objects['Longest Active Day Streak'][7])
-        self.assertEqual(objects['Miles'][7], 'SUM(activity_points[incremental_distance_miles])')
+        self.assertEqual(objects['Miles'][7], 'SUM(activity_points[incremental_distance])')
 
     def test_m_literal_preserves_special_characters(self):
         self.assertEqual(m_literal('a"b\n#(lf)\t'), '"a""b#(lf)#(#)(lf)#(tab)"')

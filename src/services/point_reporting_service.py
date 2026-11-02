@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from shapely.geometry import Point, shape
 from sqlalchemy import text
+from src.services.reporting_local_time import DDL as LOCAL_TIME_DDL, refresh_local_times
 
 DDL = """
 CREATE TABLE IF NOT EXISTS activity_points (
@@ -29,6 +30,8 @@ CREATE TABLE IF NOT EXISTS point_reporting_metadata (
  timezone_name TEXT
 );
 """
+
+DDL += LOCAL_TIME_DDL
 
 
 def valid_point(row):
@@ -63,14 +66,15 @@ def rebuild_points(connection, max_gap_seconds=60, tolerance_feet=40,
         connection.execute(text("SELECT * FROM trail_systems WHERE boundary_confirmed=1 AND boundary_geojson IS NOT NULL ORDER BY trail_system_id")).mappings()]
     trails = [(x['official_trail_id'], x['trail_system_id'], geometry(x['combined_geometry_geojson'])) for x in
         connection.execute(text("SELECT * FROM official_trails WHERE combined_geometry_geojson IS NOT NULL ORDER BY official_trail_id")).mappings()]
+    refresh_local_times(connection, update_point_dates=False)
     connection.execute(text('DELETE FROM activity_points'))
     count = 0
-    activities = connection.execute(text('SELECT a.*, m.timezone_name FROM activities a LEFT JOIN point_reporting_metadata m ON m.activity_id=a.activity_id')).mappings()
+    activities = connection.execute(text('SELECT a.*, m.timezone_name FROM activities a LEFT JOIN reporting_activity_timezones m ON m.activity_id=a.activity_id')).mappings()
     for a in activities:
         start = datetime.fromisoformat(str(a['start_date']).replace('Z','+00:00'))
         if start.tzinfo is None:
             start = start.replace(tzinfo=timezone.utc)
-        local_zone = ZoneInfo(a['timezone_name']) if a['timezone_name'] else timezone.utc
+        local_zone = ZoneInfo(a['timezone_name']) if a['timezone_name'] else None
         # Project each candidate trail once per activity, not once per sample.
         from pyproj import Transformer
         from shapely.ops import transform
@@ -109,7 +113,7 @@ def rebuild_points(connection, max_gap_seconds=60, tolerance_feet=40,
                     trail = distances[0][1]
                     method += ':nearest_trail'
             stamp = start + timedelta(seconds=p['time_seconds']) if p['time_seconds'] is not None and math.isfinite(p['time_seconds']) and p['time_seconds'] >= 0 else None
-            batch.append(dict(key=f"{a['activity_id']}:{p['point_index']}",activity=a['activity_id'],idx=p['point_index'],stamp=stamp.astimezone(timezone.utc).isoformat() if stamp else None,date=int(stamp.astimezone(local_zone).strftime('%Y%m%d')) if stamp else None,system=system,trail=trail,dd=dd,dt=dt,status=status,method=method))
+            batch.append(dict(key=f"{a['activity_id']}:{p['point_index']}",activity=a['activity_id'],idx=p['point_index'],stamp=stamp.astimezone(timezone.utc).isoformat() if stamp else None,date=int(stamp.astimezone(local_zone).strftime('%Y%m%d')) if stamp and local_zone else None,system=system,trail=trail,dd=dd,dt=dt,status=status,method=method))
             previous = p
         if batch:
             connection.execute(text("""INSERT INTO activity_points VALUES (:key,:activity,:idx,:stamp,:date,:system,:trail,:dd,:dt,:status,:method)"""),batch)

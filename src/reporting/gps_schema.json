@@ -14,21 +14,24 @@
     "description": "string",
     "device_name": "string",
     "distance_miles": "double",
-    "elapsed_time_minutes": "double",
+    "elapsed_time_seconds": "int64",
     "gear_key": "string",
     "is_commute": "int64",
     "is_trainer": "int64",
     "kilojoules": "double",
     "max_heartrate": "double",
     "max_speed_mph": "double",
-    "moving_time_minutes": "double",
+    "moving_time_seconds": "int64",
     "segment_effort_count": "int64",
     "sport_type": "string",
     "start_date": "dateTime",
     "stream_point_count": "int64",
     "suffer_score": "double",
     "total_elevation_gain_feet": "double",
-    "workout_type": "int64"
+    "workout_type": "int64",
+    "start_date_utc": "dateTime",
+    "timezone_name": "string",
+    "date_basis": "string"
   },
   "view_activity_point_segments": {
     "activity_point_key": "string",
@@ -63,7 +66,9 @@
     "temperature_f": "double",
     "trail_key": "int64",
     "trail_system_key": "int64",
-    "watts": "double"
+    "watts": "double",
+    "recorded_at": "dateTime",
+    "timezone_name": "string"
   },
   "view_activity_type": {
     "activity_category": "string",
@@ -239,7 +244,9 @@
     "reported_kom_first": "int64",
     "eligible_for_stored_best": "int64",
     "activity_url": "string",
-    "segment_url": "string"
+    "segment_url": "string",
+    "effort_started_at_utc": "dateTime",
+    "timezone_name": "string"
   },
   "view_segment_personal_best": {
     "segment_key": "int64",
@@ -260,6 +267,9 @@
     "ranks_retrieved_at": "dateTime",
     "pr_rank_status": "string",
     "kom_rank_status": "string",
-    "best_basis": "string"
+    "best_basis": "string",
+    "best_effort_started_at_utc": "dateTime",
+    "date_basis": "string",
+    "timezone_name": "string"
   }
 }

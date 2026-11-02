@@ -11,6 +11,7 @@ from src.tools.export_power_bi import export_view
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = json.loads((ROOT/'src/reporting/gps_schema.json').read_text())
+ALIASES = json.loads((ROOT/'src/reporting/gps_model_columns.json').read_text())
 
 
 class ReportingTypeTests(unittest.TestCase):
@@ -43,10 +44,14 @@ class ReportingTypeTests(unittest.TestCase):
             view=re.search(r'ExportFolder & "(view_\w+).parquet"',content)[1]
             seen.add(view)
             types=dict(re.findall(r'\n\tcolumn (\w+)\n\t\tdataType: (\w+)',content))
-            self.assertEqual(types,CONTRACT[view])
+            self.assertEqual(types,{ALIASES.get(path.stem,{}).get(name,name):typ for name,typ in CONTRACT[view].items()})
             self.assertIn('Table.TransformColumnTypes',content)
-            for column in types:
-                self.assertIn('{"'+column+'", ',content)
+            for source in CONTRACT[view]:
+                self.assertIn('{"'+source+'", ',content)
+                alias=ALIASES.get(path.stem,{}).get(source,source)
+                self.assertIn('sourceColumn: '+alias,content)
+                if source!=alias:
+                    self.assertIn('{"'+source+'", "'+alias+'"}',content)
         self.assertEqual(seen,set(CONTRACT))
 
     def test_measures_are_centralized_and_organized(self):
@@ -75,8 +80,8 @@ class ReportingTypeTests(unittest.TestCase):
                     self.assertIn('annotation SummarizationSetBy = User',body,(path.stem,name))
                     foreign_keys = {
                         'segment_effort_achievements': {'segment_key', 'activity_key', 'gear_key', 'activity_type_key', 'date_key'},
-                        'segment_personal_bests': {'segment_key', 'best_activity_key', 'best_segment_effort_key'},
-                        'activities': {'activity_date_key', 'activity_type_key', 'gear_key'},
+                        'segment_personal_bests': {'segment_key', 'pr_activity_key', 'pr_effort_key'},
+                        'activities': {'date_key', 'activity_type_key', 'gear_key'},
                         'segment_efforts': {'activity_key', 'segment_key'},
                         'gear': {'athlete_id'},
                         'gear_components': {'gear_key'},

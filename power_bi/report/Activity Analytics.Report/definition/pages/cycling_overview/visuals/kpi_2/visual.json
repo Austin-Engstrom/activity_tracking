@@ -24,11 +24,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Moving Time"
+                  "Property": "Activity Moving Time"
                 }
               },
-              "queryRef": "measures_.Moving Time",
-              "nativeQueryRef": "Moving Time"
+              "queryRef": "measures_.Activity Moving Time",
+              "nativeQueryRef": "Activity Moving Time"
             }
           ]
         }
@@ -94,7 +94,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Activity moving hours'"
+                  "Value": "'Activity moving time'"
                 }
               }
             },

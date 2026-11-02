@@ -99,11 +99,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Point Moving Hours"
+                  "Property": "Point Moving Time"
                 }
               },
-              "queryRef": "measures_.Point Moving Hours",
-              "nativeQueryRef": "Point Moving Hours"
+              "queryRef": "measures_.Point Moving Time",
+              "nativeQueryRef": "Point Moving Time"
             },
             {
               "field": {
@@ -113,11 +113,11 @@
                       "Entity": "measures_"
                     }
                   },
-                  "Property": "Moving Time"
+                  "Property": "Activity Moving Time"
                 }
               },
-              "queryRef": "measures_.Activity Moving Hours",
-              "nativeQueryRef": "Moving Time"
+              "queryRef": "measures_.Activity Moving Time",
+              "nativeQueryRef": "Activity Moving Time"
             }
           ]
         }
@@ -214,7 +214,7 @@
             }
           },
           "selector": {
-            "metadata": "measures_.Point Moving Hours"
+            "metadata": "measures_.Point moving time"
           }
         },
         {
@@ -228,7 +228,7 @@
             }
           },
           "selector": {
-            "metadata": "measures_.Activity Moving Hours"
+            "metadata": "measures_.Activity moving time"
           }
         }
       ],

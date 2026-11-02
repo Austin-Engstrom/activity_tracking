@@ -51,10 +51,10 @@
                       "Entity": "segments"
                     }
                   },
-                  "Property": "distance_miles"
+                  "Property": "distance"
                 }
               },
-              "queryRef": "segments.distance_miles",
+              "queryRef": "segments.distance",
               "nativeQueryRef": "Segment length (mi)"
             },
             {
@@ -65,25 +65,25 @@
                       "Entity": "segment_personal_bests"
                     }
                   },
-                  "Property": "best_effort_local_date"
+                  "Property": "pr_date"
                 }
               },
-              "queryRef": "segment_personal_bests.best_effort_local_date",
+              "queryRef": "segment_personal_bests.pr_date",
               "nativeQueryRef": "Best date"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "segment_personal_bests"
+                      "Entity": "measures_"
                     }
                   },
-                  "Property": "best_elapsed_time_seconds"
+                  "Property": "Segment PR Time"
                 }
               },
-              "queryRef": "segment_personal_bests.best_elapsed_time_seconds",
-              "nativeQueryRef": "Best (sec)"
+              "queryRef": "measures_.Segment PR Time",
+              "nativeQueryRef": "Segment PR Time"
             },
             {
               "field": {
@@ -121,10 +121,10 @@
                       "Entity": "segment_personal_bests"
                     }
                   },
-                  "Property": "tied_best_effort_count"
+                  "Property": "pr_tie_count"
                 }
               },
-              "queryRef": "segment_personal_bests.tied_best_effort_count",
+              "queryRef": "segment_personal_bests.pr_tie_count",
               "nativeQueryRef": "Tied best efforts"
             },
             {
@@ -154,7 +154,7 @@
                     "Entity": "segment_personal_bests"
                   }
                 },
-                "Property": "best_effort_local_date"
+                "Property": "pr_date"
               }
             },
             "direction": "Descending"

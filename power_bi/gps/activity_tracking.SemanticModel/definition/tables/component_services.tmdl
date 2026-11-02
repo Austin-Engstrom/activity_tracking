@@ -52,4 +52,3 @@ table component_services
 				    Typed = Table.TransformColumnTypes(Source, {{"service_id", Int64.Type}, {"component_key", Int64.Type}, {"service_date", type datetime}, {"service_type", type text}, {"notes", type text}})
 				in
 				    Typed
-

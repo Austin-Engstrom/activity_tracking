@@ -19,3 +19,5 @@ updating TMDL. The older model under `power_bi/dataset` is retained as legacy.
 
 Keep field names and source columns stable so existing DAX and report bindings
 continue to work. Hidden fields remain available to existing visuals and measures.
+
+The user-approved [field naming migration](reporting-field-renames.md) uses concise duration/distance names, numeric seconds underneath formatted duration measures, local event dates, and explicit UTC audit names. Service hours/mixed schedule units remain explicit. Update all tracked DAX/report bindings and the alias contract together when changing a published field.

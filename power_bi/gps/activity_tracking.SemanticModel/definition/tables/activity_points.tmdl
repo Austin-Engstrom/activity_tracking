@@ -1,13 +1,14 @@
 table activity_points
 	lineageTag: 5c8ac6cc-0446-4b14-9211-4885df110fc6
 
-	/// Stable activity/sample composite identifier; do not aggregate.
-	column activity_point_key
-		dataType: string
+	/// Activity id; source identifier or relationship key, not a measure.
+	column activity_id
+		dataType: int64
 		isHidden
-		lineageTag: 7d512446-5002-4f9f-9aab-3f40dac65911
+		formatString: 0
+		lineageTag: 18ce8da3-eb12-4084-a722-88ccf7f265bc
 		summarizeBy: none
-		sourceColumn: activity_point_key
+		sourceColumn: activity_id
 
 		annotation SummarizationSetBy = User
 
@@ -22,34 +23,13 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
-	/// Activity id; source identifier or relationship key, not a measure.
-	column activity_id
-		dataType: int64
-		isHidden
-		formatString: 0
-		lineageTag: 18ce8da3-eb12-4084-a722-88ccf7f265bc
-		summarizeBy: none
-		sourceColumn: activity_id
-
-		annotation SummarizationSetBy = User
-
-	/// Original zero-based stream sample index; not a dense GPS-only row number.
-	column point_index
-		dataType: int64
-		formatString: 0
-		lineageTag: e11cac14-41e6-4b08-ae40-f03d6eb92a73
-		summarizeBy: none
-		sourceColumn: point_index
-
-		annotation SummarizationSetBy = User
-
-	/// Gear key; source identifier or relationship key, not a measure.
-	column gear_key
+	/// Stable activity/sample composite identifier; do not aggregate.
+	column activity_point_key
 		dataType: string
 		isHidden
-		lineageTag: 593dadf2-0bc5-4cdc-9b3b-9468be2be614
+		lineageTag: 7d512446-5002-4f9f-9aab-3f40dac65911
 		summarizeBy: none
-		sourceColumn: gear_key
+		sourceColumn: activity_point_key
 
 		annotation SummarizationSetBy = User
 
@@ -63,7 +43,34 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
-	/// YYYYMMDD point-local calendar key (UTC when timezone metadata is missing).
+	/// Source sample cadence in rpm.
+	column cadence
+		dataType: double
+		formatString: #,0
+		lineageTag: 62c4efca-f183-4087-a116-492216c06fc5
+		summarizeBy: sum
+		sourceColumn: cadence
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source cumulative stream distance converted to miles; do not sum.
+	column cumulative_distance
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 1bf5bbc3-3550-40f0-911e-b5f1f3d83a02
+		summarizeBy: sum
+		sourceColumn: cumulative_distance
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Timezone provenance: strava, first_gps, source_local or unresolved. No UTC instant is silently presented as local.
+	column date_basis
+		dataType: string
+		lineageTag: c9442510-aad0-443d-8b7f-8e2c65005ae4
+		summarizeBy: none
+		sourceColumn: date_basis
+
+	/// YYYYMMDD local point-date key; NULL when timezone or source time is unresolved.
 	column date_key
 		dataType: int64
 		isHidden
@@ -74,35 +81,87 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
-	/// Trail system key; source identifier or relationship key, not a measure.
-	column trail_system_key
-		dataType: int64
+	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
+	column elapsed_time
+		dataType: double
+		formatString: #,0
+		lineageTag: c4a38e92-c803-44be-8094-60aa12f9cb25
 		isHidden
-		formatString: 0
-		lineageTag: a7cddc92-50cc-44d3-9187-aace73ac03fa
+		summarizeBy: sum
+		sourceColumn: elapsed_time
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Point altitude in feet; not elevation gain.
+	column elevation_feet
+		dataType: double
+		formatString: #,0
+		lineageTag: 91f32035-6227-44c0-98d7-5912c855a9c8
+		summarizeBy: sum
+		sourceColumn: elevation_feet
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Gear key; source identifier or relationship key, not a measure.
+	column gear_key
+		dataType: string
+		isHidden
+		lineageTag: 593dadf2-0bc5-4cdc-9b3b-9468be2be614
 		summarizeBy: none
-		sourceColumn: trail_system_key
+		sourceColumn: gear_key
 
 		annotation SummarizationSetBy = User
 
-	/// Trail key; source identifier or relationship key, not a measure.
-	column trail_key
-		dataType: int64
+	/// Sample grade in percent.
+	column grade_percent
+		dataType: double
+		formatString: 0.0\%
+		lineageTag: 97770d54-0429-442a-8406-7b1742f49aa6
+		summarizeBy: sum
+		sourceColumn: grade_percent
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sample heart rate in bpm.
+	column heartrate
+		dataType: double
+		formatString: #,0
+		lineageTag: 0c52f39a-dba0-45e8-bebc-8bd6ebc1c9b7
+		summarizeBy: sum
+		sourceColumn: heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Eligible preceding interval distance in miles; first/invalid intervals NULL.
+	column incremental_distance
+		dataType: double
+		formatString: #,0.00
+		lineageTag: aa3f0238-44cf-4a2e-b312-313bb0a6fecb
+		summarizeBy: sum
+		sourceColumn: incremental_distance
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Eligible preceding interval duration in seconds; first/invalid intervals NULL.
+	column incremental_time
+		dataType: double
+		formatString: #,0
+		lineageTag: b3951d24-0e96-4390-a476-89fb76d99726
 		isHidden
+		summarizeBy: sum
+		sourceColumn: incremental_time
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source moving flag: 1 moving, 0 stopped; NULL unknown.
+	column is_moving
+		dataType: int64
 		formatString: 0
-		lineageTag: 4286c468-0dd8-4ba5-8ef4-c7803d58ca51
+		lineageTag: dd9dac2a-f298-4372-8beb-9c3d177a3dbb
 		summarizeBy: none
-		sourceColumn: trail_key
+		sourceColumn: is_moving
 
 		annotation SummarizationSetBy = User
-
-	/// UTC activity start plus stream elapsed seconds.
-	column recorded_at_utc
-		dataType: dateTime
-		formatString: yyyy-mm-dd hh:mm:ss
-		lineageTag: 07ae2a88-5c88-41ea-962f-248fab91e14f
-		summarizeBy: none
-		sourceColumn: recorded_at_utc
 
 	/// WGS84 latitude in decimal degrees.
 	column latitude
@@ -124,65 +183,49 @@ table activity_points
 
 		annotation SummarizationSetBy = User
 
-	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
-	column elapsed_time_seconds
-		dataType: double
-		formatString: #,0.0
-		lineageTag: c4a38e92-c803-44be-8094-60aa12f9cb25
-		summarizeBy: sum
-		sourceColumn: elapsed_time_seconds
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Source cumulative stream distance converted to miles; do not sum.
-	column cumulative_distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 1bf5bbc3-3550-40f0-911e-b5f1f3d83a02
-		summarizeBy: sum
-		sourceColumn: cumulative_distance_miles
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Eligible preceding interval distance in miles; first/invalid intervals NULL.
-	column incremental_distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: aa3f0238-44cf-4a2e-b312-313bb0a6fecb
-		summarizeBy: sum
-		sourceColumn: incremental_distance_miles
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Eligible preceding interval duration in seconds; first/invalid intervals NULL.
-	column incremental_time_seconds
-		dataType: double
-		formatString: #,0.0
-		lineageTag: b3951d24-0e96-4390-a476-89fb76d99726
-		summarizeBy: sum
-		sourceColumn: incremental_time_seconds
-
-		annotation SummarizationSetBy = Automatic
+	/// Spatial outcome: boundary, boundary_overlap_lowest_id or unmatched, optionally suffixed :nearest_trail or :ambiguous_trail. Unknown system/trail assignments retain NULL keys.
+	column match_method
+		dataType: string
+		lineageTag: aaea348d-5dbe-429b-afcc-40c27b1757f5
+		summarizeBy: none
+		sourceColumn: match_method
 
 	/// Point table: eligible interval seconds when moving, zero when stopped, otherwise NULL. Effort table: stored whole-effort moving seconds.
-	column moving_time_seconds
-		dataType: double
-		formatString: #,0.0
-		lineageTag: b3d236bc-9e8e-486a-8b0f-781d0da29314
-		summarizeBy: sum
-		sourceColumn: moving_time_seconds
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Point altitude in feet; not elevation gain.
-	column elevation_feet
+	column moving_time
 		dataType: double
 		formatString: #,0
-		lineageTag: 91f32035-6227-44c0-98d7-5912c855a9c8
+		lineageTag: b3d236bc-9e8e-486a-8b0f-781d0da29314
+		isHidden
 		summarizeBy: sum
-		sourceColumn: elevation_feet
+		sourceColumn: moving_time
 
 		annotation SummarizationSetBy = Automatic
+
+	/// Original zero-based stream sample index; not a dense GPS-only row number.
+	column point_index
+		dataType: int64
+		formatString: 0
+		lineageTag: e11cac14-41e6-4b08-ae40-f03d6eb92a73
+		summarizeBy: none
+		sourceColumn: point_index
+
+		annotation SummarizationSetBy = User
+
+	/// Interval quality: valid, first_point, invalid_interval or recording_gap. Only valid intervals have eligible increments; NULL increments are not zero.
+	column quality_status
+		dataType: string
+		lineageTag: 1bfe220d-b4e7-4679-ad8c-8eacc309aeae
+		summarizeBy: none
+		sourceColumn: quality_status
+
+	/// UTC activity start plus stream elapsed seconds.
+	column recorded_at_utc
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
+		lineageTag: 07ae2a88-5c88-41ea-962f-248fab91e14f
+		isHidden
+		summarizeBy: none
+		sourceColumn: recorded_at_utc
 
 	/// Source instantaneous stream speed converted to mph; NULL when not recorded.
 	column speed_mph
@@ -204,25 +247,27 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Sample heart rate in bpm.
-	column heartrate
-		dataType: double
-		formatString: #,0
-		lineageTag: 0c52f39a-dba0-45e8-bebc-8bd6ebc1c9b7
-		summarizeBy: sum
-		sourceColumn: heartrate
+	/// Trail key; source identifier or relationship key, not a measure.
+	column trail_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4286c468-0dd8-4ba5-8ef4-c7803d58ca51
+		summarizeBy: none
+		sourceColumn: trail_key
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
-	/// Source sample cadence in rpm.
-	column cadence
-		dataType: double
-		formatString: #,0
-		lineageTag: 62c4efca-f183-4087-a116-492216c06fc5
-		summarizeBy: sum
-		sourceColumn: cadence
+	/// Trail system key; source identifier or relationship key, not a measure.
+	column trail_system_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a7cddc92-50cc-44d3-9187-aace73ac03fa
+		summarizeBy: none
+		sourceColumn: trail_system_key
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	/// Sample power in watts.
 	column watts
@@ -234,46 +279,19 @@ table activity_points
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Source moving flag: 1 moving, 0 stopped; NULL unknown.
-	column is_moving
-		dataType: int64
-		formatString: 0
-		lineageTag: dd9dac2a-f298-4372-8beb-9c3d177a3dbb
+	/// GPS sample timestamp in the activity local timezone, including historical offset changes. NULL when unresolved; recorded_at_utc retains the instant.
+	column recorded_at
+		dataType: dateTime
+		lineageTag: 2821143f-dfb6-4db6-9027-57a4da6748e3
 		summarizeBy: none
-		sourceColumn: is_moving
+		sourceColumn: recorded_at
 
-		annotation SummarizationSetBy = User
-
-	/// Sample grade in percent.
-	column grade_percent
-		dataType: double
-		formatString: 0.0\%
-		lineageTag: 97770d54-0429-442a-8406-7b1742f49aa6
-		summarizeBy: sum
-		sourceColumn: grade_percent
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Interval quality: valid, first_point, invalid_interval or recording_gap. Only valid intervals have eligible increments; NULL increments are not zero.
-	column quality_status
+	/// IANA timezone used for local event reporting.
+	column timezone_name
 		dataType: string
-		lineageTag: 1bfe220d-b4e7-4679-ad8c-8eacc309aeae
+		lineageTag: 01774a0b-4210-4100-a071-fc34006a5a93
 		summarizeBy: none
-		sourceColumn: quality_status
-
-	/// Spatial outcome: boundary, boundary_overlap_lowest_id or unmatched, optionally suffixed :nearest_trail or :ambiguous_trail. Unknown system/trail assignments retain NULL keys.
-	column match_method
-		dataType: string
-		lineageTag: aaea348d-5dbe-429b-afcc-40c27b1757f5
-		summarizeBy: none
-		sourceColumn: match_method
-
-	/// activity_timezone or utc_fallback; indicates point calendar basis.
-	column date_basis
-		dataType: string
-		lineageTag: c9442510-aad0-443d-8b7f-8e2c65005ae4
-		summarizeBy: none
-		sourceColumn: date_basis
+		sourceColumn: timezone_name
 
 	/// Latitude snapped to 0.00025-degree heatmap cells (about 28 metres north/south, longitude-dependent east/west). Weight by Activities to count each distinct activity once per cell; repeated samples within one activity do not increase its weight.
 	column map_latitude = IF(NOT ISBLANK(activity_points[latitude]), ROUND(activity_points[latitude] * 4000, 0) / 4000, BLANK())
@@ -296,7 +314,7 @@ table activity_points
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity_points.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"activity_point_key", type text}, {"activity_key", Int64.Type}, {"activity_id", Int64.Type}, {"point_index", Int64.Type}, {"gear_key", type text}, {"activity_type_key", type text}, {"date_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"trail_key", Int64.Type}, {"recorded_at_utc", type datetime}, {"latitude", type number}, {"longitude", type number}, {"elapsed_time_seconds", type number}, {"cumulative_distance_miles", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"moving_time_seconds", type number}, {"elevation_feet", type number}, {"speed_mph", type number}, {"temperature_f", type number}, {"heartrate", type number}, {"cadence", type number}, {"watts", type number}, {"is_moving", Int64.Type}, {"grade_percent", type number}, {"quality_status", type text}, {"match_method", type text}, {"date_basis", type text}})
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_id", Int64.Type}, {"activity_key", Int64.Type}, {"activity_point_key", type text}, {"activity_type_key", type text}, {"cadence", type number}, {"cumulative_distance_miles", type number}, {"date_basis", type text}, {"date_key", Int64.Type}, {"elapsed_time_seconds", type number}, {"elevation_feet", type number}, {"gear_key", type text}, {"grade_percent", type number}, {"heartrate", type number}, {"incremental_distance_miles", type number}, {"incremental_time_seconds", type number}, {"is_moving", Int64.Type}, {"latitude", type number}, {"longitude", type number}, {"match_method", type text}, {"moving_time_seconds", type number}, {"point_index", Int64.Type}, {"quality_status", type text}, {"recorded_at_utc", type datetime}, {"speed_mph", type number}, {"temperature_f", type number}, {"trail_key", Int64.Type}, {"trail_system_key", Int64.Type}, {"watts", type number}, {"recorded_at", type datetime}, {"timezone_name", type text}}),
+				    Renamed = Table.RenameColumns(Typed, {{"cumulative_distance_miles", "cumulative_distance"}, {"elapsed_time_seconds", "elapsed_time"}, {"incremental_distance_miles", "incremental_distance"}, {"incremental_time_seconds", "incremental_time"}, {"moving_time_seconds", "moving_time"}})
 				in
-				    Typed
-
+				    Renamed

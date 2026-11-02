@@ -61,5 +61,5 @@ class HeatmapAndPRTests(unittest.TestCase):
                 self.assertIn('segment_effort_key',fields)
                 self.assertIn('pr_rank_status',fields)
                 self.assertIn('kom_rank_status',fields)
-                self.assertIn('ranks_retrieved_at',fields)
-            else:self.assertIn('tied_best_effort_count',fields)
+                self.assertIn('ranks_retrieved_at_utc',fields)
+            else:self.assertIn('pr_tie_count',fields)

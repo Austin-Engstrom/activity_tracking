@@ -1,6 +1,27 @@
 table activities
 	lineageTag: 9e69bded-f4c6-4d66-a26d-f6a243693c1a
 
+	/// Local activity-start calendar date, derived using the activity timezone and historical daylight-saving rules. NULL when unresolved.
+	column date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 72a1dd8f-32fc-4a2f-92ac-ea1bb1fe8670
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// YYYYMMDD local activity-start date key. NULL when unresolved.
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8c34d0b9-956b-4f18-90d4-6693503a3bd2
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = User
+
 	/// Activity id; source identifier or relationship key, not a measure.
 	column activity_id
 		dataType: int64
@@ -11,16 +32,22 @@ table activities
 
 		annotation SummarizationSetBy = User
 
-	/// UTC activity-start date as YYYYMMDD; use dates dimension for local reporting.
-	column activity_date_key
+	/// Activity key; source identifier or relationship key, not a measure.
+	column activity_key
 		dataType: int64
-		isHidden
 		formatString: 0
-		lineageTag: 8c34d0b9-956b-4f18-90d4-6693503a3bd2
+		lineageTag: 1e4d9c76-bf1c-4529-8df8-d3f9d1507b84
 		summarizeBy: none
-		sourceColumn: activity_date_key
+		sourceColumn: activity_key
 
 		annotation SummarizationSetBy = User
+
+	/// Source Strava activity title. Names need not be unique; use activity_key for identity.
+	column activity_name
+		dataType: string
+		lineageTag: c9864ecd-b2fe-495a-bed3-7094a43ee8b1
+		summarizeBy: none
+		sourceColumn: activity_name
 
 	/// Activity type key; source identifier or relationship key, not a measure.
 	column activity_type_key
@@ -32,106 +59,13 @@ table activities
 
 		annotation SummarizationSetBy = User
 
-	/// Gear key; source identifier or relationship key, not a measure.
-	column gear_key
-		dataType: string
-		isHidden
-		lineageTag: 896886c6-01f8-439d-bb06-5febd8876ca7
-		summarizeBy: none
-		sourceColumn: gear_key
-
-		annotation SummarizationSetBy = User
-
-	/// Source Strava activity title. Names need not be unique; use activity_key for identity.
-	column activity_name
-		dataType: string
-		lineageTag: c9864ecd-b2fe-495a-bed3-7094a43ee8b1
-		summarizeBy: none
-		sourceColumn: activity_name
-
-	/// Source Strava sport type for the activity; GPS eligibility does not restrict sports to cycling.
-	column sport_type
-		dataType: string
-		isHidden
-		lineageTag: 27235482-7588-4aa1-a04f-5856a08792d0
-		summarizeBy: none
-		sourceColumn: sport_type
-
-	/// Stored activity start timestamp in UTC.
-	column start_date
-		dataType: dateTime
-		formatString: yyyy-mm-dd hh:mm:ss
-		lineageTag: 015fa143-aa58-4f49-a77d-1e4c38a4ee67
-		summarizeBy: none
-		sourceColumn: start_date
-
-	/// UTC activity-start calendar date.
-	column activity_date
-		dataType: dateTime
-		formatString: yyyy-mm-dd
-		lineageTag: 72a1dd8f-32fc-4a2f-92ac-ea1bb1fe8670
-		summarizeBy: none
-		sourceColumn: activity_date
-
-		annotation UnderlyingDateTimeDataType = Date
-
-	/// Converted source distance in miles at this table grain; gear is source lifetime distance, activities rounded to 2 decimals, efforts may overlap.
-	column distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: f7bf3dfe-f9e8-457e-ab6e-ac921e4ed6e5
-		summarizeBy: sum
-		sourceColumn: distance_miles
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Whole source activity moving duration converted to minutes and rounded to 2 decimals.
-	column moving_time_minutes
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 179253e9-4e81-4f73-8abe-a2913f52af9a
-		summarizeBy: sum
-		sourceColumn: moving_time_minutes
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Whole source activity elapsed duration converted to minutes and rounded to 2 decimals, including stops.
-	column elapsed_time_minutes
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 8c998762-4d8c-4f11-8cf7-39f919f52a79
-		summarizeBy: sum
-		sourceColumn: elapsed_time_minutes
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Whole source activity elevation gain converted to feet and rounded to 2 decimals; not allocated to trails.
-	column total_elevation_gain_feet
+	/// Source activity average cadence in rpm; optional, not an average of selected GPS samples.
+	column average_cadence
 		dataType: double
 		formatString: #,0
-		lineageTag: bf29f522-c4ab-4d8f-b50e-fda682c12199
+		lineageTag: 6a99a7fd-82d6-46c6-9c96-63453762a748
 		summarizeBy: sum
-		sourceColumn: total_elevation_gain_feet
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Source activity average speed converted to mph and rounded to 2 decimals; not route-selected speed.
-	column average_speed_mph
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 58dd82cb-c6ee-48cc-bb04-02d86a9cd20e
-		summarizeBy: sum
-		sourceColumn: average_speed_mph
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Source activity maximum speed converted to mph and rounded to 2 decimals.
-	column max_speed_mph
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 289fcd25-d52e-4e56-81bc-a380939c540f
-		summarizeBy: sum
-		sourceColumn: max_speed_mph
+		sourceColumn: average_cadence
 
 		annotation SummarizationSetBy = Automatic
 
@@ -145,23 +79,13 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Source activity maximum heart rate in bpm; optional.
-	column max_heartrate
+	/// Source activity average speed converted to mph and rounded to 2 decimals; not route-selected speed.
+	column average_speed_mph
 		dataType: double
-		formatString: #,0
-		lineageTag: 8ca19d04-3ee0-44b0-b509-666b0269ff71
+		formatString: #,0.00
+		lineageTag: 58dd82cb-c6ee-48cc-bb04-02d86a9cd20e
 		summarizeBy: sum
-		sourceColumn: max_heartrate
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Source activity average cadence in rpm; optional, not an average of selected GPS samples.
-	column average_cadence
-		dataType: double
-		formatString: #,0
-		lineageTag: 6a99a7fd-82d6-46c6-9c96-63453762a748
-		summarizeBy: sum
-		sourceColumn: average_cadence
+		sourceColumn: average_speed_mph
 
 		annotation SummarizationSetBy = Automatic
 
@@ -175,16 +99,6 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Source activity energy in kilojoules; optional whole-activity total.
-	column kilojoules
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 083f1c7e-45e2-41cf-8d99-0c185389085b
-		summarizeBy: sum
-		sourceColumn: kilojoules
-
-		annotation SummarizationSetBy = Automatic
-
 	/// Source activity calories; unknown remains NULL.
 	column calories
 		dataType: double
@@ -195,15 +109,50 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Source Strava suffer score; optional.
-	column suffer_score
+	/// Source free-text description for the row entity; may be missing.
+	column description
+		dataType: string
+		lineageTag: 17300eed-9703-47c1-adc0-06651e900eaa
+		summarizeBy: none
+		sourceColumn: description
+
+	/// Source activity recording device name; may be missing.
+	column device_name
+		dataType: string
+		lineageTag: 21fdf7aa-9007-4212-986a-f6bfcbcfa671
+		summarizeBy: none
+		sourceColumn: device_name
+
+	/// Converted source distance in miles at this table grain; gear is source lifetime distance, activities rounded to 2 decimals, efforts may overlap.
+	column distance
 		dataType: double
-		formatString: #,0
-		lineageTag: 6a6e09d8-9383-41b4-bdfb-36118ee78765
+		formatString: #,0.00
+		lineageTag: f7bf3dfe-f9e8-457e-ab6e-ac921e4ed6e5
 		summarizeBy: sum
-		sourceColumn: suffer_score
+		sourceColumn: distance
 
 		annotation SummarizationSetBy = Automatic
+
+	/// Whole source activity elapsed duration in numeric seconds, including stops. Use Activity Elapsed Time for formatted display.
+	column elapsed_time
+		dataType: int64
+		formatString: #,0
+		lineageTag: 8c998762-4d8c-4f11-8cf7-39f919f52a79
+		isHidden
+		summarizeBy: sum
+		sourceColumn: elapsed_time
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Gear key; source identifier or relationship key, not a measure.
+	column gear_key
+		dataType: string
+		isHidden
+		lineageTag: 896886c6-01f8-439d-bb06-5febd8876ca7
+		summarizeBy: none
+		sourceColumn: gear_key
+
+		annotation SummarizationSetBy = User
 
 	/// Is commute flag: 1 yes, 0 no; NULL unknown.
 	column is_commute
@@ -225,13 +174,44 @@ table activities
 
 		annotation SummarizationSetBy = User
 
-	/// All stored source stream rows for activity, not just valid GPS samples.
-	column stream_point_count
+	/// Source activity energy in kilojoules; optional whole-activity total.
+	column kilojoules
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 083f1c7e-45e2-41cf-8d99-0c185389085b
+		summarizeBy: sum
+		sourceColumn: kilojoules
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source activity maximum heart rate in bpm; optional.
+	column max_heartrate
+		dataType: double
+		formatString: #,0
+		lineageTag: 8ca19d04-3ee0-44b0-b509-666b0269ff71
+		summarizeBy: sum
+		sourceColumn: max_heartrate
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source activity maximum speed converted to mph and rounded to 2 decimals.
+	column max_speed_mph
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 289fcd25-d52e-4e56-81bc-a380939c540f
+		summarizeBy: sum
+		sourceColumn: max_speed_mph
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Whole source activity moving duration in numeric seconds. Use Activity Moving Time for MM:SS or HH:MM:SS display.
+	column moving_time
 		dataType: int64
 		formatString: #,0
-		lineageTag: b563060c-ef22-4871-b83c-1fd931f3c7c5
+		lineageTag: 179253e9-4e81-4f73-8abe-a2913f52af9a
+		isHidden
 		summarizeBy: sum
-		sourceColumn: stream_point_count
+		sourceColumn: moving_time
 
 		annotation SummarizationSetBy = Automatic
 
@@ -245,29 +225,51 @@ table activities
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Activity key; source identifier or relationship key, not a measure.
-	column activity_key
+	/// Source Strava sport type for the activity; GPS eligibility does not restrict sports to cycling.
+	column sport_type
+		dataType: string
+		isHidden
+		lineageTag: 27235482-7588-4aa1-a04f-5856a08792d0
+		summarizeBy: none
+		sourceColumn: sport_type
+
+	/// Activity start in its resolved local timezone. NULL when unresolved; started_at_utc retains the original instant.
+	column started_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:mm:ss
+		lineageTag: 015fa143-aa58-4f49-a77d-1e4c38a4ee67
+		summarizeBy: none
+		sourceColumn: started_at
+
+	/// All stored source stream rows for activity, not just valid GPS samples.
+	column stream_point_count
 		dataType: int64
-		formatString: 0
-		lineageTag: 1e4d9c76-bf1c-4529-8df8-d3f9d1507b84
-		summarizeBy: none
-		sourceColumn: activity_key
+		formatString: #,0
+		lineageTag: b563060c-ef22-4871-b83c-1fd931f3c7c5
+		summarizeBy: sum
+		sourceColumn: stream_point_count
 
-		annotation SummarizationSetBy = User
+		annotation SummarizationSetBy = Automatic
 
-	/// Source free-text description for the row entity; may be missing.
-	column description
-		dataType: string
-		lineageTag: 17300eed-9703-47c1-adc0-06651e900eaa
-		summarizeBy: none
-		sourceColumn: description
+	/// Source Strava suffer score; optional.
+	column suffer_score
+		dataType: double
+		formatString: #,0
+		lineageTag: 6a6e09d8-9383-41b4-bdfb-36118ee78765
+		summarizeBy: sum
+		sourceColumn: suffer_score
 
-	/// Source activity recording device name; may be missing.
-	column device_name
-		dataType: string
-		lineageTag: 21fdf7aa-9007-4212-986a-f6bfcbcfa671
-		summarizeBy: none
-		sourceColumn: device_name
+		annotation SummarizationSetBy = Automatic
+
+	/// Whole source activity elevation gain converted to feet and rounded to 2 decimals; not allocated to trails.
+	column total_elevation_gain_feet
+		dataType: double
+		formatString: #,0
+		lineageTag: bf29f522-c4ab-4d8f-b50e-fda682c12199
+		summarizeBy: sum
+		sourceColumn: total_elevation_gain_feet
+
+		annotation SummarizationSetBy = Automatic
 
 	/// Strava workout-type code; meaning depends on sport.
 	column workout_type
@@ -279,12 +281,34 @@ table activities
 
 		annotation SummarizationSetBy = User
 
+	/// Original source activity start instant in UTC; retained for auditing and timezone reconstruction.
+	column started_at_utc
+		dataType: dateTime
+		lineageTag: f97861a8-019f-4fa8-9901-d522bccc3f16
+		isHidden
+		summarizeBy: none
+		sourceColumn: started_at_utc
+
+	/// IANA timezone used for local event reporting.
+	column timezone_name
+		dataType: string
+		lineageTag: 6287dbae-19e2-42f8-b3bf-fcb638dbd2f3
+		summarizeBy: none
+		sourceColumn: timezone_name
+
+	/// Timezone provenance: strava, first_gps, source_local or unresolved. No UTC instant is silently presented as local.
+	column date_basis
+		dataType: string
+		lineageTag: 0ece16db-217c-4e27-8aec-12915d65dd7d
+		summarizeBy: none
+		sourceColumn: date_basis
+
 	partition activities = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_activity.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"activity_id", Int64.Type}, {"activity_date_key", Int64.Type}, {"activity_type_key", type text}, {"gear_key", type text}, {"activity_name", type text}, {"sport_type", type text}, {"start_date", type datetime}, {"activity_date", type date}, {"distance_miles", type number}, {"moving_time_minutes", type number}, {"elapsed_time_minutes", type number}, {"total_elevation_gain_feet", type number}, {"average_speed_mph", type number}, {"max_speed_mph", type number}, {"average_heartrate", type number}, {"max_heartrate", type number}, {"average_cadence", type number}, {"average_watts", type number}, {"kilojoules", type number}, {"calories", type number}, {"suffer_score", type number}, {"is_commute", Int64.Type}, {"is_trainer", Int64.Type}, {"stream_point_count", Int64.Type}, {"segment_effort_count", Int64.Type}, {"activity_key", Int64.Type}, {"description", type text}, {"device_name", type text}, {"workout_type", Int64.Type}})
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_date", type datetime}, {"activity_date_key", Int64.Type}, {"activity_id", Int64.Type}, {"activity_key", Int64.Type}, {"activity_name", type text}, {"activity_type_key", type text}, {"average_cadence", type number}, {"average_heartrate", type number}, {"average_speed_mph", type number}, {"average_watts", type number}, {"calories", type number}, {"description", type text}, {"device_name", type text}, {"distance_miles", type number}, {"elapsed_time_seconds", Int64.Type}, {"gear_key", type text}, {"is_commute", Int64.Type}, {"is_trainer", Int64.Type}, {"kilojoules", type number}, {"max_heartrate", type number}, {"max_speed_mph", type number}, {"moving_time_seconds", Int64.Type}, {"segment_effort_count", Int64.Type}, {"sport_type", type text}, {"start_date", type datetime}, {"stream_point_count", Int64.Type}, {"suffer_score", type number}, {"total_elevation_gain_feet", type number}, {"workout_type", Int64.Type}, {"start_date_utc", type datetime}, {"timezone_name", type text}, {"date_basis", type text}}),
+				    Renamed = Table.RenameColumns(Typed, {{"activity_date", "date"}, {"activity_date_key", "date_key"}, {"distance_miles", "distance"}, {"elapsed_time_seconds", "elapsed_time"}, {"moving_time_seconds", "moving_time"}, {"start_date", "started_at"}, {"start_date_utc", "started_at_utc"}})
 				in
-				    Typed
-
+				    Renamed

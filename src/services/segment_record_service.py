@@ -22,6 +22,11 @@ def load_activity_segments(session, activity, payload, retrieved_at=None):
         raise SegmentMappingError('Complete segment_efforts array was not returned; existing efforts retained.')
     if any(not isinstance(item, dict) for item in raw):
         raise SegmentMappingError('Invalid segment effort entry.')
+    from src.services.reporting_local_time import zone_name
+    zone = zone_name(payload.get('timezone'))
+    if zone:
+        from sqlalchemy import text
+        session.execute(text('INSERT INTO point_reporting_metadata VALUES (:id,:zone) ON CONFLICT(activity_id) DO UPDATE SET timezone_name=:zone'), {'id':activity.activity_id,'zone':zone})
     stamp = retrieved_at or utcnow()
     segments = [SegmentMapper.segment_from_effort(item) for item in raw]
     efforts = [SegmentMapper.effort_from_api(activity.activity_id, item) for item in raw]

@@ -1,16 +1,6 @@
 table segment_efforts
 	lineageTag: 16b83d8a-a726-4867-8319-da2acac3d6c4
 
-	/// Segment effort key; source identifier or relationship key, not a measure.
-	column segment_effort_key
-		dataType: int64
-		formatString: 0
-		lineageTag: c4febbb1-6f2e-45dd-9984-74ad19f22215
-		summarizeBy: none
-		sourceColumn: segment_effort_key
-
-		annotation SummarizationSetBy = User
-
 	/// Activity key; source identifier or relationship key, not a measure.
 	column activity_key
 		dataType: int64
@@ -19,6 +9,50 @@ table segment_efforts
 		lineageTag: cee43e0b-fd17-43b2-801b-16a20a553c87
 		summarizeBy: none
 		sourceColumn: activity_key
+
+		annotation SummarizationSetBy = User
+
+	/// Stored full-effort distance converted to miles; repeated/overlapping efforts can double-count route distance.
+	column distance
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 650c8e69-27bc-4d51-97a5-209c472f388e
+		summarizeBy: none
+		sourceColumn: distance
+
+	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
+	column time
+		dataType: double
+		formatString: #,0
+		lineageTag: d4e1fa77-7a87-4d8d-a70d-18cfb8865f93
+		isHidden
+		summarizeBy: none
+		sourceColumn: time
+
+	/// Inclusive original stream end index for effort membership.
+	column end_index
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a0b7731-8952-4354-bbe5-ae09dd9d989a
+		summarizeBy: none
+		sourceColumn: end_index
+
+	/// Point table: eligible interval seconds when moving, zero when stopped, otherwise NULL. Effort table: stored whole-effort moving seconds.
+	column moving_time
+		dataType: double
+		formatString: #,0
+		lineageTag: e1b5eec3-13dd-4c71-a3c8-2b7624f807f2
+		isHidden
+		summarizeBy: none
+		sourceColumn: moving_time
+
+	/// Segment effort key; source identifier or relationship key, not a measure.
+	column segment_effort_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c4febbb1-6f2e-45dd-9984-74ad19f22215
+		summarizeBy: none
+		sourceColumn: segment_effort_key
 
 		annotation SummarizationSetBy = User
 
@@ -41,44 +75,12 @@ table segment_efforts
 		summarizeBy: none
 		sourceColumn: start_index
 
-	/// Inclusive original stream end index for effort membership.
-	column end_index
-		dataType: int64
-		formatString: 0
-		lineageTag: 6a0b7731-8952-4354-bbe5-ae09dd9d989a
-		summarizeBy: none
-		sourceColumn: end_index
-
-	/// Point table: elapsed seconds from activity start. Effort table: stored whole-effort elapsed seconds.
-	column elapsed_time_seconds
-		dataType: double
-		formatString: #,0.0
-		lineageTag: d4e1fa77-7a87-4d8d-a70d-18cfb8865f93
-		summarizeBy: none
-		sourceColumn: elapsed_time_seconds
-
-	/// Point table: eligible interval seconds when moving, zero when stopped, otherwise NULL. Effort table: stored whole-effort moving seconds.
-	column moving_time_seconds
-		dataType: double
-		formatString: #,0.0
-		lineageTag: e1b5eec3-13dd-4c71-a3c8-2b7624f807f2
-		summarizeBy: none
-		sourceColumn: moving_time_seconds
-
-	/// Stored full-effort distance converted to miles; repeated/overlapping efforts can double-count route distance.
-	column distance_miles
-		dataType: double
-		formatString: #,0.00
-		lineageTag: 650c8e69-27bc-4d51-97a5-209c472f388e
-		summarizeBy: none
-		sourceColumn: distance_miles
-
 	partition segment_efforts = m
 		mode: import
 		source =
 				let
 				    Source = Parquet.Document(File.Contents(ExportFolder & "view_point_segment_effort.parquet")),
-				    Typed = Table.TransformColumnTypes(Source, {{"segment_effort_key", Int64.Type}, {"activity_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}, {"end_index", Int64.Type}, {"elapsed_time_seconds", type number}, {"moving_time_seconds", type number}, {"distance_miles", type number}})
+				    Typed = Table.TransformColumnTypes(Source, {{"activity_key", Int64.Type}, {"distance_miles", type number}, {"elapsed_time_seconds", type number}, {"end_index", Int64.Type}, {"moving_time_seconds", type number}, {"segment_effort_key", Int64.Type}, {"segment_key", Int64.Type}, {"start_index", Int64.Type}}),
+				    Renamed = Table.RenameColumns(Typed, {{"distance_miles", "distance"}, {"elapsed_time_seconds", "time"}, {"moving_time_seconds", "moving_time"}})
 				in
-				    Typed
-
+				    Renamed

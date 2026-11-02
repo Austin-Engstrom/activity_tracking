@@ -51,10 +51,10 @@
                       "Entity": "segments"
                     }
                   },
-                  "Property": "distance_miles"
+                  "Property": "distance"
                 }
               },
-              "queryRef": "segments.distance_miles",
+              "queryRef": "segments.distance",
               "nativeQueryRef": "Segment length (mi)"
             },
             {
@@ -65,25 +65,25 @@
                       "Entity": "segment_effort_achievements"
                     }
                   },
-                  "Property": "effort_local_date"
+                  "Property": "date"
                 }
               },
-              "queryRef": "segment_effort_achievements.effort_local_date",
+              "queryRef": "segment_effort_achievements.date",
               "nativeQueryRef": "Effort date"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "segment_effort_achievements"
+                      "Entity": "measures_"
                     }
                   },
-                  "Property": "elapsed_time_seconds"
+                  "Property": "Segment Effort Time"
                 }
               },
-              "queryRef": "segment_effort_achievements.elapsed_time_seconds",
-              "nativeQueryRef": "Elapsed (sec)"
+              "queryRef": "measures_.Segment Effort Time",
+              "nativeQueryRef": "Segment Effort Time"
             },
             {
               "field": {
@@ -163,10 +163,10 @@
                       "Entity": "segment_effort_achievements"
                     }
                   },
-                  "Property": "ranks_retrieved_at"
+                  "Property": "ranks_retrieved_at_utc"
                 }
               },
-              "queryRef": "segment_effort_achievements.ranks_retrieved_at",
+              "queryRef": "segment_effort_achievements.ranks_retrieved_at_utc",
               "nativeQueryRef": "Retrieved (UTC)"
             },
             {
@@ -196,7 +196,7 @@
                     "Entity": "segment_effort_achievements"
                   }
                 },
-                "Property": "effort_local_date"
+                "Property": "date"
               }
             },
             "direction": "Descending"
