@@ -114,6 +114,7 @@ table select_measures
 				    ("Segments With Stored Best", NAMEOF('measures_'[Segments With Stored Best]), 70),
 				    ("Seconds Behind Segment PR", NAMEOF('measures_'[Seconds Behind Segment PR]), 71),
 				    ("Segment Effort Rank All Time", NAMEOF('measures_'[Segment Effort Rank All Time]), 72),
-				    ("Segment Effort Time", NAMEOF('measures_'[Segment Effort Time]), 73)
+				    ("Segment Effort Time", NAMEOF('measures_'[Segment Effort Time]), 73),
+				    ("Reported KOM Top 10 Efforts", NAMEOF('measures_'[Reported KOM Top 10 Efforts]), 74)
 				}
 

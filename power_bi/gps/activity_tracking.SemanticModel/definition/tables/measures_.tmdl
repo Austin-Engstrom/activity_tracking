@@ -690,6 +690,22 @@ table measures_
 		displayFolder: Segments\Records
 		lineageTag: d0fbf914-64e0-437e-af06-8cc4b16837af
 
+	/// Count of selected efforts with an observed Strava-reported KOM rank from 1 through 10, inclusive. Includes first-place efforts; counts efforts, not distinct segments.
+	/// Filters: Follows effort-start date, activity, equipment, sport and segment filters, preserving existing rank/status selections. Only ranked observations qualify; legacy or omitted rank fields are not counted.
+	/// Notes: This is reported leaderboard top-10 achievement, not the athlete's personal effort rank, a certified historical leaderboard, or current crown ownership. Zero under partial observation coverage does not prove no top-10 achievements occurred. Existing Reported KOM Firsts remains first place only.
+	measure 'Reported KOM Top 10 Efforts' =
+			CALCULATE(
+			    [Recorded Segment Efforts],
+			    KEEPFILTERS(segment_effort_achievements[kom_rank_status] = "ranked"),
+			    KEEPFILTERS(
+			        segment_effort_achievements[reported_kom_rank] >= 1
+			            && segment_effort_achievements[reported_kom_rank] <= 10
+			    )
+			)
+		formatString: #,0
+		displayFolder: Segments\Records
+		lineageTag: b445d81d-63fc-4c2d-99ae-9240879ef426
+
 	column Placeholder
 		dataType: int64
 		isHidden

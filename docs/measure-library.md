@@ -194,3 +194,20 @@ multi-effort total; filter the visible dates and confirm individual ranks stay
 all-history ranks. Inspect a hidden/invalid effort and verify duration formatting
 for short efforts and efforts lasting over an hour. Repository checks validate
 metadata and bindings; they do not evaluate DAX.
+
+## Reported KOM top 10
+
+`Reported KOM Top 10 Efforts` counts observed `reported_kom_rank` values **1 through
+10 inclusive**, with `kom_rank_status = ranked`. It includes Reported KOM Firsts,
+but counts efforts rather than distinct segments: two top-10 efforts on the same
+segment contribute two. Use it in place of the firsts-only measure on a report
+card when the broader top-10 achievement is desired; report files are unchanged.
+
+The count follows effort-start date, activity, equipment, sport and segment filters
+and preserves additional rank/status selections. Null/omitted ranks, unobserved
+legacy ranks and ranks above 10 are not counted. Review observation coverage when
+interpreting zero. This is different from personal all-time effort rank, and it
+does not certify current leaderboard position or crown ownership. It is available
+in Segments / Records, the measure selector and the embedded dictionary. Refresh
+and republish the GPS model to expose it; no ETL or Parquet export is required.
+Desktop checks should include ranks 1, 10, 11, null and unobserved legacy rows.
