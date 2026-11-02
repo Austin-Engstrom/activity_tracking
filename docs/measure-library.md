@@ -155,3 +155,16 @@ and dictionary. Reopen/refresh and republish the GPS model before using this rep
 revision. No Parquet re-export is needed if both tables are already current.
 In Desktop verify a best effort, a slower effort, a tie, date-filter changes,
 a hidden/invalid effort and a multi-effort total. Repository tests do not execute DAX.
+
+## Segment length
+
+`Segment Length Miles` returns a single segment's catalog distance, formatted to
+two decimals. Use the segment dimension to select a segment or place it on a
+segment-effort detail row. Multiple segments or unknown source distance return
+blank. A date selection does not shorten a segment's catalog length.
+
+Both PR tables show Segment length (mi): the effort table uses this measure, while
+the all-history best table uses the existing `segments[distance_miles]` attribute.
+This is distinct from `Segment Miles`, which accumulates effort distances and can
+count repeated or overlapping traversals. Refresh and republish the GPS model for
+the new measure; no Parquet re-export is needed.
