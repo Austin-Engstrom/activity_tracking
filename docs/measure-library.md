@@ -145,7 +145,7 @@ or a missing baseline. Date/category/equipment selections do not change the PR
 baseline. The lookup transfers the current effort's segment key explicitly; an
 effort row does not rely on a bidirectional segment relationship.
 
-A 75-second effort with a 60-second best shows **+15**. The 60-second best and ties
+A 75-second effort with a 60-second best shows **15**. The 60-second best and ties
 show **0**. A negative result means the effort beats the loaded best snapshot;
 check that both tables were exported/refreshed together. This is not an official
 Strava lifetime-PR guarantee and works before rank backfill is complete.

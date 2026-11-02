@@ -638,7 +638,7 @@ table measures_
 			        EffortSeconds - BaselineSeconds,
 			        BLANK()
 			    )
-		formatString: +#,0;-#,0;0
+		formatString: #,0;-#,0;0
 		displayFolder: Segments\Records
 		lineageTag: 913dffae-7476-4ae2-883d-80c3116df486
 
