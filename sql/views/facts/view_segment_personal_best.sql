@@ -7,13 +7,15 @@ WITH counts AS (
     FROM view_segment_effort_achievement GROUP BY segment_key
 ), ranked AS (
     SELECT e.*,
-           row_number() OVER (PARTITION BY segment_key ORDER BY elapsed_time_seconds,effort_started_at,segment_effort_key) AS position,
+           row_number() OVER (PARTITION BY segment_key ORDER BY elapsed_time_seconds,effort_started_at_utc,segment_effort_key) AS position,
            count(*) OVER (PARTITION BY segment_key,elapsed_time_seconds) AS tied_best_effort_count
     FROM view_segment_effort_achievement e WHERE eligible_for_stored_best=1
 )
 SELECT r.segment_key,r.segment_effort_key AS best_segment_effort_key,
        r.activity_key AS best_activity_key,
        r.effort_started_at AS best_effort_started_at,
+       r.effort_started_at_utc AS best_effort_started_at_utc,
+       r.date_basis, r.timezone_name,
        r.effort_local_date AS best_effort_local_date,
        r.elapsed_time_seconds AS best_elapsed_time_seconds,
        r.moving_time_seconds AS best_moving_time_seconds,
